@@ -1,0 +1,22 @@
+{% extends "base_fixed.html" %}
+{% load autobreadcrumb %}{% load url from future %}
+
+{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
+
+{% block head_more_links %}
+    {% include "datebook/include_css.html" %}
+{% endblock %}
+
+{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+
+<ul class="datebook-calendar-month-week">{% for datekey, entry in weekdays %}
+    <li class="item">
+        <h3>{{ datekey|date:"d - l" }}<h3>
+        <div class="container{% if not entry %} empty{% endif %}">{% if entry %}
+            <p class="working-hour">{{ entry.get_working_hours }}</p>
+            <div class="content">{{ entry.content }}</div>
+            <p class="length">{{ entry.get_elapsed_time }}</p>
+        {% endif %}</div>
+    </li>
+{% endfor %}</ul>
+{% endblock %}

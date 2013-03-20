@@ -1,0 +1,19 @@
+{% extends "base_fixed.html" %}
+{% load autobreadcrumb %}{% load url from future %}
+
+{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
+
+{% block head_more_links %}
+    {% include "datebook/include_css.html" %}
+{% endblock %}
+
+{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+
+<ul class="simple">
+    {% spaceless %}{% for item in object_list %}
+        <li>
+            <p><a href="{% url 'datebook-month' author=item.author.username year=item.period.year month=item.period.month %}">{{ item.period|date:"F Y" }} - {{ item.author.get_full_name }}</a></p>
+            <p>Updated on {{ item.modified|timesince }}</p>
+        </li>
+    {% endfor %}{% endspaceless %}
+</ul>{% endblock %}
