@@ -3,20 +3,21 @@
 Page document views
 """
 import datetime
-from calendar import Calendar
+import calendar
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views import generic
+from django.contrib.auth.models import User
 
 from datebook.models import Datebook, DayEntry
 from datebook.calendars import DatebookHTMLCalendar
 
 class IndexView(generic.list.ListView):
     """
-    Index view
+    Dummy Index view
     """
     model = Datebook
     template_name = "datebook/index.html"
@@ -47,7 +48,6 @@ class DatebookDetailsMixin(object):
         calendar_table = DatebookHTMLCalendar(day_items=day_items, current_day=current_day)
         
         return calendar_table.formatmonth(self.object.period.year, self.object.period.month)
-
 
 class DatebookMonthView(DatebookDetailsMixin, generic.TemplateView):
     """
@@ -83,7 +83,7 @@ class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
         week = self.week-1
         
         try:
-            weekdays = Calendar().monthdatescalendar(self.year, self.month)[week]
+            weekdays = calendar.Calendar().monthdatescalendar(self.year, self.month)[week]
         except IndexError:
             raise Http404
         
@@ -98,7 +98,6 @@ class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
             _f = {'activity_date__gte': self.weekdays[0], 'activity_date__lte': self.weekdays[-1]}
         else:
             _f = {'activity_date': self.weekdays[0]}
-        print _f
         return super(DatebookWeekView, self).get_dayentry_list(_f)
     
     def get(self, request, *args, **kwargs):
@@ -127,6 +126,34 @@ class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
         
         return self.render_to_response(context)
 
-# To implement ?
-class DatebookYearView(generic.TemplateView): pass
-class DatebookDayView(generic.TemplateView): pass
+class DatebookYearView(DatebookDetailsMixin, generic.TemplateView):
+    """
+    Datebook year view
+    
+    Simply display the twelve months of the given year with link and infos from the 
+    existing datebooks
+    """
+    template_name = "datebook/datebook_year.html"
+    
+    def get(self, request, *args, **kwargs):
+        year = int(self.kwargs['year'])
+        _curr = datetime.date.today()
+        
+        self.object = get_object_or_404(User, username=self.kwargs['author'])
+        
+        # Get all datebooks for the given year
+        queryset = self.object.datebook_set.filter(period__year=year).order_by('period')[0:13]
+        _datebook_map = dict(map(lambda x: (x.period.month, x), queryset))
+        # Fill the finded datebooks in the month map, month without datebook will have 
+        # None instead of a Datebook instance
+        datebooks_map = [(name, _datebook_map.get(i)) for i, name in enumerate(calendar.month_name) if i>0]
+        
+        context = {
+            'author': self.object,
+            'year': year,
+            'year_current': _curr.year,
+            'is_current_year': (year == _curr.year),
+            'datebooks': datebooks_map,
+        }
+        
+        return self.render_to_response(context)

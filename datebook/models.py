@@ -21,7 +21,15 @@ class Datebook(models.Model):
     
     def __unicode__(self):
         return self.period.strftime("%m/%Y")
-        
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('datebook-month', (), {
+            'author': self.author.username,
+            'year': self.period.year,
+            'month': self.period.strftime('%m'),
+        })
+    
     def clean(self):
         """Allways forcing to the first day of the month"""
         self.period = self.period.replace(day=1) 
