@@ -8,25 +8,34 @@
 }
 /* line 15, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month th {
+  font-size: 14px;
+  text-transform: capitalize;
+}
+/* line 20, ../../scss/datebook/frontend.scss */
+.datebook-calendar-month thead {
+  background: transparent;
+}
+/* line 23, ../../scss/datebook/frontend.scss */
+.datebook-calendar-month thead th {
   padding: 9px;
   font-size: 16px;
-  text-transform: capitalize;
   border-bottom: 4px solid #dedede;
-}
-/* line 22, ../../scss/datebook/frontend.scss */
-.datebook-calendar-month th.sat, .datebook-calendar-month th.sun {
-  border-bottom: 4px solid #c5c5c5;
+  text-align: center;
 }
 /* line 30, ../../scss/datebook/frontend.scss */
+.datebook-calendar-month thead th.sat, .datebook-calendar-month thead th.sun {
+  border-bottom: 4px solid #c5c5c5;
+}
+/* line 39, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr
 tbody tr.even,
 .datebook-calendar-month tbody tr.alt,
 .datebook-calendar-month tbody tr:nth-child(even) {
   background: transparent;
 }
-/* line 34, ../../scss/datebook/frontend.scss */
+/* line 43, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td {
-  width: 14.28571%;
+  width: 13.85714%;
   height: 135px;
   color: #333;
   padding: 7px 8px;
@@ -34,21 +43,27 @@ tbody tr.even,
   border: 1px solid #dedede;
   background: white;
 }
-/* line 45, ../../scss/datebook/frontend.scss */
+/* line 54, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td.sat, .datebook-calendar-month tbody tr td.sun {
   border: 1px solid #d1d1d1;
   background: #f2f2f2;
 }
-/* line 50, ../../scss/datebook/frontend.scss */
-.datebook-calendar-month tbody tr td.noday {
+/* line 60, ../../scss/datebook/frontend.scss */
+.datebook-calendar-month tbody tr td.noday, .datebook-calendar-month tbody tr td.weekno {
   border: 1px solid transparent !important;
   background: transparent !important;
 }
-/* line 55, ../../scss/datebook/frontend.scss */
+/* line 64, ../../scss/datebook/frontend.scss */
+.datebook-calendar-month tbody tr td.weekno {
+  width: 3%;
+  text-align: center;
+  vertical-align: middle;
+}
+/* line 70, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td .container {
   position: relative;
 }
-/* line 58, ../../scss/datebook/frontend.scss */
+/* line 73, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td .container .daylabel {
   display: block;
   width: 16px;
@@ -60,13 +75,13 @@ tbody tr.even,
   text-align: right;
   background: #2ba6cb;
 }
-/* line 74, ../../scss/datebook/frontend.scss */
+/* line 89, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr.even td,
 .datebook-calendar-month tbody tr.alt td,
 .datebook-calendar-month tbody tr:nth-child(even) td {
   background: #f9f9f9;
 }
-/* line 78, ../../scss/datebook/frontend.scss */
+/* line 93, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr.even td.sat, .datebook-calendar-month tbody tr.even td.sun,
 .datebook-calendar-month tbody tr.alt td.sat,
 .datebook-calendar-month tbody tr.alt td.sun,
@@ -76,18 +91,18 @@ tbody tr.even,
   background: #ececec;
 }
 
-/* line 86, ../../scss/datebook/frontend.scss */
+/* line 101, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-/* line 91, ../../scss/datebook/frontend.scss */
+/* line 106, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week li.item {
   margin: 0;
   padding: 10px 7px;
 }
-/* line 95, ../../scss/datebook/frontend.scss */
+/* line 110, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week li.item + li.item {
   border-top: 1px solid black;
 }

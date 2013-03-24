@@ -6,50 +6,76 @@ import datetime
 import calendar
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.contrib.auth.models import User
 
-from datebook.models import Datebook, DayEntry
-from datebook.calendars import DatebookHTMLCalendar
+from datebook.models import Datebook
+from datebook.mixins import AuthorKwargsMixin, DateKwargsMixin, DatebookCalendarMixin
 
-class IndexView(generic.list.ListView):
+class IndexView(generic.TemplateView):
     """
     Dummy Index view
     """
-    model = Datebook
     template_name = "datebook/index.html"
-    paginate_by = None
+    
+    def get(self, request, *args, **kwargs):
+        
+        context = {
+            'object_list': Datebook.objects.all().values('author__username').distinct(),
+        }
+        
+        return self.render_to_response(context)
 
-class DatebookDetailsMixin(object):
-    """
-    Datebook details mixin
-    """
-    def get_object(self, filters):
-        return get_object_or_404(Datebook, author__username=self.kwargs['author'], **filters)
+class DatebookAuthorView(generic.TemplateView):
+    template_name = "datebook/author_index.html"
     
-    def get_dayentry_list(self, filters={}):
-        return self.object.dayentry_set.filter(**filters).order_by('activity_date')
+    def get(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, username=self.kwargs['author'])
+        
+        context = {
+            'author': self.object,
+            'object_list': Datebook.objects.filter(author=self.object).dates('period', 'year'),
+        }
+        
+        return self.render_to_response(context)
+
+class DatebookYearView(DateKwargsMixin, generic.TemplateView):
+    """
+    Datebook year view
     
-    def get_calendar(self, day_filters={}):
-        # Add current day if the datebook period is the current month+year
-        current_day = None
+    Simply display the twelve months of the given year with link and infos from the 
+    existing datebooks
+    """
+    template_name = "datebook/datebook_year.html"
+        
+    def get_context_data(self, **kwargs):
+        context = super(DatebookYearView, self).get_context_data(**kwargs)
+        
         _curr = datetime.date.today()
-        if _curr.replace(day=1) == self.object.period:
-            current_day = _curr.day
+        # Get all datebooks for the given year
+        queryset = self.object.datebook_set.filter(period__year=self.year).order_by('period')[0:13]
+        _datebook_map = dict(map(lambda x: (x.period.month, x), queryset))
+        # Fill the finded datebooks in the month map, month without datebook will have 
+        # None instead of a Datebook instance
+        datebooks_map = [(name, _datebook_map.get(i)) for i, name in enumerate(calendar.month_name) if i>0]
         
-        # Get the day items
-        day_items = {}
-        for item in self.get_dayentry_list(day_filters):
-            day_items[item.activity_date.day] = item
+        context.update({
+            'year_current': _curr.year,
+            'is_current_year': (self.year == _curr.year),
+            'datebooks_map': datebooks_map,
+        })
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.author
         
-        calendar_table = DatebookHTMLCalendar(day_items=day_items, current_day=current_day)
+        context = self.get_context_data(**kwargs)
         
-        return calendar_table.formatmonth(self.object.period.year, self.object.period.month)
+        return self.render_to_response(context)
 
-class DatebookMonthView(DatebookDetailsMixin, generic.TemplateView):
+class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
     """
     Datebook month details view
     
@@ -57,18 +83,36 @@ class DatebookMonthView(DatebookDetailsMixin, generic.TemplateView):
     """
     template_name = "datebook/datebook_month.html"
     
-    def get(self, request, *args, **kwargs):
-        self.year, self.month = int(self.kwargs['year']), int(self.kwargs['month']) # This should go in the dispatch
-        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
+    def get_calendar(self, day_filters={}):
+        # Add current day if the datebook period is the current month+year
+        current_day = None
+        _curr = datetime.date.today()
+        if _curr.replace(day=1) == self.object.period:
+            current_day = _curr
         
-        context = {
+        _cal = super(DatebookMonthView, self).get_calendar()
+        
+        return {
+            "weekheader": _cal.formatweekheader(),
+            "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=self.get_dayentry_list(day_filters), current_day=current_day),
+        }
+        
+    def get_context_data(self, **kwargs):
+        context = super(DatebookMonthView, self).get_context_data(**kwargs)
+        context.update({
             'datebook': self.object,
             'datebook_calendar': self.get_calendar(),
-        }
+        })
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
+        
+        context = self.get_context_data(**kwargs)
         
         return self.render_to_response(context)
 
-class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
+class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
     """
     Datebook month week details view
     
@@ -100,14 +144,8 @@ class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
             _f = {'activity_date': self.weekdays[0]}
         return super(DatebookWeekView, self).get_dayentry_list(_f)
     
-    def get(self, request, *args, **kwargs):
-        self.year, self.month = int(self.kwargs['year']), int(self.kwargs['month'])
-        self.week = int(self.kwargs['week'])
-        # Week number can't be empty or zero (index on 1 for humans)
-        if not self.week:
-            raise Http404
-        
-        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
+    def get_context_data(self, **kwargs):
+        context = super(DatebookWeekView, self).get_context_data(**kwargs)
         
         # Filter query set on the week days
         self.weekdays = self.find_weekday_range()
@@ -117,43 +155,21 @@ class DatebookWeekView(DatebookDetailsMixin, generic.TemplateView):
         # Make a dict from the day entry and merge it in the weekdays
         _w.update(dict(map(lambda x: (x.activity_date, x), dayentry_list)))
         
-        context = {
+        context.update({
             'datebook': self.object,
-            'month_week': self.week,
+            'week': self.week,
             # For django templates loop we need to have a sorted list
             'weekdays': [(key, _w[key]) for key in sorted(_w.iterkeys())],
-        }
-        
-        return self.render_to_response(context)
-
-class DatebookYearView(DatebookDetailsMixin, generic.TemplateView):
-    """
-    Datebook year view
-    
-    Simply display the twelve months of the given year with link and infos from the 
-    existing datebooks
-    """
-    template_name = "datebook/datebook_year.html"
+        })
+        return context
     
     def get(self, request, *args, **kwargs):
-        year = int(self.kwargs['year'])
-        _curr = datetime.date.today()
+        # Week number can't be empty or zero (index on 1 for humans)
+        if not self.week:
+            raise Http404
         
-        self.object = get_object_or_404(User, username=self.kwargs['author'])
+        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
         
-        # Get all datebooks for the given year
-        queryset = self.object.datebook_set.filter(period__year=year).order_by('period')[0:13]
-        _datebook_map = dict(map(lambda x: (x.period.month, x), queryset))
-        # Fill the finded datebooks in the month map, month without datebook will have 
-        # None instead of a Datebook instance
-        datebooks_map = [(name, _datebook_map.get(i)) for i, name in enumerate(calendar.month_name) if i>0]
-        
-        context = {
-            'author': self.object,
-            'year': year,
-            'year_current': _curr.year,
-            'is_current_year': (year == _curr.year),
-            'datebooks': datebooks_map,
-        }
+        context = self.get_context_data(**kwargs)
         
         return self.render_to_response(context)

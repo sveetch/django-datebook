@@ -11,7 +11,7 @@
 
 <ul class="datebook-calendar-month-week">{% for datekey, entry in weekdays %}
     <li class="item">
-        <h3>{{ datekey|date:"d - l" }}<h3>
+        <h3>{{ datekey|date:"d - l" }}</h3>
         <div class="container{% if not entry %} empty{% endif %}">{% if entry %}
             <p class="working-hour">{{ entry.get_working_hours }}</p>
             <div class="content">{{ entry.content }}</div>

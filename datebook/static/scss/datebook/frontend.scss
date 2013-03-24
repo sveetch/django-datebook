@@ -13,14 +13,23 @@
     $tdBorderColor: #dedede;
     
     th{
-        padding: 9px;
-        font-size: 16px;
+        font-size: 14px;
         text-transform: capitalize;
-        border-bottom: 4px solid $tdBorderColor;
+    }
+    
+    thead{
+        background: transparent;
         
-        &.sat,
-        &.sun{
-            border-bottom: 4px solid darken($tdBorderColor, 10%);
+        th{
+            padding: 9px;
+            font-size: 16px;
+            border-bottom: 4px solid $tdBorderColor;
+            text-align: center;
+            
+            &.sat,
+            &.sun{
+                border-bottom: 4px solid darken($tdBorderColor, 10%);
+            }
         }
     }
     
@@ -32,7 +41,7 @@
     }
     
     tbody tr td {
-        width:(100%/7);
+        width:(97%/7);
         height: 135px; //temp?
         
         color: #333;
@@ -47,9 +56,15 @@
             background: darken($tdBaseColor, 5%);
         }
         
-        &.noday{
+        &.noday,
+        &.weekno{
             border: 1px solid transparent !important;
             background: transparent !important;
+        }
+        &.weekno{
+            width: 3%;
+            text-align: center;
+            vertical-align: middle;
         }
         
         .container{

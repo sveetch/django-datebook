@@ -6,8 +6,10 @@ from autobreadcrumbs import site
 from django.utils.translation import ugettext_lazy
 
 site.update({
-    'datebook-index': ugettext_lazy('Agendas'),
-    'datebook-year': ugettext_lazy('Year {{ year }} - {{ author.get_full_name }}'),
-    'datebook-month': ugettext_lazy('{{ datebook.period|date:"F Y" }} - {{ datebook.author.get_full_name }}'),
-    'datebook-month-week': ugettext_lazy('{{ datebook.period|date:"F Y" }} week {{ month_week }} - {{ datebook.author.get_full_name }}'),
+    'datebook-index': ugettext_lazy('Datebooks'),
+    
+    'datebook-author': ugettext_lazy('{{ author.get_full_name }}'),
+    'datebook-author-year': ugettext_lazy('{{ year }}'),
+    'datebook-author-month': ugettext_lazy('{{ datebook.period|date:"F" }}'),
+    'datebook-author-month-week': ugettext_lazy('Week {{ week }}'),
 })

@@ -12,8 +12,7 @@
 <ul class="simple">
     {% spaceless %}{% for item in object_list %}
         <li>
-            <p><a href="{% url 'datebook-author' author=item.author__username %}">{{ item.author__username }}</a></p>
-{% comment %}            <p>Updated on {{ item.modified|timesince }}</p>{% endcomment %}
+            <p><a href="{% url 'datebook-author-year' author=author year=item.year %}">{{ item.year }}</a></p>
         </li>
     {% endfor %}{% endspaceless %}
 </ul>{% endblock %}

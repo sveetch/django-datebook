@@ -9,7 +9,6 @@ Actually this is only a prototype, more details to come..
 TODO
 ====
 
-* Better index to browse users datebooks;
 * Forms to add new datebooks and to manage their day entries;
 * User permission, restriction access, etc..;
 * i18n and FR translations;

@@ -13,6 +13,9 @@ from datebook import utils
 class Datebook(models.Model):
     """
     Datebook is only for one user (its author) it is not shared. A Datebook is for a specific month of a year.
+    
+    A Datebook is alike "lazy" in the way that its 'DayEntry' are only created when the 
+    user fill them, Datebook are not initialized with all its DayEntry on create.
     """
     author = models.ForeignKey(User, verbose_name=_('author'))
     created = models.DateTimeField(_('created'), blank=True, editable=False)
@@ -24,7 +27,7 @@ class Datebook(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('datebook-month', (), {
+        return ('datebook-author-month', (), {
             'author': self.author.username,
             'year': self.period.year,
             'month': self.period.strftime('%m'),
@@ -63,7 +66,7 @@ class DayEntry(models.Model):
         return self.activity_date.strftime("%d/%m/%Y")
     
     def get_display_hour(self, timeobj):
-        """Formating time display"""
+        """Formating time "XXhYY" display, minute are not displayed if not > 0"""
         _m = ""
         if timeobj.minute > 0:
             _m = str(timeobj.minute).rjust(2, "0")

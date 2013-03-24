@@ -1,5 +1,5 @@
 {% extends "base_fixed.html" %}
-{% load autobreadcrumb %}{% load url from future %}
+{% load autobreadcrumb i18n %}{% load url from future %}
 
 {% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
 
@@ -9,5 +9,35 @@
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
 
-{{ datebook_calendar|safe }}
+<table class="datebook-calendar-month">
+    <thead>
+        <tr>{% spaceless %}
+            <td class="weekno"></td>
+            {% for classname, name in datebook_calendar.weekheader %}
+            <th class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}">{% trans name %}</th>
+            {% endfor %}
+        {% endspaceless %}</tr>
+    </thead>
+    <tbody>{% for week in datebook_calendar.month %}
+        <tr>{% spaceless %}
+            <td class="weekno">
+                <a href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}">{{ forloop.counter }}</a>
+            </td>
+            {% for day in week %}
+                <td class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">{% if not day.noday %}
+                    <div class="container">
+                        <span class="daylabel">{{ day.date.day }}</span>
+                        {% if day.entry %}
+                            <p class="working-hour"><strong>{{ day.entry.get_working_hours }}</strong></p>
+                            <hr>
+                            <div class="content">{{ day.entry.content }}</div>
+                            <hr>
+                            <p class="length">{{ day.entry.get_elapsed_time }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}</td>
+            {% endfor %}
+        {% endspaceless %}</tr>{% endfor %}
+    </tbody>
+</table>
 {% endblock %}

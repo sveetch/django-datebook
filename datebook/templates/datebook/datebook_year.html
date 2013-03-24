@@ -9,7 +9,7 @@
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
 
-<div class="datebook-calendar-year">{% for name, datebook in datebooks %}
+<div class="datebook-calendar-year">{% for name, datebook in datebooks_map %}
     <div class="panel radius three columns{% if not datebook %} empty{% endif %}">
         <h3>{{ name|capfirst }}<h3>
         {% if datebook %}
