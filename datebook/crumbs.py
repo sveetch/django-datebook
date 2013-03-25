@@ -11,5 +11,6 @@ site.update({
     'datebook-author': ugettext_lazy('{{ author.get_full_name }}'),
     'datebook-author-year': ugettext_lazy('{{ year }}'),
     'datebook-author-month': ugettext_lazy('{{ datebook.period|date:"F" }}'),
+    #'datebook-author-month-form': ugettext_lazy('Form'),
     'datebook-author-month-week': ugettext_lazy('Week {{ week }}'),
 })

@@ -6,13 +6,14 @@ import datetime
 import calendar
 
 from django.conf import settings
-from django.http import Http404
+from django import http
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.contrib.auth.models import User
 
 from datebook.models import Datebook
 from datebook.mixins import AuthorKwargsMixin, DateKwargsMixin, DatebookCalendarMixin
+from datebook.forms import DatebookForm
 
 class IndexView(generic.TemplateView):
     """
@@ -75,6 +76,31 @@ class DatebookYearView(DateKwargsMixin, generic.TemplateView):
         
         return self.render_to_response(context)
 
+
+
+class DatebookMonthAddView(DatebookCalendarMixin, generic.View):
+    """
+    Automatically create the datebook if it does not allready exists for the "author+year+month" 
+    kwargs given, then redirect to its page.
+    
+    If the Datebook allready exists for the given kwargs, raise a "Http404"
+    """
+    def get(self, request, *args, **kwargs):
+        if Datebook.objects.filter(author=self.author, period__year=self.year, period__month=self.month).count()>0:
+            raise http.Http404
+        
+        d = self.author.datebook_set.create(period=datetime.date(year=self.year, month=self.month, day=1))
+        
+        return http.HttpResponseRedirect(d.get_absolute_url())
+
+
+class DatebookMonthFormView(DatebookCalendarMixin, generic.CreateView):
+    model = Datebook
+    context_object_name = "datebook"
+    template_name = "datebook/datebook_month_form.html"
+    form_class = DatebookForm
+
+
 class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
     """
     Datebook month details view
@@ -129,7 +155,7 @@ class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
         try:
             weekdays = calendar.Calendar().monthdatescalendar(self.year, self.month)[week]
         except IndexError:
-            raise Http404
+            raise http.Http404
         
         # Calendar fill the grid with previous or past month days, so we filter them to 
         # return only the current month days
@@ -166,7 +192,7 @@ class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
     def get(self, request, *args, **kwargs):
         # Week number can't be empty or zero (index on 1 for humans)
         if not self.week:
-            raise Http404
+            raise http.Http404
         
         self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
         
