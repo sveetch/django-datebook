@@ -8,7 +8,7 @@ from django.utils.translation import ugettext
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, RowFluid, Column, ButtonHolder, Submit
 
-from datebook.models import Datebook
+from datebook.models import Datebook, DayEntry
 
 class DatebookForm(forms.ModelForm):
     """
@@ -31,3 +31,46 @@ class DatebookForm(forms.ModelForm):
     
     class Meta:
         model = Datebook
+
+class DayEntryForm(forms.ModelForm):
+    """
+    DayEntry form
+    """
+    def __init__(self, datebook, day, *args, **kwargs):
+        self.datebook = datebook
+        self.daydate = datebook.period.replace(day=day)
+        
+        self.helper = FormHelper()
+        self.helper.form_action = '.'
+        self.helper.layout = Layout(
+            Fieldset(
+                ugettext('Working hours'),
+                RowFluid(
+                    Column('start', css_class='four'),
+                    Column('stop', css_class='four'),
+                    Column('pause', css_class='two'),
+                    Column('vacation', css_class='two'),
+                ),
+            ),
+            Fieldset(
+                ugettext('Content'),
+                'content',
+            ),
+            ButtonHolder(
+                Submit('submit', ugettext('Save')),
+            ),
+        )
+        
+        super(DayEntryForm, self).__init__(*args, **kwargs)
+    
+    def save(self, *args, **kwargs):
+        instance = super(DayEntryForm, self).save(commit=False, *args, **kwargs)
+        instance.datebook = self.datebook
+        instance.activity_date = self.daydate
+        instance.save()
+        
+        return instance
+    
+    class Meta:
+        model = DayEntry
+        exclude = ('datebook', 'activity_date')

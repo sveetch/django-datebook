@@ -6,6 +6,15 @@
 {% block head_more_links %}
     {% include "datebook/include_css.html" %}
 {% endblock %}
+{% block head_more_js %}{{ block.super }}
+<script language="JavaScript">
+//<![CDATA[
+$('td.item').click(function(e) {
+    return;
+});
+//]]>
+</script>
+{% endblock %}
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
 
@@ -24,7 +33,7 @@
                 <a href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}">{{ forloop.counter }}</a>
             </td>
             {% for day in week %}
-                <td class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">{% if not day.noday %}
+                <td class="item {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">{% if not day.noday %}
                     <div class="container">
                         <span class="daylabel">{{ day.date.day }}</span>
                         {% if day.entry %}

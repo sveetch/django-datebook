@@ -11,5 +11,6 @@ TODO
 
 * Forms to add new datebooks and to manage their day entries;
 * User permission, restriction access, etc..;
-* i18n and FR translations;
+* Add "DayEntry templates" to fill day entries content from a template string;
 * Add "Reminder" which can be global reminder for all datebooks, or just reminder associated for a single datebook (~=month year);
+* i18n and FR translations;

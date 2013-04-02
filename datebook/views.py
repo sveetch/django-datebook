@@ -9,15 +9,19 @@ from django.conf import settings
 from django import http
 from django.shortcuts import get_object_or_404
 from django.views import generic
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from datebook.models import Datebook
+from datebook.models import Datebook, DayEntry
 from datebook.mixins import AuthorKwargsMixin, DateKwargsMixin, DatebookCalendarMixin
-from datebook.forms import DatebookForm
+from datebook.forms import DatebookForm, DayEntryForm
+from datebook.utils import week_from_date
 
 class IndexView(generic.TemplateView):
     """
-    Dummy Index view
+    Index view
+    
+    Display all user that have one or more Datebooks
     """
     template_name = "datebook/index.html"
     
@@ -30,6 +34,11 @@ class IndexView(generic.TemplateView):
         return self.render_to_response(context)
 
 class DatebookAuthorView(generic.TemplateView):
+    """
+    User datebook index
+    
+    Display all year that have one or more Datebooks for the given user
+    """
     template_name = "datebook/author_index.html"
     
     def get(self, request, *args, **kwargs):
@@ -46,7 +55,7 @@ class DatebookYearView(DateKwargsMixin, generic.TemplateView):
     """
     Datebook year view
     
-    Simply display the twelve months of the given year with link and infos from the 
+    Display the twelve months of the given year with link and infos for the 
     existing datebooks
     """
     template_name = "datebook/datebook_year.html"
@@ -76,8 +85,6 @@ class DatebookYearView(DateKwargsMixin, generic.TemplateView):
         
         return self.render_to_response(context)
 
-
-
 class DatebookMonthAddView(DatebookCalendarMixin, generic.View):
     """
     Automatically create the datebook if it does not allready exists for the "author+year+month" 
@@ -95,6 +102,9 @@ class DatebookMonthAddView(DatebookCalendarMixin, generic.View):
 
 
 class DatebookMonthFormView(DatebookCalendarMixin, generic.CreateView):
+    """
+    Unused, actually "DatebookMonthAddView" does the job
+    """
     model = Datebook
     context_object_name = "datebook"
     template_name = "datebook/datebook_month_form.html"
@@ -132,11 +142,64 @@ class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
         return context
     
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
+        self.object = self.get_datebook({'period__year': self.year, 'period__month': self.month})
         
         context = self.get_context_data(**kwargs)
         
         return self.render_to_response(context)
+
+
+class DayEntryBaseFormView(DatebookCalendarMixin):
+    """
+    DayEntry base form view
+    """
+    model = DayEntry
+    context_object_name = "dayentry"
+    template_name = "datebook/datebook_day_form.html"
+    form_class = DayEntryForm
+
+    def get_form(self, form_class):
+        """
+        Add required args to form instance
+        """
+        return form_class(self.datebook, self.day, **self.get_form_kwargs())
+    
+    def get(self, request, *args, **kwargs):
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        
+        return super(DayEntryBaseFormView, self).get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        
+        return super(DayEntryBaseFormView, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('datebook-author-month-week', kwargs={
+            'author': self.author,
+            'year': self.object.activity_date.year,
+            'month': self.object.activity_date.month,
+            'week': week_from_date(self.object.activity_date),
+        })
+
+
+class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
+    """
+    DayEntry form create view
+    """
+    pass
+
+
+class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
+    """
+    DayEntry form edit view
+    """
+    def get_object(self):
+        """
+        Add required args to form instance
+        """
+        return self.datebook.dayentry_set.get(activity_date__day=self.day)
+
 
 class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
     """
@@ -194,7 +257,7 @@ class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
         if not self.week:
             raise http.Http404
         
-        self.object = self.get_object({'period__year': self.year, 'period__month': self.month})
+        self.object = self.get_datebook({'period__year': self.year, 'period__month': self.month})
         
         context = self.get_context_data(**kwargs)
         

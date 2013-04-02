@@ -2,6 +2,8 @@
 """
 View mixins
 """
+import datetime
+
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
@@ -35,7 +37,7 @@ class DateKwargsMixin(AuthorKwargsMixin):
     
     This does not check anything, kwargs rules have to be in your view or urls map
     """
-    date_kwarg_names = ['year', 'month', 'week']
+    date_kwarg_names = ['year', 'month', 'week', 'day']
     
     def dispatch(self, request, *args, **kwargs):
         for name in self.date_kwarg_names:
@@ -47,6 +49,7 @@ class DateKwargsMixin(AuthorKwargsMixin):
         context = super(DateKwargsMixin, self).get_context_data(**kwargs)
         for name in self.date_kwarg_names:
             context[name] = getattr(self, name, None)
+        context['target_date'] = datetime.date(getattr(self, 'year', 1977), getattr(self, 'month', 1), getattr(self, 'day', 1))
         return context
 
 class DatebookCalendarMixin(DateKwargsMixin):
@@ -55,7 +58,7 @@ class DatebookCalendarMixin(DateKwargsMixin):
     """
     calendar_obj = DatebookCalendar
     
-    def get_object(self, filters):
+    def get_datebook(self, filters):
         return get_object_or_404(Datebook, author__username=self.kwargs['author'], **filters)
     
     def get_dayentry_list(self, filters={}):
