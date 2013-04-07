@@ -1,10 +1,16 @@
-{% extends "base_fixed.html" %}
+{% extends "datebook/subbase.html" %}
 {% load autobreadcrumb crispy_forms_tags %}{% load url from future %}
 
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
-
-{% block head_more_links %}
-    {% include "datebook/include_css.html" %}
+{% block head_more_js %}{{ block.super }}
+<script language="JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+        $('#id_start_datetime_1').timepicker({ 'timeFormat': 'H:i' });
+        $('#id_stop_datetime_1').timepicker({ 'timeFormat': 'H:i' });
+        $('#id_pause').timepicker({ 'timeFormat': 'H:i' });
+    });
+//]]>
+</script>
 {% endblock %}
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>

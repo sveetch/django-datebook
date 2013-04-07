@@ -187,7 +187,25 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
     """
     DayEntry form create view
     """
-    pass
+    def get_form_kwargs(self):
+        """
+        Put the initial data for the datetime start and stop
+        
+        TODO: Time start and stop should comes from the User profile settings (date 
+              allways come from the datebook period and the required day).
+        """
+        kwargs = super(DayEntryFormCreateView, self).get_form_kwargs()
+        day_date = self.datebook.period.replace(day=self.day)
+        time_start = datetime.time(9, 0)
+        time_stop = datetime.time(18, 0)
+        kwargs.update({
+            'initial': {
+                'start' : datetime.datetime.combine(day_date, time_start),
+                'stop' : datetime.datetime.combine(day_date, time_stop),
+                'pause' : datetime.time(1, 0),
+            }
+        })
+        return kwargs
 
 
 class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):

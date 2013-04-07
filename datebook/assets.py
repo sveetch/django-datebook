@@ -14,10 +14,16 @@ else:
             filters='yui_css',
             output='css/datebook/frontend.min.css'
         ),
+        'datebook_frontend_js': Bundle(
+            "js/jquery/jquery.timepicker.js",
+            filters='yui_js',
+            output='js/datebook_frontend.min.js'
+        ),
     }
 
     ENABLED_BUNDLES = (
         'datebook_frontend_css',
+        'datebook_frontend_js',
     )
 
     for item in ENABLED_BUNDLES:

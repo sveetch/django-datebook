@@ -1,19 +1,14 @@
-{% extends "base_fixed.html" %}
+{% extends "datebook/subbase.html" %}
 {% load autobreadcrumb i18n %}{% load url from future %}
 
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
-
-{% block head_more_links %}
-    {% include "datebook/include_css.html" %}
-{% endblock %}
 {% block head_more_js %}{{ block.super }}
-<script language="JavaScript">
+{% comment %}<script language="JavaScript">
 //<![CDATA[
 $('td.item').click(function(e) {
     return;
 });
 //]]>
-</script>
+</script>{% endcomment %}
 {% endblock %}
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>

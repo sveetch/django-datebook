@@ -1,11 +1,5 @@
-{% extends "base_fixed.html" %}
+{% extends "datebook/subbase.html" %}
 {% load autobreadcrumb %}{% load url from future %}
-
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
-
-{% block head_more_links %}
-    {% include "datebook/include_css.html" %}
-{% endblock %}
 
 {% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
 
