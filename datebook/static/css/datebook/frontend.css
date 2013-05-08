@@ -15,24 +15,15 @@
   outline: none;
   z-index: 10001;
 }
-
-/* line 18, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 17, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list.ui-timepicker-with-duration {
   width: 11em;
 }
-
-/* line 22, ../../scss/datebook/_jquery.timepicker.scss */
-.ui-timepicker-duration {
-  margin-left: 5px;
-  color: #888;
-}
-
-/* line 26, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 21, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list:hover .ui-timepicker-duration {
   color: #888;
 }
-
-/* line 30, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 25, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list li {
   padding: 3px 0 3px 5px;
   cursor: pointer;
@@ -41,42 +32,43 @@
   list-style: none;
   margin: 0;
 }
-
-/* line 39, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 34, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list:hover .ui-timepicker-selected {
   background: #fff;
   color: #000;
 }
-
-/* line 45, ../../scss/datebook/_jquery.timepicker.scss */
-li.ui-timepicker-selected,
+/* line 40, ../../scss/datebook/_jquery.timepicker.scss */
+.ui-timepicker-list li.ui-timepicker-selected,
 .ui-timepicker-list li:hover,
 .ui-timepicker-list .ui-timepicker-selected:hover {
   background: #1980EC;
   color: #fff;
 }
-
-/* line 50, ../../scss/datebook/_jquery.timepicker.scss */
-li.ui-timepicker-selected .ui-timepicker-duration,
+/* line 45, ../../scss/datebook/_jquery.timepicker.scss */
+.ui-timepicker-list li.ui-timepicker-selected .ui-timepicker-duration,
 .ui-timepicker-list li:hover .ui-timepicker-duration {
   color: #ccc;
 }
-
-/* line 56, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 51, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list li.ui-timepicker-disabled,
 .ui-timepicker-list li.ui-timepicker-disabled:hover,
 .ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
   color: #888;
   cursor: default;
 }
-
-/* line 62, ../../scss/datebook/_jquery.timepicker.scss */
+/* line 57, ../../scss/datebook/_jquery.timepicker.scss */
 .ui-timepicker-list li.ui-timepicker-disabled:hover,
 .ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
   background: #f2f2f2;
 }
 
-/* line 5, ../../scss/datebook/frontend.scss */
+/* line 62, ../../scss/datebook/_jquery.timepicker.scss */
+.ui-timepicker-duration {
+  margin-left: 5px;
+  color: #888;
+}
+
+/* line 6, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month {
   width: 100%;
   font-size: 12px;
@@ -84,34 +76,34 @@ li.ui-timepicker-selected .ui-timepicker-duration,
   border-collapse: separate;
   border-spacing: 5px;
 }
-/* line 16, ../../scss/datebook/frontend.scss */
+/* line 17, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month th {
   font-size: 14px;
   text-transform: capitalize;
 }
-/* line 21, ../../scss/datebook/frontend.scss */
+/* line 22, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month thead {
   background: transparent;
 }
-/* line 24, ../../scss/datebook/frontend.scss */
+/* line 25, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month thead th {
   padding: 9px;
   font-size: 16px;
   border-bottom: 4px solid #dedede;
   text-align: center;
 }
-/* line 31, ../../scss/datebook/frontend.scss */
+/* line 32, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month thead th.sat, .datebook-calendar-month thead th.sun {
   border-bottom: 4px solid #c5c5c5;
 }
-/* line 40, ../../scss/datebook/frontend.scss */
+/* line 41, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr
 tbody tr.even,
 .datebook-calendar-month tbody tr.alt,
 .datebook-calendar-month tbody tr:nth-child(even) {
   background: transparent;
 }
-/* line 44, ../../scss/datebook/frontend.scss */
+/* line 45, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td {
   width: 13.85714%;
   height: 135px;
@@ -121,27 +113,27 @@ tbody tr.even,
   border: 1px solid #dedede;
   background: white;
 }
-/* line 55, ../../scss/datebook/frontend.scss */
+/* line 56, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td.sat, .datebook-calendar-month tbody tr td.sun {
   border: 1px solid #d1d1d1;
   background: #f2f2f2;
 }
-/* line 61, ../../scss/datebook/frontend.scss */
+/* line 62, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td.noday, .datebook-calendar-month tbody tr td.weekno {
   border: 1px solid transparent !important;
   background: transparent !important;
 }
-/* line 65, ../../scss/datebook/frontend.scss */
+/* line 66, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td.weekno {
   width: 3%;
   text-align: center;
   vertical-align: middle;
 }
-/* line 71, ../../scss/datebook/frontend.scss */
+/* line 72, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td .container {
   position: relative;
 }
-/* line 74, ../../scss/datebook/frontend.scss */
+/* line 75, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr td .container .daylabel {
   display: block;
   width: 16px;
@@ -153,13 +145,13 @@ tbody tr.even,
   text-align: right;
   background: #2ba6cb;
 }
-/* line 90, ../../scss/datebook/frontend.scss */
+/* line 91, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr.even td,
 .datebook-calendar-month tbody tr.alt td,
 .datebook-calendar-month tbody tr:nth-child(even) td {
   background: #f9f9f9;
 }
-/* line 94, ../../scss/datebook/frontend.scss */
+/* line 95, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month tbody tr.even td.sat, .datebook-calendar-month tbody tr.even td.sun,
 .datebook-calendar-month tbody tr.alt td.sat,
 .datebook-calendar-month tbody tr.alt td.sun,
@@ -169,18 +161,34 @@ tbody tr.even,
   background: #ececec;
 }
 
-/* line 102, ../../scss/datebook/frontend.scss */
+/* line 103, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-/* line 107, ../../scss/datebook/frontend.scss */
+/* line 108, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week li.item {
   margin: 0;
   padding: 10px 7px;
 }
-/* line 111, ../../scss/datebook/frontend.scss */
+/* line 112, ../../scss/datebook/frontend.scss */
 .datebook-calendar-month-week li.item + li.item {
   border-top: 1px solid black;
+}
+
+/* line 120, ../../scss/datebook/frontend.scss */
+#datebook-dayentry-form #div_id_vacation {
+  text-align: right;
+}
+/* line 124, ../../scss/datebook/frontend.scss */
+#datebook-dayentry-form div.row {
+  padding-left: 0;
+  padding-right: 0;
+}
+/* line 129, ../../scss/datebook/frontend.scss */
+#datebook-dayentry-form div.row + div.row, #datebook-dayentry-form div.row + div.buttonHolder {
+  border-top: 1px solid #d0d0d0;
+  margin-top: 15px;
+  padding-top: 15px;
 }

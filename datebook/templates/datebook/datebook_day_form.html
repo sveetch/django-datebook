@@ -5,9 +5,36 @@
 <script language="JavaScript">
 //<![CDATA[
     $(document).ready(function() {
+        // Init timepick on time inputs
         $('#id_start_datetime_1').timepicker({ 'timeFormat': 'H:i' });
         $('#id_stop_datetime_1').timepicker({ 'timeFormat': 'H:i' });
         $('#id_pause').timepicker({ 'timeFormat': 'H:i' });
+        // Hide date inputs to avoid manual edit
+        $('#id_start_datetime_0').hide();
+        $('#id_stop_datetime_0').hide();
+        
+        /*
+        * Automatically update the stop date on start & stop time inputs changes
+        * 
+        * If diff between start and stop is less than 0, assume the stop time is in the 
+        * next day (from the start date), else assume it is in the same day that the 
+        * start date.
+        *
+        * Ex: If start is "15/05/2013 11:00" and stop time is "02:00", stop date will be 
+        *     "16/05/2013". Then if stop time become "18:00", stop date will be "15/05/2013".
+        */
+        $('#id_start_datetime_1, #id_stop_datetime_1').on('changeTime', function() {
+            var mstart = moment($("#id_start_datetime_0").val() +" "+ $("#id_start_datetime_1").val(), "DD/MM/YYYY HH:mm"),
+                mstop = moment($("#id_stop_datetime_0").val() +" "+ $("#id_stop_datetime_1").val(), "DD/MM/YYYY HH:mm"),
+                startdate = moment($("#id_start_datetime_0").val(), "DD/MM/YYYY");
+            
+            // Update stop date from diff with start datetime
+            if(mstop.diff(mstart, 'minutes') < 0) {
+                startdate.add('days', 1);
+                $("#id_stop_datetime_0").val( startdate.format("DD/MM/YYYY") );
+            }
+            $("#id_stop_datetime_0").val( startdate.format("DD/MM/YYYY") );
+        });
     });
 //]]>
 </script>

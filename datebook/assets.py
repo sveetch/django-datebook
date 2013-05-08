@@ -16,6 +16,7 @@ else:
         ),
         'datebook_frontend_js': Bundle(
             "js/jquery/jquery.timepicker.js",
+            "js/jquery/moment.js",
             filters='yui_js',
             output='js/datebook_frontend.min.js'
         ),

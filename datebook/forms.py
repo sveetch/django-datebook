@@ -63,22 +63,22 @@ class DayEntryForm(forms.ModelForm):
         
         self.helper = FormHelper()
         self.helper.form_action = '.'
+        self.helper.form_class = 'custom'
+        self.helper.form_id = 'datebook-dayentry-form'
         self.helper.layout = Layout(
-            Fieldset(
-                ugettext('Working hours'),
-                RowFluid(
-                    Column('start_datetime', css_class='four'),
-                    Column('stop_datetime', css_class='four'),
-                    Column('pause', css_class='two'),
-                    Column('vacation', css_class='two'),
-                ),
+            RowFluid(
+                Column('vacation', css_class='twelve'),
             ),
-            Fieldset(
-                ugettext('Content'),
-                'content',
+            RowFluid(
+                Column('start_datetime', css_class='five mobile-two'),
+                Column('pause', css_class='two mobile-one'),
+                Column('stop_datetime', css_class='five mobile-two'),
+            ),
+            RowFluid(
+                Column('content', css_class='twelve'),
             ),
             ButtonHolder(
-                Submit('submit', ugettext('Save')),
+                Submit('submit', ugettext('Save'), css_class='expand'),
             ),
         )
         
@@ -89,6 +89,9 @@ class DayEntryForm(forms.ModelForm):
         # Day entry can't start before the targeted day date
         if start and start.date() < self.daydate:
             raise forms.ValidationError("You can't start a day before itself")
+        # Day entry can't start after the targeted day date
+        if start and start.date() > self.daydate:
+            raise forms.ValidationError("You can't start a day after itself")
         
         return start
     
