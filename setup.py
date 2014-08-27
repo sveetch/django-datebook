@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='datebook',
+    name='django-datebook',
     version=__import__('datebook').__version__,
     description=__import__('datebook').__doc__,
     long_description=open('README.rst').read(),
     author='David Thenon',
     author_email='sveetch@gmail.com',
-    url='http://pypi.python.org/pypi/datebook',
+    url='http://pypi.python.org/pypi/django-datebook',
     license='MIT',
     packages=find_packages(),
     classifiers=[

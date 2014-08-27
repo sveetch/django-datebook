@@ -22,7 +22,7 @@ TODO
 Links
 -----
 
-* Clone it on his `Github repository <https://github.com/sveetch/datebook>`_;
+* Clone it on his `Github repository <https://github.com/sveetch/django-datebook>`_;
 
 Install
 =======
