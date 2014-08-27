@@ -1,7 +1,7 @@
-{% extends "datebook/subbase.html" %}
-{% load autobreadcrumb crispy_forms_tags %}{% load url from future %}
+{% extends "datebook/base.html" %}
+{% load autobreadcrumb crispy_forms_tags %}
 
-{% block head_more_js %}{{ block.super }}
+{% block head_base_js %}{{ block.super }}
 <script language="JavaScript">
 //<![CDATA[
     $(document).ready(function() {
@@ -40,7 +40,7 @@
 </script>
 {% endblock %}
 
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+{% block datebook_content %}
     
 {% crispy form %}
 {% endblock %}

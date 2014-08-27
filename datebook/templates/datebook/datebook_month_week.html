@@ -1,7 +1,7 @@
-{% extends "datebook/subbase.html" %}
-{% load autobreadcrumb i18n %}{% load url from future %}
+{% extends "datebook/base.html" %}
+{% load autobreadcrumb i18n %}
 
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+{% block datebook_content %}
 
 <ul class="datebook-calendar-month-week">{% for datekey, entry in weekdays %}
     <li class="item">

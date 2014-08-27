@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy
 site.update({
     'datebook-index': ugettext_lazy('Datebooks'),
     
-    'datebook-author': ugettext_lazy('{{ author.get_full_name }}'),
+    'datebook-author': ugettext_lazy('{{ author.username }}'),
     'datebook-author-year': ugettext_lazy('{{ year }}'),
     'datebook-author-month': ugettext_lazy('{{ target_date|date:"F" }}'),
     'datebook-author-day-add': ugettext_lazy('Add day {{ day }}'),

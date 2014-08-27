@@ -1,7 +1,7 @@
-{% extends "datebook/subbase.html" %}
-{% load autobreadcrumb %}{% load url from future %}
+{% extends "datebook/base.html" %}
+{% load autobreadcrumb %}
 
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+{% block datebook_content %}
 
 <div class="datebook-calendar-year">{% for name, datebook in datebooks_map %}
     <div class="three columns{% if not datebook %} empty{% endif %}">

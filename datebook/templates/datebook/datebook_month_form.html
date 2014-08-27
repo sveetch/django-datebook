@@ -1,13 +1,7 @@
 {% extends "base_fixed.html" %}
-{% load autobreadcrumb crispy_forms_tags %}{% load url from future %}
+{% load autobreadcrumb crispy_forms_tags %}
 
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
-
-{% block head_more_links %}
-    {% include "datebook/include_css.html" %}
-{% endblock %}
-
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+{% block datebook_content %}
     
 {% crispy form %}
 {% endblock %}

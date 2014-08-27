@@ -1,13 +1,13 @@
-{% extends "datebook/subbase.html" %}
-{% load autobreadcrumb %}{% load url from future %}
+{% extends "datebook/base.html" %}
+{% load autobreadcrumb %}
 
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
+{% block datebook_content %}
 
 <ul class="simple">
     {% spaceless %}{% for item in object_list %}
         <li>
             <p><a href="{% url 'datebook-author' author=item.author__username %}">{{ item.author__username }}</a></p>
-{% comment %}            <p>Updated on {{ item.modified|timesince }}</p>{% endcomment %}
+            {% comment %}<p>Updated on {{ item.modified|timesince }}</p>{% endcomment %}
         </li>
     {% endfor %}{% endspaceless %}
 </ul>{% endblock %}

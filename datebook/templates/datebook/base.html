@@ -1,0 +1,22 @@
+{% extends "skeleton.html" %}
+{% load autobreadcrumb %}
+
+{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
+
+{% block head_more_links %}{{ block.super }}
+    {% include "datebook/include_css.html" %}
+{% endblock %}
+
+{% block head_base_js %}{{ block.super }}
+    {% include "datebook/include_js.html" %}
+{% endblock %}
+
+{% block menu_active_link_datebook %} class="active"{% endblock %}
+
+{% block base_content %}<div class="row datebook">
+    <div class="small-12 columns">
+        {% autobreadcrumbs_tag %}
+        <h2>{% current_title_from_breadcrumbs %}</h2>
+        {% block datebook_content %}{% endblock %}
+    </div>
+</div>{% endblock %}

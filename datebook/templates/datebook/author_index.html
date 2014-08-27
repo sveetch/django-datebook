@@ -1,14 +1,7 @@
-{% extends "base_fixed.html" %}
-{% load autobreadcrumb %}{% load url from future %}
+{% extends "datebook/base.html" %}
+{% load autobreadcrumb %}
 
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
-
-{% block head_more_links %}
-    {% include "datebook/include_css.html" %}
-{% endblock %}
-
-{% block content %}<h2>{% current_title_from_breadcrumbs %}</h2>
-
+{% block datebook_content %}
 <ul class="simple">
     {% spaceless %}{% for item in object_list %}
         <li>
