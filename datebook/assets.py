@@ -9,22 +9,22 @@ else:
     DJANGO_ASSETS_INSTALLED = True
 
     AVALAIBLE_BUNDLES = {
-        'datebook_frontend_css': Bundle(
-            "css/datebook/frontend.css",
+        'datebook_app_css': Bundle(
+            "css/datebook_app.css",
             filters='yui_css',
-            output='css/datebook/frontend.min.css'
+            output='css/datebook_app.min.css'
         ),
-        'datebook_frontend_js': Bundle(
+        'datebook_app_js': Bundle(
             "js/jquery/jquery.timepicker.js",
             "js/jquery/moment.js",
             filters='yui_js',
-            output='js/datebook_frontend.min.js'
+            output='js/datebook_app.min.js'
         ),
     }
 
     ENABLED_BUNDLES = (
-        'datebook_frontend_css',
-        'datebook_frontend_js',
+        'datebook_app_css',
+        'datebook_app_js',
     )
 
     for item in ENABLED_BUNDLES:

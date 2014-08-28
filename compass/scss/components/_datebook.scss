@@ -1,6 +1,4 @@
 @import "compass/css3";
-@import "foundation/settings";
-@import "jquery.timepicker";
 
 // Full calendar for a month
 .datebook-calendar-month{
@@ -81,7 +79,7 @@
                 font-size: 10px;
                 font-weight: bold;
                 text-align: right;
-                background: $mainColor;
+                background: $primary-color;
             }
         }
     }
@@ -110,7 +108,7 @@
         padding: 10px 7px; 
         
         &+li.item{
-            border-top: 1px solid $black;
+            border-top: 1px solid #000000;
         }
     }
 }
