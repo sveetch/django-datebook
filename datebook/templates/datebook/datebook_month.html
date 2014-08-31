@@ -1,5 +1,5 @@
 {% extends "datebook/base.html" %}
-{% load autobreadcrumb i18n %}
+{% load i18n %}
 
 {% block head_base_js %}{{ block.super }}
 {% comment %}<script language="JavaScript">
@@ -25,21 +25,27 @@ $('td.item').click(function(e) {
     <tbody>{% for week in datebook_calendar.month %}
         <tr>{% spaceless %}
             <td class="weekno">
-                <a href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}">{{ forloop.counter }}</a>
+                <a href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}">Week&nbsp;{{ forloop.counter }}</a>
             </td>
             {% for day in week %}
-                <td class="item {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">{% if not day.noday %}
-                    <div class="container">
-                        <span class="daylabel">{{ day.date.day }}</span>
-                        {% if day.entry %}
-                            <p class="working-hour"><strong>{{ day.entry.get_working_hours }}</strong></p>
-                            <hr>
-                            <div class="content">{{ day.entry.content }}</div>
-                            <hr>
-                            <p class="length">{{ day.entry.get_elapsed_time }}</p>
-                        {% endif %}
-                    </div>
-                {% endif %}</td>
+                <td class="item {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">
+                    {% if not day.noday %}
+                        <div class="container">
+                            <span class="daylabel">{{ day.date.day }}</span>
+                            {% if day.entry %}
+                                {% if day.entry.vacation %}
+                                    <p><em>Vacation</em></p>
+                                {% else %}
+                                    <p class="working-hour"><strong>{{ day.entry.get_working_hours }}</strong></p>
+                                    <hr>
+                                    <div class="content">{{ day.entry.content }}</div>
+                                    <hr>
+                                    <p class="length">{{ day.entry.get_elapsed_time }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </td>
             {% endfor %}
         {% endspaceless %}</tr>{% endfor %}
     </tbody>

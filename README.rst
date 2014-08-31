@@ -1,3 +1,10 @@
+.. _Django: https://www.djangoproject.com/
+.. _South: http://south.readthedocs.org/en/latest/
+.. _autobreadcrumbs: https://github.com/sveetch/autobreadcrumbs
+.. _django-braces: https://github.com/brack3t/django-braces/
+.. _django-guardian: https://github.com/lukaszb/django-guardian
+.. _django-crispy-forms: https://github.com/maraujop/django-crispy-forms
+
 Introduction
 ============
 
@@ -9,20 +16,25 @@ This does not aims to reproduce some advanced apps like Google calendar or alike
 
 Actually this is only a prototype, more details to come..
 
-TODO
-----
-
-* User permission, restriction access, etc..;
-* Better ergonomy;
-* Add "DayEntry templates" model to fill day entries content from a template string;
-* Add "Reminder" model which can be global reminder for all datebooks, or just reminder associated for a single datebook (~=month year);
-* i18n and FR translations;
-
 
 Links
 -----
 
+* Download his `PyPi package <https://pypi.python.org/pypi/django-datebook>`_;
 * Clone it on his `Github repository <https://github.com/sveetch/django-datebook>`_;
+
+Requires
+--------
+
+* `Django`_ >= 1.5;
+* `autobreadcrumbs`_ >= 1.0;
+* `django-braces`_ >= 1.2.0,<1.4;
+* `django-crispy-forms`_ >= 1.4.0;
+* `django-guardian`_ >= 1.2.0;
+
+Optionnally :
+
+* `South`_ to perform database migrations for next releases;
 
 Install
 =======

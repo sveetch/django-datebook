@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Forms
+Forms for day forms
 """
 from django import forms
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, RowFluid, Column, ButtonHolder, Submit
 
-from datebook.models import Datebook, DayEntry
+from datebook.models import DayEntry
+from datebook.forms import CrispyFormMixin
 
 DATETIME_FORMATS = {
     'input_date_formats': ['%d/%m/%Y'],
@@ -16,34 +17,14 @@ DATETIME_FORMATS = {
     'widget': forms.SplitDateTimeWidget(date_format='%d/%m/%Y', time_format='%H:%M'),
 }
 
-class DatebookForm(forms.ModelForm):
-    """
-    Datebook form
-    """
-    def __init__(self, author=None, *args, **kwargs):
-        self.author = author
-        
-        self.helper = FormHelper()
-        self.helper.form_action = '.'
-        
-        super(DatebookForm, self).__init__(*args, **kwargs)
-    
-    def save(self, *args, **kwargs):
-        instance = super(DatebookForm, self).save(commit=False, *args, **kwargs)
-        instance.author = self.author
-        instance.save()
-        
-        return instance
-    
-    class Meta:
-        model = Datebook
-
-class DayEntryForm(forms.ModelForm):
+class DayEntryForm(CrispyFormMixin, forms.ModelForm):
     """
     DayEntry form
     """
-    start_datetime = forms.SplitDateTimeField(label=ugettext('start'), **DATETIME_FORMATS)
-    stop_datetime = forms.SplitDateTimeField(label=ugettext('stop'), **DATETIME_FORMATS)
+    crispy_form_helper_path = 'datebook.forms.crispies.day_helper'
+    
+    start_datetime = forms.SplitDateTimeField(label=_('start'), **DATETIME_FORMATS)
+    stop_datetime = forms.SplitDateTimeField(label=_('stop'), **DATETIME_FORMATS)
 
     def __init__(self, datebook, day, *args, **kwargs):
         self.datebook = datebook
@@ -61,28 +42,8 @@ class DayEntryForm(forms.ModelForm):
             kwargs['initial']['stop_datetime'] = kwargs['instance'].stop
                 
         
-        self.helper = FormHelper()
-        self.helper.form_action = '.'
-        self.helper.form_class = 'custom'
-        self.helper.form_id = 'datebook-dayentry-form'
-        self.helper.layout = Layout(
-            RowFluid(
-                Column('vacation', css_class='twelve'),
-            ),
-            RowFluid(
-                Column('start_datetime', css_class='five mobile-two'),
-                Column('pause', css_class='two mobile-one'),
-                Column('stop_datetime', css_class='five mobile-two'),
-            ),
-            RowFluid(
-                Column('content', css_class='twelve'),
-            ),
-            ButtonHolder(
-                Submit('submit', ugettext('Save'), css_class='expand'),
-            ),
-        )
-        
         super(DayEntryForm, self).__init__(*args, **kwargs)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
     
     def clean_start_datetime(self):
         start = self.cleaned_data['start_datetime']

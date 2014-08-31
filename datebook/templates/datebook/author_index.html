@@ -1,11 +1,16 @@
 {% extends "datebook/base.html" %}
-{% load autobreadcrumb %}
+{% load i18n crispy_forms_tags %}
 
 {% block datebook_content %}
-<ul class="simple">
+<div class="clearfix">{% crispy form %}</div>
+
+<ul class="list-group">
     {% spaceless %}{% for item in object_list %}
         <li>
-            <p><a href="{% url 'datebook-author-year' author=author year=item.year %}">{{ item.year }}</a></p>
+            <a href="{% url 'datebook-author-year' author=author year=item.year %}">
+                {% comment %}<p class="right text-right"><small>X filled months</small></p>{% endcomment %}
+                <h3>{{ item.year }}</h3>
+            </a>
         </li>
     {% endfor %}{% endspaceless %}
 </ul>{% endblock %}

@@ -1,5 +1,12 @@
 @import "compass/css3";
 
+.hide-label{
+    &>label,
+    &>.holder > label{
+        display:none;
+    }
+}
+
 // Full calendar for a month
 .datebook-calendar-month{
     width: 100%;

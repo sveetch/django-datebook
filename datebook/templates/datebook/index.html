@@ -1,13 +1,21 @@
 {% extends "datebook/base.html" %}
-{% load autobreadcrumb %}
+{% load i18n %}
 
 {% block datebook_content %}
 
-<ul class="simple">
+<h3>Users datebooks</h3>
+
+<ul class="inline-list">
+        <li>
+            <a href="{% url 'datebook-create' %}" class="button success small radius"><i class="icon-add-circle"></i> Open a new datebook for an user</a>
+        </li>
     {% spaceless %}{% for item in object_list %}
         <li>
-            <p><a href="{% url 'datebook-author' author=item.author__username %}">{{ item.author__username }}</a></p>
+            <a href="{% url 'datebook-author' author=item.author__username %}" class="button small radius">{{ item.author__username }}</a>
             {% comment %}<p>Updated on {{ item.modified|timesince }}</p>{% endcomment %}
         </li>
     {% endfor %}{% endspaceless %}
-</ul>{% endblock %}
+</ul>
+    
+</p>
+ {% endblock %}

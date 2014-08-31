@@ -7,6 +7,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import now as tz_now
 
 from datebook import utils
 
@@ -41,7 +42,7 @@ class Datebook(models.Model):
     def save(self, *args, **kwargs):
         # First create
         if not self.created:
-            self.created = datetime.datetime.now()
+            self.created = tz_now()
         
         super(Datebook, self).save(*args, **kwargs)
 
@@ -98,7 +99,7 @@ class DayEntry(models.Model):
 
     def save(self, *args, **kwargs):
         # Allways update the datebook
-        self.datebook.modified = datetime.datetime.now()
+        self.datebook.modified = tz_now()
         self.datebook.save()
         
         super(DayEntry, self).save(*args, **kwargs)

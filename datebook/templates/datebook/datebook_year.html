@@ -1,10 +1,9 @@
 {% extends "datebook/base.html" %}
-{% load autobreadcrumb %}
+{% load i18n %}
 
 {% block datebook_content %}
-
 <div class="datebook-calendar-year">{% for name, datebook in datebooks_map %}
-    <div class="three columns{% if not datebook %} empty{% endif %}">
+    <div class="small-12 medium-3 columns{% if not datebook %} empty{% endif %}">
         <div class="panel radius">
             <h3>{{ name|capfirst }}</h3>
             {% if datebook %}
@@ -23,7 +22,7 @@
 
 {% block foot_more_js %}{{ block.super }}
 {% for name, datebook in datebooks_map %}{% if not datebook %}
-<div id="new-datebook-{{ name }}" class="reveal-modal medium" data-reveal>
+<div id="new-datebook-{{ name }}" class="reveal-modal tiny" data-reveal>
     <h3>Create a new datebook<h3>
     <p>This will create a datebook for <strong>{{ name|capfirst }} {{ year }}</strong>, confirm this.</p>
     <p><a href="{% url 'datebook-author-month-add' author=author year=year month=forloop.counter %}" class="radius button">I confirm</a></p>
