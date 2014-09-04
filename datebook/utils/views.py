@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Some generic mixins and views
+Some generic views
 """
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin

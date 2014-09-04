@@ -22,7 +22,7 @@ def day_helper(form_tag=True):
         ),
         Row(
             Column('start_datetime', css_class='small-4 medium-5'),
-            Column('pause', css_class='small-2 medium-2'),
+            Column('pause', css_class='small-4 medium-2'),
             Column('stop_datetime', css_class='small-4 medium-5'),
         ),
         Row(

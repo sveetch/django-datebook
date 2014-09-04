@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Page document views
+Datebook year views
 """
 import datetime
 import calendar

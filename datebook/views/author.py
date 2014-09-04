@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Common views
+Datebook author views
 """
 from django.views import generic
 from django.shortcuts import get_object_or_404

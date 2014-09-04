@@ -66,3 +66,24 @@ class DatebookCalendarMixin(DateKwargsMixin):
     
     def get_calendar(self, *args, **kwargs):
         return self.calendar_obj(*args, **kwargs)
+
+class DatebookCalendarAutoCreateMixin(DatebookCalendarMixin):
+    """
+    Same as DatebookCalendarMixin but use a get_or_create instead of get_object_or_404 
+    so the datebook is automatically created
+    """
+    def get_current_date(self):
+        today = datetime.date.today()
+        self.year = self.kwargs['year'] = today.year
+        self.month = self.kwargs['month'] = today.month
+        self.day = self.kwargs['day'] = today.day
+        return today
+    
+    def get_datebook(self, filters):
+        try:
+            obj = Datebook.objects.get(author__username=self.kwargs['author'], **filters)
+        except Datebook.DoesNotExist:
+            author = get_object_or_404(User, username=self.kwargs['author'])
+            obj = Datebook(author=author, period=datetime.date(self.year, self.month, self.day))
+            obj.save()
+        return obj

@@ -7,7 +7,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now as tz_now
+from django.utils.timezone import now as tz_now, is_aware, localtime
 
 from datebook import utils
 
@@ -73,6 +73,7 @@ class DayEntry(models.Model):
     def get_display_hour(self, timeobj):
         """Formating time "XXhYY" display, minute are not displayed if not > 0"""
         _m = ""
+        timeobj = localtime(timeobj)
         if timeobj.minute > 0:
             _m = str(timeobj.minute).rjust(2, "0")
         return _('%(hour)sh%(minute)s') % {'hour': str(timeobj.hour).rjust(2, "0"), 'minute': _m}

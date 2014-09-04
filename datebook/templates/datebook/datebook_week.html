@@ -4,7 +4,7 @@
 {% block datebook_content %}
 
 <ul class="datebook-calendar-month-week">{% for datekey, entry in weekdays %}
-    <li class="item">
+    <li class="item" id="week-day-{{ datekey.day }}">
         <h3>{{ datekey|date:"d - l" }}</h3>
         <div class="container{% if not entry %} empty{% elif entry.vacation %} vacation{% endif %}">
         {% if entry %}

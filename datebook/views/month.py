@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Page document views
+Datebook month views
 """
 import datetime
 

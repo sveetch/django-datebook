@@ -9,7 +9,7 @@ from datebook.views.author import DatebookAuthorView
 from datebook.views.year import DatebookYearView
 from datebook.views.month import DatebookMonthView, DatebookMonthAddView, DatebookMonthFormView
 from datebook.views.week import DatebookWeekView
-from datebook.views.day import DayEntryFormCreateView, DayEntryFormEditView
+from datebook.views.day import DayEntryFormCreateView, DayEntryFormEditView, DayEntryCurrentView
 
 urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(), name='datebook-index'),
@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^create/$', DatebookMonthFormView.as_view(), name='datebook-create'),
     
     url(r'^(?P<author>\w+)/$', DatebookAuthorView.as_view(), name='datebook-author'),
+    
+    url(r'^(?P<author>\w+)/current-day/$', DayEntryCurrentView.as_view(), name='datebook-current-day'),
     
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/$', DatebookYearView.as_view(), name='datebook-author-year'),
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/add/(?P<month>\d{1,2})/$', DatebookMonthAddView.as_view(), name='datebook-author-month-add'),

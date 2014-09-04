@@ -15,8 +15,8 @@
 
 {% block base_content %}<div class="row datebook">
     <div class="small-12 columns">
-        {% autobreadcrumbs_tag %}
-        <h2>{% current_title_from_breadcrumbs %}</h2>
+        {% block breadcrumbs_block %}{% autobreadcrumbs_tag %}{% endblock %}
+        {% block datebook_maintitle %}<h2>{% current_title_from_breadcrumbs %}</h2>{% endblock %}
         {% block datebook_content %}{% endblock %}
     </div>
 </div>{% endblock %}
