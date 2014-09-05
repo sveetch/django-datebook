@@ -9,15 +9,15 @@
         <div class="container{% if not entry %} empty{% elif entry.vacation %} vacation{% endif %}">
         {% if entry %}
             {% if entry.vacation %}
-                <p>Vacation</p>
+                <p class="text-center"><em>Vacation</em></p>
             {% else %}
                 <p class="working-hour">{{ entry.get_working_hours }}</p>
                 <div class="content">{{ entry.content }}</div>
                 <p class="length">{{ entry.get_elapsed_time }}</p>
             {% endif %}
-            <p><a href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round secondary">{% trans 'Edit' %}</a></p>
+            <p class="text-right"><a href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Edit' %} <i class="icon-pencil"></i></a></p>
         {% else %}
-            <p><a href="{% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round secondary">{% trans 'Add' %}</a></p>
+            <p class="text-right"><a href="{% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Add' %} <i class="icon-add-circle"></i></a></p>
         {% endif %}
         </div>
     </li>

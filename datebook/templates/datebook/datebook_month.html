@@ -11,6 +11,8 @@ $('td.item').click(function(e) {
 </script>{% endcomment %}
 {% endblock %}
 
+{% block datebook_container_css_classes %} row-fluid{% endblock %}
+
 {% block datebook_content %}
 
 <table class="datebook-calendar-month">
@@ -25,14 +27,14 @@ $('td.item').click(function(e) {
     <tbody>{% for week in datebook_calendar.month %}
         <tr>{% spaceless %}
             <td class="weekno">
-                <a href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}">Week&nbsp;{{ forloop.counter }}</a>
+                <a class="button round tiny" href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}"><i class="icon-edit"></i>&nbsp;Week&nbsp;{{ forloop.counter }}</a>
             </td>
             {% for day in week %}
                 <td class="item {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">
                     {% if not day.noday %}
                         <div class="container">
-                            <span class="daylabel">{{ day.date.day }}</span>
                             {% if day.entry %}
+                                <p><span class="label text-center">{{ day.date.day }}</span></p>
                                 {% if day.entry.vacation %}
                                     <p><em>Vacation</em></p>
                                 {% else %}
@@ -42,6 +44,8 @@ $('td.item').click(function(e) {
                                     <hr>
                                     <p class="length">{{ day.entry.get_elapsed_time }}</p>
                                 {% endif %}
+                            {% else %}
+                                <p><span class="label text-center">{{ day.date.day }}</span></p>
                             {% endif %}
                         </div>
                     {% endif %}

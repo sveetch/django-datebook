@@ -13,7 +13,7 @@
 
 {% block menu_active_link_datebook %} class="active"{% endblock %}
 
-{% block base_content %}<div class="row datebook">
+{% block base_content %}<div class="row datebook{% block datebook_container_css_classes %}{% endblock %}">
     <div class="small-12 columns">
         {% block breadcrumbs_block %}{% autobreadcrumbs_tag %}{% endblock %}
         {% block datebook_maintitle %}<h2>{% current_title_from_breadcrumbs %}</h2>{% endblock %}

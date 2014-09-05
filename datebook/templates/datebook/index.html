@@ -2,6 +2,18 @@
 {% load i18n %}
 
 {% block datebook_content %}
+<div data-alert class="alert-box warning radius">
+    <p><strong>This is a beta release, it lacks of :</strong></p>
+    <ul>
+        <li>Permission restriction, this is actually <em>Open bar</em>, everyone can add or edit everything;</li>
+        <li>Translation with i18n into French;</li>
+        <li>Content markup for day entries;</li>
+    </ul>
+    <p class="text-center"><a class="button secondary" target="_blank" href="https://github.com/sveetch/django-datebook/issues">See the issues list on Github for more details</a></p>
+</div>
+
+<hr/>
+
 <p><a href="{% url 'datebook-current-day' author=user %}" class="button success large expand radius"><i class="icon-pencil"></i> Fill your current day</a></p>
 
 <hr/>
