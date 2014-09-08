@@ -1,57 +1,85 @@
 {% extends "datebook/base.html" %}
 {% load i18n %}
 
-{% block head_base_js %}{{ block.super }}
-{% comment %}<script language="JavaScript">
+{% comment %}{% block head_base_js %}{{ block.super }}
+<script language="JavaScript">
 //<![CDATA[
 $('td.item').click(function(e) {
     return;
 });
 //]]>
-</script>{% endcomment %}
-{% endblock %}
+</script>
+{% endblock %}{% endcomment %}
 
-{% block datebook_container_css_classes %} row-fluid{% endblock %}
+{% block datebook_container_css_classes %} large-row-fluid{% endblock %}
 
 {% block datebook_content %}
+<div class="clearfix">
+    <ul class="inline-list right">
+        <li><a href="#">Calendar view</a></li>
+        <li><a href="#">Flat view</a></li>
+    </ul>
+</div>
 
-<table class="datebook-calendar-month">
-    <thead>
-        <tr>{% spaceless %}
-            <td class="weekno"></td>
+<div class="datebook-month calendar">
+    <div class="head">
+        {% spaceless %}
+            <span class="weekno"></span>
             {% for classname, name in datebook_calendar.weekheader %}
-            <th class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}">{% trans name %}</th>
+            <span class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}">{% trans name %}</span>
             {% endfor %}
-        {% endspaceless %}</tr>
-    </thead>
-    <tbody>{% for week in datebook_calendar.month %}
-        <tr>{% spaceless %}
-            <td class="weekno">
-                <a class="button round tiny" href="{% url 'datebook-author-month-week' author=datebook.author year=datebook.period.year month=datebook.period.month week=forloop.counter %}" title="{% trans 'Week' %} {{ forloop.counter }}"><i class="icon-edit"></i>&nbsp;Week&nbsp;{{ forloop.counter }}</a>
-            </td>
-            {% for day in week %}
-                <td class="item {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}{% if day.entry %} entry{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}">
-                    {% if not day.noday %}
-                        <div class="container">
-                            {% if day.entry %}
-                                <p><span class="label text-center">{{ day.date.day }}</span></p>
-                                {% if day.entry.vacation %}
-                                    <p><em>Vacation</em></p>
-                                {% else %}
-                                    <p class="working-hour"><strong>{{ day.entry.get_working_hours }}</strong></p>
-                                    <hr>
-                                    <div class="content">{{ day.entry.content }}</div>
-                                    <hr>
-                                    <p class="length">{{ day.entry.get_elapsed_time }}</p>
-                                {% endif %}
+        {% endspaceless %}
+    </div>
+    
+    {% spaceless %}
+    {% for week in datebook_calendar.month %}
+    <div class="week">
+        <div class="item weekno">
+            <span class="label radius">Week&nbsp;{{ forloop.counter }}</span>
+        </div>
+        {% for day in week %}
+            {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' as day_name silent %}
+            <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}"
+            {% if not day.noday %} data-date="{{ day.date.day }}"{% endif %}>
+                {% if not day.noday %}
+                    <h3>{{ day.date|date:"l d F" }}</h3>
+                    <div class="container">
+                        {% if day.entry %}
+                            {% if day.entry.vacation %}
+                                <p class="vacation-label">Vacation</p>
                             {% else %}
-                                <p><span class="label text-center">{{ day.date.day }}</span></p>
+                                <p class="working-hour">{{ day.entry.get_working_hours }}</p>
+                                {% if day.entry.content %}
+                                    <div class="content">{{ day.entry.content|linebreaks }}</div>
+                                {% else %}
+                                    <p class="empty">Empty content</p>
+                                {% endif %}
+                                {% comment %}<p class="length">{{ day.entry.get_elapsed_time }}</p>{% endcomment %}
                             {% endif %}
-                        </div>
-                    {% endif %}
-                </td>
-            {% endfor %}
-        {% endspaceless %}</tr>{% endfor %}
-    </tbody>
-</table>
+                        {% else %}
+                        <p class="empty">There is no entry yet, <a href="{% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}">add one</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="menu">
+                        {% if day.entry %}
+                            <a title="{% trans 'Read' %}" class="read action" href="#">
+                                <i class="icon-eye"></i>
+                            </a> 
+                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}">
+                                <i class="icon-pencil"></i>
+                            </a>
+                        {% else %}
+                            <a title="{% trans 'Add' %}" class="add action" href="{% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}">
+                                <i class="icon-add-circle"></i>
+                            </a> 
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    {% endspaceless %}
+    
+</div>
 {% endblock %}

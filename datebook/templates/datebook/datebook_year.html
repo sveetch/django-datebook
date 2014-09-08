@@ -8,7 +8,7 @@
             <h3>{{ name|capfirst }}</h3>
             {% if datebook %}
                 <p>
-                    <a href="{% url 'datebook-author-month' author=author year=datebook.period.year month=datebook.period.month %}" class="button">{{ datebook }}</a>
+                    <a href="{% url 'datebook-author-month' author=author year=datebook.period.year month=datebook.period.month %}" class="button">{{ datebook.dayentry_set.count }} entries</a>
                 </p>
             {% else %}
                 <p>

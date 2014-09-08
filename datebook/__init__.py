@@ -2,4 +2,4 @@
 """
 A Django application to manage user Datebook
 """
-__version__ = '0.2.6'
+__version__ = '0.3'

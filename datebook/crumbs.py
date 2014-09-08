@@ -13,5 +13,4 @@ site.update({
     'datebook-author-month': ugettext_lazy('{{ target_date|date:"F" }}'),
     'datebook-author-day-add': ugettext_lazy('Add day {{ day }}'),
     'datebook-author-day-edit': ugettext_lazy('Edit day {{ day }}'),
-    'datebook-author-month-week': ugettext_lazy('Week {{ week }}'),
 })

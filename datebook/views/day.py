@@ -41,11 +41,10 @@ class DayEntryBaseFormView(DatebookCalendarMixin):
         return super(DayEntryBaseFormView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('datebook-author-month-week', kwargs={
+        return reverse('datebook-author-month', kwargs={
             'author': self.author,
             'year': self.object.activity_date.year,
             'month': self.object.activity_date.month,
-            'week': week_from_date(self.object.activity_date),
         })
 
 
