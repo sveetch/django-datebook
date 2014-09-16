@@ -85,7 +85,7 @@ class DayEntry(models.Model):
     def get_elapsed_time(self):
         """Display elapsed time between start and stop, where pause time has been substracted from"""
         diff = utils.timedelta_to_seconds((self.stop-self.start))-utils.time_to_seconds(self.pause)
-        return utils.format_second_to_clock(diff)
+        return utils.format_seconds_to_clock(diff)
 
     def clean(self):
         from django.core.exceptions import ValidationError

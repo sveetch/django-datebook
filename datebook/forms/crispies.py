@@ -5,7 +5,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, Row, Column, Field, InlineField, ButtonHolder, ButtonHolderPanel, Submit
+from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, Row, Div, Column, HTML, Field, InlineField, SwitchField, ButtonHolder, ButtonHolderPanel, Submit
 
 def day_helper(form_tag=True):
     """
@@ -18,19 +18,20 @@ def day_helper(form_tag=True):
     
     helper.layout = Layout(
         Row(
-            Column('vacation', css_class='small-12'),
-        ),
-        Row(
             Column('start_datetime', css_class='small-4 medium-5'),
             Column('pause', css_class='small-4 medium-2'),
             Column('stop_datetime', css_class='small-4 medium-5'),
+            css_class='opacited'
         ),
         Row(
             Column('content', css_class='small-12'),
+            css_class='opacited'
         ),
         ButtonHolderPanel(
-            Submit('submit', _('Submit')),
-            css_class='text-right',
+            Row(
+                Column('vacation', css_class='small-6'),
+                Column(Submit('submit', _('Submit')), css_class='small-6 text-right'),
+            ),
         ),
     )
     

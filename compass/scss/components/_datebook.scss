@@ -33,73 +33,92 @@
  * Else fallback on the "flat view"
  */
 // For small and medium only
-@media ($screen and max-width:#{upper-bound($medium-range)}) {
-    .datebook-month {
-        .head {
-            display: none;
+.datebook-view-mode{
+    display: none;
+}
+
+.datebook-month {
+    .head {
+        display: none;
+    }
+    .week {
+        padding: rem-calc(10px) 0;
+        
+        .weekno{
+            .label{
+                display: block;
+                margin-bottom: rem-calc(10px);
+                font-size: rem-calc(14px);
+                font-weight: 600;
+                line-height: inherit;
+                white-space: normal;
+            }
         }
-        .week {
-            padding: rem-calc(10px) 0;
+        
+        .item{
+            h3{
+                padding: rem-calc(10px) rem-calc(5px);
+                font-size: rem-calc(18px);
+                text-align: center;
+                background-color: lighten($secondary-color, 5%);
+                border-bottom: 4px solid darken(lighten($secondary-color, 5%), 10%);
+            }
             
-            .weekno{
-                .label{
-                    display: block;
-                    //padding: 0;
-                    margin-bottom: rem-calc(10px);
-                    font-size: rem-calc(14px);
-                    font-weight: 600;
-                    //color: inherit;
-                    line-height: inherit;
-                    //text-align: left;
-                    white-space: normal;
-                    //background-color: inherit;
+            .working-hour{
+                font-weight: 600;
+                
+                span{
+                    margin-left: 10px;
+                    //display: none;
+                }
+                
+                /*&:hover span{
+                    display: inline;
+                }*/
+            }
+            
+            .time-infos{
+                margin: 0 0 5px 0;
+                
+                &>li{
+                    margin: 0;
+                    
+                    &+li{
+                        margin-left: 5px;
+                    }
                 }
             }
             
-            .item{
-                h3{
-                    padding: rem-calc(10px) rem-calc(5px);
-                    font-size: rem-calc(18px);
-                    text-align: center;
-                    background-color: lighten($secondary-color, 5%);
-                    border-bottom: 4px solid darken(lighten($secondary-color, 5%), 10%);
-                }
-                
-                .working-hour{
-                    font-weight: 600;
-                }
-                
-                .vacation-label,
-                .empty{
-                    margin: 0;
-                    padding: rem-calc(25px) rem-calc(5px);
-                    color: darken($secondary-color, 20%);
-                    text-align: center;
-                }
-                .vacation-label{
-                    color: inherit;
-                }
-                
+            .vacation-label,
+            .empty{
+                margin: 0;
+                padding: rem-calc(25px) rem-calc(5px);
+                color: darken($secondary-color, 20%);
+                text-align: center;
+            }
+            .vacation-label{
+                color: inherit;
+            }
+            
+            .menu{
+                display: none;
+            }
+            
+            &.has-entry{
                 .menu{
-                    display: none;
-                }
-                
-                &.has-entry{
-                    .menu{
-                        display: block;
-                        text-align: right;
-                        margin-bottom: rem-calc(20px);
+                    display: block;
+                    text-align: right;
+                    margin-bottom: rem-calc(20px);
+                    
+                    .action{
+                        &::before{
+                            margin-right: 5px;
+                            content: attr(title);
+                            text-decoration: underline;
+                        }
                         
-                        .action{
-                            &::before{
-                                margin-right: 5px;
-                                content: attr(title);
-                                text-decoration: underline;
-                            }
-                            
-                            &.read{
-                                display: none;
-                            }
+                        &.read{
+                            display: none;
                         }
                     }
                 }
@@ -111,12 +130,16 @@
 // For large and up
 @media #{$large-up} {
     html.flexbox{
+        .datebook-view-mode{
+            display: block;
+            
+            .button{
+                font-size: rem-calc(16px);
+            }
+        }
+        
         /* Calendar 100% height */
         .datebook-month.calendar {
-            /*height: 100%; 
-            display: flex;
-            flex-flow: column nowrap;
-            align-items: stretch;*/
             font-size: rem-calc(12px);
             
             .head {
@@ -132,8 +155,9 @@
                     margin-right: rem-calc(6px);
                     color: #333;
                     border-bottom: 4px solid rgba(55,55,55,0.5);
-                    padding: 0 rem-calc(5px) rem-calc(5px) 0;
+                    padding: 0 rem-calc(10px) rem-calc(5px) 0;
                     text-align: right;
+                    text-transform: uppercase;
                     
                     &.weekno{
                         display: none;
@@ -145,6 +169,7 @@
                 display: flex;
                 flex: rem-calc(30px) 1 0;
                 margin-bottom: rem-calc(5px);
+                padding: 0;
                 
                 &>.item {
                     width: 100%;
@@ -165,7 +190,6 @@
                     
                     .working-hour{
                         margin-bottom: rem-calc(5px);
-                        font-weight: 600;
                     }
                     .vacation-label{
                         font-style: italic;
@@ -183,26 +207,38 @@
                     
                     /* Month day action menu */
                     .menu{
-                        display: none;
-                        padding: rem-calc(4px) rem-calc(4px) rem-calc(4px) rem-calc(6px);
+                        display: block;
+                        margin: 0;
+                        padding: rem-calc(6px) rem-calc(6px) rem-calc(6px) rem-calc(8px);
                         position: absolute;
                         bottom: rem-calc(4px);
                         right: rem-calc(4px);
-                        font-size: rem-calc(14px);
+                        font-size: rem-calc(15px);
                         line-height: 1;
+                        text-align: center;
                         background-color: #ffffff;
                         border: 1px solid #e0e0e0;
                         @include border-radius(2px);
                         
                         a+a{
-                            margin-left: 10px;
+                            margin-left: 15px;
+                        }
+                        .action{
+                            &::before{
+                                margin-right: 0;
+                                content: none;
+                                text-decoration: none;
+                            }
+                            &.read{
+                                display: inline;
+                            }
                         }
                     }
-                    &:hover{
+                    /*&:hover{
                         .menu{
                             display: block;
                         }
-                    }
+                    }*/
                     
                     &.weekno{
                         display: none;
@@ -233,5 +269,38 @@
 
         }
 
+    }
+}
+
+/*
+ * Modal view for day's detail read
+ */
+#revealDayModal{
+    bottom: 100px;
+    overflow: auto;
+    
+    .modal-navigation-day{
+        position: absolute;
+        top: 0;
+        
+        &.previous{
+            left: 0;
+        }
+        
+        &.next{
+            right: 0;
+        }
+    }
+}
+
+/*
+ * A specific div that contain a switch field with a label
+ */
+.switch-cell{
+    margin-bottom: rem-calc($rem-base);
+    
+    .switch > label,
+    .label{
+        margin-bottom: 0;
     }
 }

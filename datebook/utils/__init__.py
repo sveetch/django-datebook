@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 import calendar
 
-def format_second_to_clock(seconds):
+def split_seconds_to_clock(seconds):
     """Convert a time in seconds to a string like '15:22:01'"""
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
-    return "%d:%02d:%02d" % (h, m, s)
+    return {
+        'hour': h,
+        'minute': m,
+        'second': s
+    }
+
+def format_seconds_to_clock(seconds):
+    """Convert a time in seconds to a string like '15:22:01'"""
+    #return "%d:%02d:%02d" % split_second_to_clock(seconds)
+    return "{hour}:{minute:02}".format(**split_seconds_to_clock(seconds))
 
 def time_to_seconds(timeobj):
     """Convert a time to seconds"""
