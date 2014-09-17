@@ -16,7 +16,7 @@ class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
     Get the week days from the calendar for the given year+month then merge it with 
     associated day entries
     """
-    template_name = "datebook/datebook_week.html"
+    template_name = "datebook/week.html"
     
     def find_weekday_range(self):
         # week number is indexed on 1 in urls, but we use it at a position item in 

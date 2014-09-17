@@ -34,7 +34,7 @@ class DatebookMonthFormView(generic.FormView):
     """
     model = Datebook
     form_class = DatebookForm
-    template_name = 'datebook/datebook_month_form.html'
+    template_name = 'datebook/month/form.html'
     permission_required = 'datebook.add_datebook'
     raise_exception = True
     
@@ -53,7 +53,7 @@ class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
     
     Get the Calendar for the given year+month then fill it with day entries
     """
-    template_name = "datebook/datebook_month.html"
+    template_name = "datebook/month/calendar.html"
     
     def get_calendar(self, day_filters={}):
         # Add current day if the datebook period is the current month+year

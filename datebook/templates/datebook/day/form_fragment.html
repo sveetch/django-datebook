@@ -1,0 +1,6 @@
+{% load autobreadcrumb crispy_forms_tags %}<div class="row datebook">
+    <div class="small-12 columns">
+        <h2>{% current_title_from_breadcrumbs %}</h2>
+        {% crispy form %}
+    </div>
+</div>

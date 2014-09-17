@@ -14,13 +14,13 @@
 
 <hr/>
 
-<p><a href="{% url 'datebook-current-day' author=user %}" class="button success large expand radius"><i class="icon-pencil"></i> Fill your current day</a></p>
+<p><a href="{% url 'datebook-current-day' author=user %}" class="button success large expand radius"><i class="icon-pencil"></i> {% blocktrans %}Fill your current day{% endblocktrans %}</a></p>
 
 <hr/>
 
 <ul class="inline-list">
         <li>
-            <a href="{% url 'datebook-create' %}" class="button success small radius"><i class="icon-add-circle"></i> Open a new datebook for a new user</a>
+            <a href="{% url 'datebook-create' %}" class="button success small radius"><i class="icon-add-circle"></i> {% blocktrans %}Open a new datebook for a new user{% endblocktrans %}</a>
         </li>
     {% spaceless %}{% for item in object_list %}
         <li>

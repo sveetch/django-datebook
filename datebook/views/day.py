@@ -23,7 +23,8 @@ class DayEntryBaseFormView(DatebookCalendarMixin):
     """
     model = DayEntry
     context_object_name = "dayentry"
-    template_name = "datebook/datebook_day_form.html"
+    template_name = "datebook/day/form.html"
+    ajax_template_name = "datebook/day/form_fragment.html"
     form_class = DayEntryForm
 
     def get_form(self, form_class):
@@ -32,15 +33,30 @@ class DayEntryBaseFormView(DatebookCalendarMixin):
         """
         return form_class(self.datebook, self.day, **self.get_form_kwargs())
     
+    def switch_template(self, request):
+        if request.is_ajax():
+            return self.ajax_template_name
+        return self.template_name
+    
     def get(self, request, *args, **kwargs):
+        self.template_name = self.switch_template(request)
         self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
         
         return super(DayEntryBaseFormView, self).get(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
+        self.template_name = self.switch_template(request)
         self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
         
         return super(DayEntryBaseFormView, self).post(request, *args, **kwargs)
+    
+    def get_form_kwargs(self):
+        """
+        Add post form url
+        """
+        kwargs = super(DayEntryBaseFormView, self).get_form_kwargs()
+        kwargs.update({'form_action': '.'})
+        return kwargs
 
     def get_success_url(self):
         return reverse('datebook-author-month', kwargs={
@@ -48,6 +64,9 @@ class DayEntryBaseFormView(DatebookCalendarMixin):
             'year': self.object.activity_date.year,
             'month': self.object.activity_date.month,
         })
+        
+    def get_next(self):
+        return None
 
 
 class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
@@ -58,7 +77,7 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
         """
         Put the initial data for the datetime start and stop
         
-        TODO: Time start and stop should comes from the User profile settings (date 
+        NOTE: Time start and stop should comes from the User profile settings (date 
               allways come from the datebook period and the required day).
         """
         kwargs = super(DayEntryFormCreateView, self).get_form_kwargs()
@@ -70,70 +89,16 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
                 'start' : datetime.datetime.combine(day_date, time_start),
                 'stop' : datetime.datetime.combine(day_date, time_stop),
                 'pause' : datetime.time(1, 0),
-            }
+            },
+            'form_action': reverse('datebook-author-day-add', kwargs={
+                'author': self.author,
+                'year': self.year,
+                'month': self.month,
+                'day': self.day,
+            })
         })
         return kwargs
 
-
-class DayEntryDetailView(DatebookCalendarMixin, generic.TemplateView):
-    """
-    DayEntry detail view
-    """
-    model = DayEntry
-    template_name = "datebook/datebook_day_fragment.html"
-        
-    def get_previous(self, **kwargs):
-        try:
-            obj = self.object.get_previous_by_activity_date(**{
-                'activity_date__month':self.object.activity_date.month,
-                'activity_date__year':self.object.activity_date.year,
-            })
-        except DayEntry.DoesNotExist:
-            pass
-        else:
-            return obj
-        return None
-        
-    def get_next(self, **kwargs):
-        try:
-            obj = self.object.get_next_by_activity_date(**{
-                'activity_date__month':self.object.activity_date.month,
-                'activity_date__year':self.object.activity_date.year,
-            })
-        except DayEntry.DoesNotExist:
-            pass
-        else:
-            return obj
-        return None
-        
-    def get_object(self, **kwargs):
-        try:
-            obj = DayEntry.objects.get(datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
-        except DayEntry.DoesNotExist:
-            pass
-        else:
-            return obj
-        return None
-    
-    def get_context_data(self, **kwargs):
-        context = super(DayEntryDetailView, self).get_context_data(**kwargs)
-        context.update({
-            'datebook': self.datebook,
-            'object': self.object,
-            'previous_day': self.previous_day,
-            'next_day': self.next_day,
-        })
-        return context
-    
-    def get(self, request, *args, **kwargs):
-        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
-        self.object = self.get_object()
-        self.previous_day = self.get_previous()
-        self.next_day = self.get_next()
-        
-        context = self.get_context_data(**kwargs)
-        
-        return self.render_to_response(context)
 
 class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
     """
@@ -144,6 +109,21 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
         Add required args to form instance
         """
         return self.datebook.dayentry_set.get(activity_date__day=self.day)
+    
+    def get_form_kwargs(self):
+        """
+        Add post form url
+        """
+        kwargs = super(DayEntryBaseFormView, self).get_form_kwargs()
+        kwargs.update({
+            'form_action': reverse('datebook-author-day-edit', kwargs={
+                'author': self.author,
+                'year': self.year,
+                'month': self.month,
+                'day': self.day,
+            })
+        })
+        return kwargs
 
 
 class DayEntryCurrentView(generic.RedirectView):
@@ -196,4 +176,65 @@ class DayEntryCurrentView(generic.RedirectView):
                 'month': self.month,
                 'day': self.day,
             })
+
+
+class DayEntryDetailView(DatebookCalendarMixin, generic.TemplateView):
+    """
+    DayEntry detail view
+    """
+    model = DayEntry
+    template_name = "datebook/day/detail_fragment.html"
+        
+    def get_previous(self):
+        try:
+            obj = self.object.get_previous_by_activity_date(**{
+                'activity_date__month':self.object.activity_date.month,
+                'activity_date__year':self.object.activity_date.year,
+            })
+        except DayEntry.DoesNotExist:
+            pass
+        else:
+            return obj
+        return None
+        
+    def get_next(self):
+        try:
+            obj = self.object.get_next_by_activity_date(**{
+                'activity_date__month':self.object.activity_date.month,
+                'activity_date__year':self.object.activity_date.year,
+            })
+        except DayEntry.DoesNotExist:
+            pass
+        else:
+            return obj
+        return None
+        
+    def get_object(self, **kwargs):
+        try:
+            obj = DayEntry.objects.get(datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
+        except DayEntry.DoesNotExist:
+            pass
+        else:
+            return obj
+        return None
+    
+    def get_context_data(self, **kwargs):
+        context = super(DayEntryDetailView, self).get_context_data(**kwargs)
+        context.update({
+            'datebook': self.datebook,
+            'object': self.object,
+            'previous_day': self.previous_day,
+            'next_day': self.next_day,
+        })
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.object = self.get_object()
+        self.previous_day = self.get_previous()
+        self.next_day = self.get_next()
+        
+        context = self.get_context_data(**kwargs)
+        
+        return self.render_to_response(context)
 

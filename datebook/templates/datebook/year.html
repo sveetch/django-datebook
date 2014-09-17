@@ -8,11 +8,11 @@
             <h3>{{ name|capfirst }}</h3>
             {% if datebook %}
                 <p>
-                    <a href="{% url 'datebook-author-month' author=author year=datebook.period.year month=datebook.period.month %}" class="button">{{ datebook.dayentry_set.count }} entries</a>
+                    <a href="{% url 'datebook-author-month' author=author year=datebook.period.year month=datebook.period.month %}" class="button">{% blocktrans with count=datebook.dayentry_set.count %}{{ count }} entries{% endblocktrans %}</a>
                 </p>
             {% else %}
                 <p>
-                    <a href="#" class="button secondary" data-reveal-id="new-datebook-{{ name }}">Create it</a>
+                    <a href="#" class="button secondary" data-reveal-id="new-datebook-{{ name }}">{% trans "Create it" %}</a>
                 </p>
             {% endif %}
         </div>
@@ -23,9 +23,9 @@
 {% block foot_more_js %}{{ block.super }}
 {% for name, datebook in datebooks_map %}{% if not datebook %}
 <div id="new-datebook-{{ name }}" class="reveal-modal text-center tiny" data-reveal>
-    <h3>Create a new datebook<h3>
-    <p>This will create a datebook for <strong>{{ name|capfirst }} {{ year }}</strong>, confirm this.</p>
-    <p><a href="{% url 'datebook-author-month-add' author=author year=year month=forloop.counter %}" class="radius success button">I confirm</a></p>
+    <h3>{% trans "Create a new datebook" %}<h3>
+    <p>{% blocktrans with name=name|capfirst year=year %}This will create a datebook for <strong>{{ name }} {{ year }}</strong>, confirm this.{% endblocktrans %}</p>
+    <p><a href="{% url 'datebook-author-month-add' author=author year=year month=forloop.counter %}" class="radius success button">{% trans "I confirm" %}</a></p>
     <a class="close-reveal-modal">&#215;</a>
 </div>
 {% endif %}{% endfor %}

@@ -7,16 +7,30 @@ from django.utils.translation import ugettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, Row, Div, Column, HTML, Field, InlineField, SwitchField, ButtonHolder, ButtonHolderPanel, Submit
 
-def day_helper(form_tag=True):
+def day_helper(form_tag=True, form_action='.', has_next=False):
     """
     DayEntry's form layout helper
     """
     helper = FormHelper()
-    helper.form_action = '.'
+    helper.form_action = form_action
     helper.attrs = {'data_abide': ''}
     helper.form_tag = form_tag
     
+    buttons = [
+        HTML('<ul class="button-group stack-for-small right"><li>'),
+        Submit('submit', _('Save')),
+        HTML('</li></ul>'),
+    ]
+    if has_next:
+        buttons = [buttons[0]]+[
+            HTML('</li><li>'),
+            Submit('submit_and_next', _('Save and continue to next day')),
+        ]+buttons[1:]
+    
     helper.layout = Layout(
+        Row(
+            Column('vacation', css_class='small-6 medium-4 medium-offset-8 text-right'),
+        ),
         Row(
             Column('start_datetime', css_class='small-4 medium-5'),
             Column('pause', css_class='small-4 medium-2'),
@@ -28,13 +42,11 @@ def day_helper(form_tag=True):
             css_class='opacited'
         ),
         ButtonHolderPanel(
-            Row(
-                Column('vacation', css_class='small-6'),
-                Column(Submit('submit', _('Submit')), css_class='small-6 text-right'),
-            ),
+            *buttons,
+            css_class=' clearfix text-right'
         ),
     )
-    
+
     return helper
 
 
@@ -61,7 +73,7 @@ def month_helper(form_tag=True):
                 ButtonHolder(
                     Submit(
                         'submit',
-                        _('Submit'),
+                        _('Save'),
                         css_class='tiny expand',
                     ),
                     css_class='text-right',

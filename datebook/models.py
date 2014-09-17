@@ -67,7 +67,7 @@ class DayEntry(models.Model):
 
     def __unicode__(self):
         if not self.activity_date:
-            return "Empty"
+            return _("Empty")
         return self.activity_date.strftime("%d/%m/%Y")
 
     def get_display_hour(self, timeobj):

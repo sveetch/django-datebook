@@ -16,7 +16,7 @@ class DatebookYearView(DateKwargsMixin, generic.TemplateView):
     Display the twelve months of the given year with link and infos for the 
     existing datebooks
     """
-    template_name = "datebook/datebook_year.html"
+    template_name = "datebook/year.html"
         
     def get_context_data(self, **kwargs):
         context = super(DatebookYearView, self).get_context_data(**kwargs)

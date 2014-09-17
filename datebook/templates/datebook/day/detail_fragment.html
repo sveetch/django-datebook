@@ -5,7 +5,7 @@
             <h3 class="text-center">{{ object.activity_date|date:"l d F" }}</h3>
             {% if object %}
                 {% if object.vacation %}
-                    <p class="empty text-center vacation-label">Vacation</p>
+                    <p class="empty text-center vacation-label">{% trans "Vacation" %}</p>
                 {% else %}
                     <ul class="inline-list">
                         <li><span class="label round secondary"><i class="icon-clock"></i> {{ object.get_working_hours }}</span></li>
@@ -14,7 +14,7 @@
                     {% if object.content %}
                         <div class="content">{{ object.content|linebreaks }}</div>
                     {% else %}
-                        <p class="empty text-center">Empty content</p>
+                        <p class="empty text-center">{% trans "Empty content" %}</p>
                     {% endif %}
                 {% endif %}
             {% endif %}
@@ -24,7 +24,7 @@
         class="button small modal-navigation-day previous" 
         data-from-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ object.activity_date.day }}" 
         data-target-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ previous_day.activity_date.day }}"
-        title="Précédent">
+        title="{% trans "Previous" %}">
             <i class="icon-arrow-left"></i>
         </a>{% endif %}
         {% if next_day %}<a 
@@ -32,7 +32,7 @@
         class="button small modal-navigation-day next" 
         data-from-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ object.activity_date.day }}" 
         data-target-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ next_day.activity_date.day }}"
-        title="Suivant">
+        title="{% trans "Next" %}">
             <i class="icon-arrow-right"></i>
         </a>{% endif %}
     </div>

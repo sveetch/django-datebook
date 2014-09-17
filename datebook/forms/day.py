@@ -30,6 +30,11 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         self.datebook = datebook
         self.daydate = datebook.period.replace(day=day)
         
+        self.crispy_form_helper_kwargs = {
+            'has_next': False,
+            'form_action': kwargs.pop('form_action'),
+        }
+        
         # Pass initial data for start and stop to their clone with SplitDateTimeField
         if 'start' in kwargs['initial']:
             kwargs['initial']['start_datetime'] = kwargs['initial']['start']
@@ -49,10 +54,10 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         start = self.cleaned_data['start_datetime']
         # Day entry can't start before the targeted day date
         if start and start.date() < self.daydate:
-            raise forms.ValidationError("You can't start a day before itself")
+            raise forms.ValidationError(_("You can't start a day before itself"))
         # Day entry can't start after the targeted day date
         if start and start.date() > self.daydate:
-            raise forms.ValidationError("You can't start a day after itself")
+            raise forms.ValidationError(_("You can't start a day after itself"))
         
         return start
     
@@ -61,10 +66,10 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         stop = self.cleaned_data['stop_datetime']
         # Day entry can't stop before the start
         if start and stop and stop <= start:
-            raise forms.ValidationError("Stop time can't be less or equal to start time")
+            raise forms.ValidationError(_("Stop time can't be less or equal to start time"))
         # Day entry can't stop more than one day to the targeted day date
         if stop and stop.date() > self.daydate.replace(day=self.daydate.day+1):
-            raise forms.ValidationError("Stop time can't be more than the next day")
+            raise forms.ValidationError(_("Stop time can't be more than the next day"))
         
         return stop
     
