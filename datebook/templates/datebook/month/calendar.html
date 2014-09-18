@@ -102,9 +102,7 @@ $(document).ready(function($) {
                             {% endif %}
                         {% else %}
                             {% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
-                            <p class="empty">{% blocktrans with add_url=add_url %}
-                                There is no entry yet, <a href="{{ add_url }}">add one</a>
-                            {% endblocktrans %}</p>
+                            <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add one</a>{% endblocktrans %}</p>
                         {% endif %}
                     </div>
                     <div class="menu">

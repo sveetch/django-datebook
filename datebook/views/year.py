@@ -27,7 +27,7 @@ class DatebookYearView(DateKwargsMixin, generic.TemplateView):
         _datebook_map = dict(map(lambda x: (x.period.month, x), queryset))
         # Fill the finded datebooks in the month map, month without datebook will have 
         # None instead of a Datebook instance
-        datebooks_map = [(name, _datebook_map.get(i)) for i, name in enumerate(calendar.month_name) if i>0]
+        datebooks_map = [(datetime.datetime(self.year, i, 1), _datebook_map.get(i)) for i in range(1,13)]
         
         context.update({
             'year_current': _curr.year,

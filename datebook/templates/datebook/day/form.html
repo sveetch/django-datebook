@@ -1,11 +1,15 @@
 {% extends "datebook/base.html" %}
-{% load autobreadcrumb crispy_forms_tags %}
+{% load i18n autobreadcrumb crispy_forms_tags %}
 
 {% block head_base_js %}{{ block.super }}
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
-        init_form("form");
+        init_form("form", {
+                'vacation_off_label': '{% blocktrans %}Switch to work{% endblocktrans %}',
+                'vacation_on_label': '{% blocktrans %}Switch to vacation{% endblocktrans %}',
+            }
+        );
     });
 //]]>
 </script>

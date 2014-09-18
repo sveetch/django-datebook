@@ -1,10 +1,10 @@
 /*
  * Vacation input
  */
-function button_switch(holder){
+function button_switch(holder, options){
     $('label, input', holder).hide();
     
-    holder.append('<a href="#" class="button vacation-switch off" data-switch-value="false" data-switch-to=".vacation-switch.on" style="display:none;">Switch to work</a><a href="#" class="button secondary vacation-switch on" data-switch-value="true" data-switch-to=".vacation-switch.off" style="display:none;">Switch to vacation</a>');
+    holder.append('<a href="#" class="button vacation-switch off" data-switch-value="false" data-switch-to=".vacation-switch.on" style="display:none;">'+options.vacation_off_label+'</a><a href="#" class="button secondary vacation-switch on" data-switch-value="true" data-switch-to=".vacation-switch.off" style="display:none;">'+options.vacation_on_label+'</a>');
     
     function apply_vacation_display(holder){
         holder.parents("form")
@@ -49,7 +49,8 @@ function button_switch(holder){
 /*
  * Initialize day form for all its inputs stuff
  */
-function init_form(day_form){
+function init_form(day_form, options){
+    options = (options) ? options : {};
     // Init timepicker on time inputs
     $('#id_start_datetime_1', day_form).timepicker({ 'timeFormat': 'H:i' });
     $('#id_stop_datetime_1', day_form).timepicker({ 'timeFormat': 'H:i' });
@@ -81,6 +82,6 @@ function init_form(day_form){
         $("#id_stop_datetime_0", day_form).val( startdate.format("DD/MM/YYYY") );
     });
 
-    button_switch($('#div_id_vacation', day_form));
+    button_switch($('#div_id_vacation', day_form), options);
 }
 

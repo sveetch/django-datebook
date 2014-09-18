@@ -9,7 +9,7 @@
         <div class="container{% if not entry %} empty{% elif entry.vacation %} vacation{% endif %}">
         {% if entry %}
             {% if entry.vacation %}
-                <p class="text-center"><em>Vacation</em></p>
+                <p class="text-center"><em>{% trans "Vacation" %}</em></p>
             {% else %}
                 <p class="working-hour">{{ entry.get_working_hours }}</p>
                 <div class="content">{{ entry.content|linebreaks }}</div>
