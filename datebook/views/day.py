@@ -10,14 +10,14 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from braces.views import JSONResponseMixin
+from braces.views import LoginRequiredMixin
 
 from datebook.models import Datebook, DayEntry
-from datebook.mixins import DatebookCalendarMixin, DatebookCalendarAutoCreateMixin
+from datebook.mixins import AuthorKwargsMixin, DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
 from datebook.forms.day import DayEntryForm
 from datebook.utils import week_from_date
 
-class DayEntryBaseFormView(DatebookCalendarMixin):
+class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin):
     """
     DayEntry base form view
     """
@@ -26,6 +26,8 @@ class DayEntryBaseFormView(DatebookCalendarMixin):
     template_name = "datebook/day/form.html"
     ajax_template_name = "datebook/day/form_fragment.html"
     form_class = DayEntryForm
+    permission_required = 'datebook.add_dayentry'
+    raise_exception = True
 
     def get_form(self, form_class):
         """
@@ -104,6 +106,8 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
     """
     DayEntry form edit view
     """
+    permission_required = 'datebook.change_dayentry'
+    
     def get_object(self):
         """
         Add required args to form instance
@@ -126,7 +130,16 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
         return kwargs
 
 
-class DayEntryCurrentView(generic.RedirectView):
+class DayEntryCurrentView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, generic.RedirectView):
+    """
+    Redirect to the form for the current day. If entry allready exists this will 
+    redirect to edit form, else to add form.
+    
+    If the month datebook does not exist for the current day, this will create it 
+    before redirect.
+    """
+    permission_required = 'datebook.add_dayentry'
+    raise_exception = True
     permanent = False
     
     def get_current_date(self):
@@ -178,7 +191,7 @@ class DayEntryCurrentView(generic.RedirectView):
             })
 
 
-class DayEntryDetailView(DatebookCalendarMixin, generic.TemplateView):
+class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.TemplateView):
     """
     DayEntry detail view
     """
@@ -188,8 +201,8 @@ class DayEntryDetailView(DatebookCalendarMixin, generic.TemplateView):
     def get_previous(self):
         try:
             obj = self.object.get_previous_by_activity_date(**{
-                'activity_date__month':self.object.activity_date.month,
-                'activity_date__year':self.object.activity_date.year,
+                'activity_date__month': self.object.activity_date.month,
+                'activity_date__year': self.object.activity_date.year,
             })
         except DayEntry.DoesNotExist:
             pass
@@ -200,8 +213,8 @@ class DayEntryDetailView(DatebookCalendarMixin, generic.TemplateView):
     def get_next(self):
         try:
             obj = self.object.get_next_by_activity_date(**{
-                'activity_date__month':self.object.activity_date.month,
-                'activity_date__year':self.object.activity_date.year,
+                'activity_date__month': self.object.activity_date.month,
+                'activity_date__year': self.object.activity_date.year,
             })
         except DayEntry.DoesNotExist:
             pass

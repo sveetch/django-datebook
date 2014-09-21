@@ -3,24 +3,34 @@
 
 {% block datebook_content %}
 <div class="datebook-calendar-year">{% for month_date, month_datebook in datebooks_map %}
-    <div class="small-12 medium-3 columns{% if not month_datebook %} empty{% endif %}">
-        <div class="panel radius text-center">
+    <div class="flex-column{% if not month_datebook %} empty{% endif %} radius text-center">
+        <div class="inner">
             <h3>{{ month_date|date:"F" }}</h3>
             {% if month_datebook %}
                 <p>
-                    <a href="{% url 'datebook-author-month' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button">{% blocktrans with count=month_datebook.dayentry_set.count %}{{ count }} entries{% endblocktrans %}</a>
+                    <a href="{% url 'datebook-author-month' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button">
+                    {% with month_datebook.dayentry_set.count as entries_counter %}
+                        {% if entries_counter > 0 %}
+                            {% blocktrans count counter=entries_counter %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}
+                        {% else %}
+                            {% trans "Empty" %}
+                        {% endif %}
+                    {% endwith %}
+                    </a>
                 </p>
             {% else %}
-                <p>
-                    <a href="#" class="button secondary" data-reveal-id="new-datebook-{{ month_date.month }}">{% trans "Create it" %}</a>
-                </p>
+                {% if user == author or user.is_superuser or perms.datebook.add_datebook %}
+                    <p><a href="#" class="button success" data-reveal-id="new-datebook-{{ month_date.month }}">{% trans "Create it" %}</a></p>
+                {% else %}
+                    <p class="empty text-center">{% trans "Empty" %}</p>
+                {% endif %}
             {% endif %}
         </div>
     </div>
 {% endfor %}</div>
 {% endblock %}
 
-{% block foot_more_js %}{{ block.super }}
+{% block foot_more_js %}{{ block.super }}{% if user == author or user.is_superuser or perms.datebook.add_datebook %}
 {% for month_date, month_datebook in datebooks_map %}{% if not month_datebook %}
 <div id="new-datebook-{{ month_date.month }}" class="reveal-modal text-center tiny" data-reveal>
     <h3>{% trans "Create a new datebook" %}</h3>
@@ -29,4 +39,4 @@
     <a class="close-reveal-modal">&#215;</a>
 </div>
 {% endif %}{% endfor %}
-{% endblock %}
+{% endif %}{% endblock %}

@@ -2,14 +2,18 @@
 {% load i18n crispy_forms_tags %}
 
 {% block datebook_content %}
-<div class="clearfix">{% crispy form %}</div>
+{% if form %}
+    <div class="clearfix">{% crispy form %}</div>
+{% endif %}
 
 <ul class="list-group">
-    {% spaceless %}{% for item in object_list %}
+    {% spaceless %}{% for year,year_datetime,months_counter in object_list %}
         <li>
-            <a href="{% url 'datebook-author-year' author=author year=item.year %}">
-                {% comment %}<p class="right text-right"><small>X filled months</small></p>{% endcomment %}
-                <h3>{{ item.year }}</h3>
+            <a href="{% url 'datebook-author-year' author=author year=year %}">
+                <p class="right text-right"><small>
+                    {% blocktrans count counter=months_counter %}<strong>{{ counter }}</strong> opened month{% plural %}<strong>{{ counter }}</strong> opened months{% endblocktrans %}
+                    </small></p>
+                <h3>{{ year }}</h3>
             </a>
         </li>
     {% endfor %}{% endspaceless %}

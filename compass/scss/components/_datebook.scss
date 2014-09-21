@@ -27,7 +27,7 @@
 }
 
 /*
- * Calendar style
+ * Calendar styles
  * 
  * For browser with Flexbox support (determined with modernizr) and only on large-up screen sizes
  * Else fallback on the "flat view"
@@ -128,8 +128,54 @@
 }
 
 // For large and up
-@media #{$large-up} {
-    html.flexbox{
+html.flexbox{
+
+    // Grid using flexbox
+    .datebook-calendar-year{
+        display: flex;
+        flex-wrap: wrap;
+        
+        .flex-column{
+            display: flex;
+            flex-wrap: wrap;
+            flex: 1 0 48%;
+            justify-content: center;
+            align-items: center;
+            margin: rem-calc(5px) 1%;
+            background-color: lighten($secondary-color, 5%);
+            border: 1px solid darken($secondary-color, 5%);
+            
+            &>.inner{
+                flex: 1 0 100%;
+                padding: rem-calc(25px) rem-calc(5px);
+                
+                &>*:first-child{
+                    line-height: 1;
+                    margin-top: 0;
+                    margin-bottom: rem-calc(10px);
+                }
+                &>*:last-child{
+                    margin-bottom: 0;
+                }
+                
+                .button{
+                    width: 80%;
+                    margin: 0;
+                    padding: rem-calc(10px) rem-calc(8px);
+                }
+                
+                .empty{
+                    width: 80%;
+                    display: inline-block;
+                    padding: rem-calc(10px) rem-calc(8px);
+                    background-color: $secondary-color;
+                    color: darken($secondary-color, 20%);
+                }
+            }
+        }
+    }
+    
+    @media #{$large-up} {
         .datebook-view-mode{
             display: block;
             
@@ -138,18 +184,45 @@
             }
         }
         
+        // Grid using flexbox
+        .datebook-calendar-year{
+            .flex-column{
+                flex: 1 0 23%;
+                margin: rem-calc(10px) 1%;
+                
+                &>.inner{
+                    padding: rem-calc(25px) rem-calc(10px);
+                    
+                    &>*:first-child{
+                        margin-bottom: rem-calc(15px);
+                    }
+                    
+                    .button{
+                        width: 60%;
+                        padding: rem-calc(16px);
+                    }
+                    
+                    .empty{
+                        width: 60%;
+                        padding: rem-calc(16px);
+                    }
+                }
+            }
+        }
+
+        
         /* Calendar 100% height */
         .datebook-month.calendar {
             font-size: rem-calc(12px);
             
-            .head {
+            .head{
                 display: flex;
                 flex: rem-calc(30px) 0 0;
                 font-size: rem-calc(14px);
                 font-weight: 600;
                 margin-bottom: rem-calc(5px);
                 
-                &>span {
+                &>span{
                     width: 100%;
                     margin-left: rem-calc(1px);
                     margin-right: rem-calc(6px);
@@ -165,13 +238,13 @@
                 }
             }
             
-            .week {
+            .week{
                 display: flex;
                 flex: rem-calc(30px) 1 0;
                 margin-bottom: rem-calc(5px);
                 padding: 0;
                 
-                &>.item {
+                &>.item{
                     width: 100%;
                     margin-right: rem-calc(6px);
                     color: #333;
@@ -196,7 +269,7 @@
                     }
                     
                     /* Include date number from attribute */
-                    &::after {
+                    &::after{
                         content: attr(data-date);
                         display: block;
                         position: absolute;
@@ -259,11 +332,11 @@
 
             /* Weekends */
             .week>.sat,
-            .week>.sun {
+            .week>.sun{
                 background: #f3f3f3;
             }
             .head>span:last-child,
-            .week>.item:last-child {
+            .week>.item:last-child{
                 margin-right: 0;
             }
 

@@ -17,7 +17,7 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
     """
     User datebook index
     
-    Display all year that have one or more Datebooks for the given user
+    Display all years that have one or more Datebooks for the given user
     """
     model = Datebook
     form_class = DatebookYearForm
@@ -29,6 +29,11 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
         self.author = get_object_or_404(User, username=self.kwargs['author'])
         self.queryset = self.model.objects.filter(author=self.author).dates('period', 'year')
         return super(DatebookAuthorView, self).get_queryset(*args, **kwargs)
+
+    def get_form(self, form_class):
+        if not self.request.user.is_superuser and self.request.user != self.author and not self.request.user.has_perm('datebook.add_datebook'):
+            return None
+        return super(DatebookAuthorView, self).get_form(form_class)
         
     def get_form_kwargs(self, **kwargs):
         kwargs = super(DatebookAuthorView, self).get_form_kwargs(**kwargs)
@@ -38,10 +43,21 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
         })
         return kwargs
         
+    def format_year_list(self, queryset):
+        """
+        Reformate the paginated queryset to replace items with a tuple containing the 
+        item's year, datetime and it's opened month counter
+        """
+        return [(item.year, item, self.count_opened_months(item.year)) for item in queryset]
+        
+    def count_opened_months(self, year):
+        return Datebook.objects.filter(author=self.author, period__year=year).count()
+        
     def get_context_data(self, **kwargs):
         context = super(DatebookAuthorView, self).get_context_data(**kwargs)
         context.update({
             'author': self.author,
+            'object_list': self.format_year_list(context['object_list']),
         })
         return context
 
@@ -50,8 +66,3 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
             'author': self.author,
             'year': self.object.period.year,
         })
-
-    #def form_valid(self, form):
-        #response = super(DatebookAuthorView, self).get_context_data(**kwargs)
-        
-        #return response

@@ -5,6 +5,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function($) {
+    {% comment %}This JS code should reside in 'datebook.js'{% endcomment %}
     /*
      * Switch calendar to mosaic/flat view
      */
@@ -50,6 +51,7 @@ $(document).ready(function($) {
 
 {% block datebook_content %}
 <div class="clearfix">
+    <p class="left"><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></p>
     <ul class="button-group round right datebook-view-mode">
         <li><a href="#" class="button tiny" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
         <li><a href="#" class="button tiny secondary" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
@@ -86,13 +88,9 @@ $(document).ready(function($) {
                             {% if day.entry.vacation %}
                                 <p class="vacation-label">{% trans "Vacation" %}</p>
                             {% else %}
-                                {% comment %}<p class="working-hour">
-                                    <i class="icon-clock"></i> {{ day.entry.get_working_hours }} 
-                                    <span> <i class="icon-timer"></i> {{ day.entry.get_elapsed_time }}</span>
-                                </p>{% endcomment %}
                                 <ul class="inline-list time-infos">
                                     <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
-                                    <li><span class="label round secondary"><i class="icon-timer"></i> {{ day.entry.get_elapsed_time }}</li>
+                                    <li><span class="label round secondary"><i class="icon-timer"></i> {{ day.entry.get_elapsed_time }}</span></li>
                                 </ul>
                                 {% if day.entry.content %}
                                     <div class="content">{{ day.entry.content|linebreaks }}</div>
@@ -101,24 +99,33 @@ $(document).ready(function($) {
                                 {% endif %}
                             {% endif %}
                         {% else %}
-                            {% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
-                            <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add one</a>{% endblocktrans %}</p>
+                            {% if user == author or user.is_superuser or perms.datebook.add_dayentry %}
+                                {% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
+                                <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add it</a>{% endblocktrans %}</p>
+                            {% else %}
+                                <p class="empty">{% blocktrans %}There is no entry yet{% endblocktrans %}</p>
+                            {% endif %}
                         {% endif %}
                     </div>
+                    
+                    {% if day.entry %}
                     <div class="menu">
-                        {% if day.entry %}
-                            <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook-author-day' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
-                                <i class="icon-eye"></i>
-                            </a> 
+                        <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook-author-day' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
+                            <i class="icon-eye"></i>
+                        </a> 
+                        {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
                             <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
                                 <i class="icon-pencil"></i>
                             </a>
-                        {% else %}
-                            <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
-                                <i class="icon-add-circle"></i>
-                            </a> 
                         {% endif %}
                     </div>
+                    {% elif user == author or user.is_superuser or perms.datebook.add_dayentry %}
+                    <div class="menu">
+                        <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
+                            <i class="icon-add-circle"></i>
+                        </a> 
+                    </div>
+                    {% endif %}
                 {% endif %}
             </div>
         {% endfor %}

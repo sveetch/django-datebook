@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """
 Datebook week views
+
+DEPRECATED
 """
 import calendar
 
 from django import http
 from django.views import generic
 
+from braces.views import LoginRequiredMixin
+
 from datebook.mixins import DatebookCalendarMixin
 
-class DatebookWeekView(DatebookCalendarMixin, generic.TemplateView):
+class DatebookWeekView(LoginRequiredMixin, DatebookCalendarMixin, generic.TemplateView):
     """
     Datebook month week details view
     

@@ -8,27 +8,14 @@ from django import http
 from django.views import generic
 from django.core.urlresolvers import reverse
 
-from datebook.models import Datebook
-from datebook.mixins import DatebookCalendarMixin
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+
 from datebook.forms.month import DatebookForm
+from datebook.models import Datebook
+from datebook.mixins import DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
+from datebook.utils import format_seconds_to_clock
 
-class DatebookMonthAddView(DatebookCalendarMixin, generic.View):
-    """
-    Automatically create the datebook if it does not allready exists for the "author+year+month" 
-    kwargs given, then redirect to its page.
-    
-    If the Datebook allready exists for the given kwargs, raise a "Http404"
-    """
-    def get(self, request, *args, **kwargs):
-        if Datebook.objects.filter(author=self.author, period__year=self.year, period__month=self.month).count()>0:
-            raise http.Http404
-        
-        d = self.author.datebook_set.create(period=datetime.date(year=self.year, month=self.month, day=1))
-        
-        return http.HttpResponseRedirect(d.get_absolute_url())
-
-
-class DatebookMonthFormView(generic.FormView):
+class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
     """
     Datebook create form view
     """
@@ -46,8 +33,26 @@ class DatebookMonthFormView(generic.FormView):
         return self.object.get_absolute_url()
 
 
+class DatebookMonthAddView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin, generic.View):
+    """
+    Automatically create the datebook if it does not allready exists for the "author+year+month" 
+    kwargs given, then redirect to its page.
+    
+    If the Datebook allready exists for the given kwargs, raise a "Http404"
+    """
+    permission_required = 'datebook.add_datebook'
+    raise_exception = True
+    
+    def get(self, request, *args, **kwargs):
+        if Datebook.objects.filter(author=self.author, period__year=self.year, period__month=self.month).count()>0:
+            raise http.Http404
+        
+        d = self.author.datebook_set.create(period=datetime.date(year=self.year, month=self.month, day=1))
+        
+        return http.HttpResponseRedirect(d.get_absolute_url())
 
-class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
+
+class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.TemplateView):
     """
     Datebook month details view
     
@@ -64,9 +69,18 @@ class DatebookMonthView(DatebookCalendarMixin, generic.TemplateView):
         
         _cal = super(DatebookMonthView, self).get_calendar()
         
+        # Calculate total elapsed time for worked days
+        day_entries = self.get_dayentry_list(day_filters)
+        total_elapsed_time = 0
+        for item in day_entries:
+            if item.vacation:
+                continue
+            total_elapsed_time += item.get_elapsed_seconds()
+        
         return {
             "weekheader": _cal.formatweekheader(),
-            "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=self.get_dayentry_list(day_filters), current_day=current_day),
+            "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=day_entries, current_day=current_day),
+            "total_elapsed_time": format_seconds_to_clock(total_elapsed_time),
         }
         
     def get_context_data(self, **kwargs):

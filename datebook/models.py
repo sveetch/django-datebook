@@ -82,10 +82,13 @@ class DayEntry(models.Model):
         """Display working hours like: '08h to 18h59'"""
         return _('%(start)s to %(stop)s') % {'start': self.get_display_hour(self.start), 'stop': self.get_display_hour(self.stop)}
 
+    def get_elapsed_seconds(self):
+        """Return elapsed seconds between start and stop, where pause time has been substracted from"""
+        return utils.timedelta_to_seconds((self.stop-self.start))-utils.time_to_seconds(self.pause)
+
     def get_elapsed_time(self):
-        """Display elapsed time between start and stop, where pause time has been substracted from"""
-        diff = utils.timedelta_to_seconds((self.stop-self.start))-utils.time_to_seconds(self.pause)
-        return utils.format_seconds_to_clock(diff)
+        """Return formatted clock for elapsed seconds from 'get_elapsed_seconds'"""
+        return utils.format_seconds_to_clock(self.get_elapsed_seconds())
 
     def clean(self):
         from django.core.exceptions import ValidationError

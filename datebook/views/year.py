@@ -7,9 +7,11 @@ import calendar
 
 from django.views import generic
 
+from braces.views import LoginRequiredMixin
+
 from datebook.mixins import DateKwargsMixin
 
-class DatebookYearView(DateKwargsMixin, generic.TemplateView):
+class DatebookYearView(LoginRequiredMixin, DateKwargsMixin, generic.TemplateView):
     """
     Datebook year view
     

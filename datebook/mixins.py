@@ -6,6 +6,10 @@ import datetime
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.contrib.auth.views import redirect_to_login
+
+from braces.views import PermissionRequiredMixin
 
 from datebook.models import Datebook
 from datebook.calendars import DatebookCalendar
@@ -31,6 +35,7 @@ class AuthorKwargsMixin(object):
             context[self.key_name] = getattr(self, self.key_name)
         return context
 
+
 class DateKwargsMixin(AuthorKwargsMixin):
     """
     Get common date kwargs (year, month, day) to set them as object attributes
@@ -52,6 +57,7 @@ class DateKwargsMixin(AuthorKwargsMixin):
         context['target_date'] = datetime.date(getattr(self, 'year', 1977), getattr(self, 'month', 1), getattr(self, 'day', 1))
         return context
 
+
 class DatebookCalendarMixin(DateKwargsMixin):
     """
     Datebook calendar mixin
@@ -66,6 +72,7 @@ class DatebookCalendarMixin(DateKwargsMixin):
     
     def get_calendar(self, *args, **kwargs):
         return self.calendar_obj(*args, **kwargs)
+
 
 class DatebookCalendarAutoCreateMixin(DatebookCalendarMixin):
     """
@@ -87,3 +94,34 @@ class DatebookCalendarAutoCreateMixin(DatebookCalendarMixin):
             obj = Datebook(author=author, period=datetime.date(self.year, self.month, self.day))
             obj.save()
         return obj
+
+
+class OwnerOrPermissionRequiredMixin(PermissionRequiredMixin):
+    """
+    Act like 'PermissionRequiredMixin' but pass permission test if the user is 
+    the object owner.
+    
+    Object owner must be in a class attribute named "author". With 'AuthorKwargsMixin' 
+    usage, you simply have to put just after like this :
+    
+        class MyView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, ....):
+            pass
+    
+    Then you don't have to do anything for the 'author' attribute. This works for any 
+    other class that inherit from 'AuthorKwargsMixin'.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        if getattr(self, 'author', None) is None:
+            raise ImproperlyConfigured(
+                "'OwnerOrPermissionRequiredMixin' requires "
+                "'author' attribute to be set.")
+        
+        # If the user is the object owner pass permission tests 
+        # using 'PermissionRequiredMixin' ancestor
+        if request.user.is_authenticated() and request.user == self.author:
+            return super(PermissionRequiredMixin, self).dispatch(
+                request, *args, **kwargs)
+        
+        # If user is not the Object owner, continue to check for permission
+        return super(OwnerOrPermissionRequiredMixin, self).dispatch(
+            request, *args, **kwargs)
