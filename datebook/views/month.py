@@ -72,16 +72,19 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
         
         # Calculate total elapsed time for worked days
         day_entries = self.get_dayentry_list(day_filters)
-        total_elapsed_time = 0
+        total_elapsed_time = total_overtime_seconds = 0
         for item in day_entries:
             if item.vacation:
                 continue
             total_elapsed_time += item.get_elapsed_seconds()
+            total_overtime_seconds += item.get_overtime_seconds()
         
         return {
             "weekheader": _cal.formatweekheader(),
             "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=day_entries, current_day=current_day),
             "total_elapsed_time": format_seconds_to_clock(total_elapsed_time),
+            "total_overtime_seconds": total_overtime_seconds,
+            "total_overtime_time": format_seconds_to_clock(total_overtime_seconds),
         }
         
     def get_context_data(self, **kwargs):

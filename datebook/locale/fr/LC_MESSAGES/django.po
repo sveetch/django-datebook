@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-21 14:34+0200\n"
+"POT-Creation-Date: 2014-09-22 03:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,26 +82,30 @@ msgstr "Fin"
 msgid "pause"
 msgstr "Pause"
 
-#: models.py:70 templates/datebook/year.html:16
+#: models.py:67
+msgid "overtime"
+msgstr "supplémentaires"
+
+#: models.py:71 templates/datebook/year.html:16
 #: templates/datebook/year.html.py:25
 msgid "Empty"
 msgstr "Vide"
 
-#: models.py:79
+#: models.py:80
 #, python-format
 msgid "%(hour)sh%(minute)s"
 msgstr ""
 
-#: models.py:83
+#: models.py:84
 #, python-format
 msgid "%(start)s to %(stop)s"
 msgstr "%(start)s à %(stop)s"
 
-#: models.py:113
+#: models.py:122
 msgid "day entry"
 msgstr "entrée de jour"
 
-#: models.py:114
+#: models.py:123
 msgid "day entries"
 msgstr "entrées de jours"
 
@@ -109,7 +113,7 @@ msgstr "entrées de jours"
 msgid "Submit"
 msgstr "Soumettre"
 
-#: forms/crispies.py:21 forms/crispies.py:76
+#: forms/crispies.py:21 forms/crispies.py:77
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -117,7 +121,7 @@ msgstr "Sauvegarder"
 msgid "Save and continue to next day"
 msgstr "Sauvegarder et continuer au jour suivant"
 
-#: forms/crispies.py:106
+#: forms/crispies.py:107
 msgid "New year"
 msgstr "Nouvelle année"
 
@@ -166,15 +170,15 @@ msgstr "Ouvrir un nouvel agenda pour un nouvel utilisateur"
 
 #: templates/datebook/week.html:12
 #: templates/datebook/day/detail_fragment.html:8
-#: templates/datebook/month/calendar.html:90
+#: templates/datebook/month/calendar.html:95
 msgid "Vacation"
 msgstr "Congé"
 
-#: templates/datebook/week.html:18 templates/datebook/month/calendar.html:118
+#: templates/datebook/week.html:18 templates/datebook/month/calendar.html:124
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/datebook/week.html:20 templates/datebook/month/calendar.html:125
+#: templates/datebook/week.html:20 templates/datebook/month/calendar.html:132
 msgid "Add"
 msgstr "Ajouter"
 
@@ -206,16 +210,16 @@ msgstr ""
 msgid "I confirm"
 msgstr "Je confirme"
 
-#: templates/datebook/day/detail_fragment.html:17
-#: templates/datebook/month/calendar.html:99
+#: templates/datebook/day/detail_fragment.html:18
+#: templates/datebook/month/calendar.html:105
 msgid "Empty content"
 msgstr "Contenu vide"
 
-#: templates/datebook/day/detail_fragment.html:27
+#: templates/datebook/day/detail_fragment.html:28
 msgid "Previous"
 msgstr "Précédent"
 
-#: templates/datebook/day/detail_fragment.html:35
+#: templates/datebook/day/detail_fragment.html:36
 msgid "Next"
 msgstr "Suivant"
 
@@ -227,33 +231,38 @@ msgstr "Changer en jour travaillé"
 msgid "Switch to vacation"
 msgstr "Changer en jour de congé"
 
-#: templates/datebook/month/calendar.html:55
+#: templates/datebook/month/calendar.html:57
 #, python-format
 msgid "Total worked hours : %(time_clock)s"
 msgstr "Total des heures travaillées : %(time_clock)s"
 
-#: templates/datebook/month/calendar.html:57
+#: templates/datebook/month/calendar.html:58
+#, python-format
+msgid "Including %(time_clock)s overtime hours"
+msgstr "Dont %(time_clock)s heures supplémentaires"
+
+#: templates/datebook/month/calendar.html:62
 msgid "Calendar view"
 msgstr "Vue calendrier"
 
-#: templates/datebook/month/calendar.html:58
+#: templates/datebook/month/calendar.html:63
 msgid "Flat view"
 msgstr "Vue à plat"
 
-#: templates/datebook/month/calendar.html:76
+#: templates/datebook/month/calendar.html:81
 msgid "Week"
 msgstr "Semaine"
 
-#: templates/datebook/month/calendar.html:105
+#: templates/datebook/month/calendar.html:111
 #, python-format
 msgid "There is no entry yet, <a href=\"%(add_url)s\">add it</a>"
 msgstr "Il n'y encore aucune entrée, <a href=\"%(add_url)s\">créez la</a>"
 
-#: templates/datebook/month/calendar.html:107
+#: templates/datebook/month/calendar.html:113
 msgid "There is no entry yet"
 msgstr "Il n'y encore aucune entrée"
 
-#: templates/datebook/month/calendar.html:114
+#: templates/datebook/month/calendar.html:120
 msgid "Read"
 msgstr "Lire"
 

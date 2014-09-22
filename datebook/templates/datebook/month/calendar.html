@@ -51,7 +51,12 @@ $(document).ready(function($) {
 
 {% block datebook_content %}
 <div class="clearfix">
-    <p class="left"><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></p>
+    <div class="left">
+        <ul class="inline-list time-infos">
+            <li><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
+            {% if datebook_calendar.total_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {% blocktrans with time_clock=datebook_calendar.total_overtime_time %}Including {{ time_clock }} overtime hours{% endblocktrans %}</span></li>{% endif %}
+        </ul>
+    </div>
     <ul class="button-group round right datebook-view-mode">
         <li><a href="#" class="button tiny" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
         <li><a href="#" class="button tiny secondary" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>

@@ -73,6 +73,11 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         
         return stop
     
+    # TODO: overtime must not be more than effective worked time
+    #def clean_overtime(self):
+        #overtime = self.cleaned_data.get('overtime')
+        #return overtime
+    
     # TODO
     #def clean_pause(self):
         #start = self.cleaned_data.get('start_datetime')
