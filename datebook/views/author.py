@@ -2,6 +2,8 @@
 """
 Datebook author views
 """
+import datetime
+
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -57,6 +59,7 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
         context = super(DatebookAuthorView, self).get_context_data(**kwargs)
         context.update({
             'author': self.author,
+            'today': datetime.datetime.today(),
             'object_list': self.format_year_list(context['object_list']),
         })
         return context

@@ -32,9 +32,10 @@ def day_helper(form_tag=True, form_action='.', has_next=False):
             Column('vacation', css_class='small-6 medium-4 medium-offset-8 text-right'),
         ),
         Row(
-            Column('start_datetime', css_class='small-4 medium-5'),
-            Column('pause', css_class='small-4 medium-2'),
-            Column('stop_datetime', css_class='small-4 medium-5'),
+            Column('start_datetime', css_class='small-6 medium-4'),
+            Column('pause', css_class='small-6 medium-2'),
+            Column('stop_datetime', css_class='small-6 medium-4'),
+            Column('overtime', css_class='small-6 medium-2'),
             css_class='opacited'
         ),
         Row(

@@ -55,6 +55,7 @@ class DateKwargsMixin(AuthorKwargsMixin):
         for name in self.date_kwarg_names:
             context[name] = getattr(self, name, None)
         context['target_date'] = datetime.date(getattr(self, 'year', 1977), getattr(self, 'month', 1), getattr(self, 'day', 1))
+        context['today'] = datetime.datetime.today()
         return context
 
 

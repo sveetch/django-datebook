@@ -99,4 +99,5 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         exclude = ('datebook', 'activity_date', 'start', 'stop')
         widgets = {
             'pause': forms.TimeInput(format=DATETIME_FORMATS['input_time_formats'][0]),
+            'overtime': forms.TimeInput(format=DATETIME_FORMATS['input_time_formats'][0]),
         }

@@ -201,9 +201,11 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
     def get_previous(self):
         try:
             obj = self.object.get_previous_by_activity_date(**{
+                'datebook__author': self.author,
                 'activity_date__month': self.object.activity_date.month,
                 'activity_date__year': self.object.activity_date.year,
             })
+            print "FOO", obj
         except DayEntry.DoesNotExist:
             pass
         else:
@@ -213,6 +215,7 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
     def get_next(self):
         try:
             obj = self.object.get_next_by_activity_date(**{
+                'datebook__author': self.author,
                 'activity_date__month': self.object.activity_date.month,
                 'activity_date__year': self.object.activity_date.year,
             })
@@ -223,13 +226,14 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
         return None
         
     def get_object(self, **kwargs):
-        try:
-            obj = DayEntry.objects.get(datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
-        except DayEntry.DoesNotExist:
-            pass
-        else:
-            return obj
-        return None
+        return get_object_or_404(DayEntry, datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
+        #try:
+            #obj = DayEntry.objects.get(datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
+        #except DayEntry.DoesNotExist:
+            #pass
+        #else:
+            #return obj
+        #return None
     
     def get_context_data(self, **kwargs):
         context = super(DayEntryDetailView, self).get_context_data(**kwargs)

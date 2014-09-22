@@ -91,6 +91,7 @@ $(document).ready(function($) {
                                 <ul class="inline-list time-infos">
                                     <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
                                     <li><span class="label round secondary"><i class="icon-timer"></i> {{ day.entry.get_elapsed_time }}</span></li>
+                                    {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
                                 </ul>
                                 {% if day.entry.content %}
                                     <div class="content">{{ day.entry.content|linebreaks }}</div>
@@ -114,7 +115,7 @@ $(document).ready(function($) {
                             <i class="icon-eye"></i>
                         </a> 
                         {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
-                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
+                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
                                 <i class="icon-pencil"></i>
                             </a>
                         {% endif %}

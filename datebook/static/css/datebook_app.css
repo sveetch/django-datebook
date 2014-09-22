@@ -8954,29 +8954,38 @@ img.divider {
   border-bottom: 4px solid #dadada;
 }
 /* line 67, ../../../compass/scss/components/_datebook.scss */
+.datebook-month .week .item.current {
+  background-color: #a1e8ff;
+}
+/* line 69, ../../../compass/scss/components/_datebook.scss */
+.datebook-month .week .item.current h3 {
+  border-bottom: 4px solid #21c8ff;
+  background-color: #a1e8ff;
+}
+/* line 75, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .working-hour {
   font-weight: 600;
   /*&:hover span{
       display: inline;
   }*/
 }
-/* line 70, ../../../compass/scss/components/_datebook.scss */
+/* line 78, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .working-hour span {
   margin-left: 10px;
 }
-/* line 80, ../../../compass/scss/components/_datebook.scss */
+/* line 88, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .time-infos {
   margin: 0 0 5px 0;
 }
-/* line 83, ../../../compass/scss/components/_datebook.scss */
+/* line 91, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .time-infos > li {
   margin: 0;
 }
-/* line 86, ../../../compass/scss/components/_datebook.scss */
+/* line 94, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .time-infos > li + li {
   margin-left: 5px;
 }
-/* line 93, ../../../compass/scss/components/_datebook.scss */
+/* line 101, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .vacation-label,
 .datebook-month .week .item .empty {
   margin: 0;
@@ -8984,37 +8993,37 @@ img.divider {
   color: #b4b4b4;
   text-align: center;
 }
-/* line 99, ../../../compass/scss/components/_datebook.scss */
+/* line 107, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .vacation-label {
   color: inherit;
 }
-/* line 103, ../../../compass/scss/components/_datebook.scss */
+/* line 111, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item .menu {
   display: none;
 }
-/* line 108, ../../../compass/scss/components/_datebook.scss */
+/* line 116, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item.has-entry .menu {
   display: block;
   text-align: right;
   margin-bottom: 1.25rem;
 }
-/* line 114, ../../../compass/scss/components/_datebook.scss */
+/* line 122, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item.has-entry .menu .action::before {
   margin-right: 5px;
   content: attr(title);
   text-decoration: underline;
 }
-/* line 120, ../../../compass/scss/components/_datebook.scss */
+/* line 128, ../../../compass/scss/components/_datebook.scss */
 .datebook-month .week .item.has-entry .menu .action.read {
   display: none;
 }
 
-/* line 134, ../../../compass/scss/components/_datebook.scss */
+/* line 142, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year {
   display: flex;
   flex-wrap: wrap;
 }
-/* line 138, ../../../compass/scss/components/_datebook.scss */
+/* line 146, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column {
   display: flex;
   flex-wrap: wrap;
@@ -9025,28 +9034,37 @@ html.flexbox .datebook-calendar-year .flex-column {
   background-color: #f4f4f4;
   border: 1px solid #dadada;
 }
-/* line 148, ../../../compass/scss/components/_datebook.scss */
+/* line 156, ../../../compass/scss/components/_datebook.scss */
+html.flexbox .datebook-calendar-year .flex-column.current {
+  background-color: #0094c4;
+  border: 1px solid #0079a1;
+}
+/* line 159, ../../../compass/scss/components/_datebook.scss */
+html.flexbox .datebook-calendar-year .flex-column.current h3 {
+  color: #ffffff;
+}
+/* line 164, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column > .inner {
   flex: 1 0 100%;
   padding: 1.5625rem 0.3125rem;
 }
-/* line 152, ../../../compass/scss/components/_datebook.scss */
+/* line 168, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column > .inner > *:first-child {
   line-height: 1;
   margin-top: 0;
   margin-bottom: 0.625rem;
 }
-/* line 157, ../../../compass/scss/components/_datebook.scss */
+/* line 173, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column > .inner > *:last-child {
   margin-bottom: 0;
 }
-/* line 161, ../../../compass/scss/components/_datebook.scss */
+/* line 177, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column > .inner .button {
   width: 80%;
   margin: 0;
   padding: 0.625rem 0.5rem;
 }
-/* line 167, ../../../compass/scss/components/_datebook.scss */
+/* line 183, ../../../compass/scss/components/_datebook.scss */
 html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
   width: 80%;
   display: inline-block;
@@ -9055,47 +9073,47 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
   color: #b4b4b4;
 }
 @media only screen and (min-width: 64.063em) {
-  /* line 131, ../../../compass/scss/components/_datebook.scss */
+  /* line 139, ../../../compass/scss/components/_datebook.scss */
   html.flexbox {
     /* Calendar 100% height */
   }
-  /* line 179, ../../../compass/scss/components/_datebook.scss */
+  /* line 195, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-view-mode {
     display: block;
   }
-  /* line 182, ../../../compass/scss/components/_datebook.scss */
+  /* line 198, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-view-mode .button {
     font-size: 1rem;
   }
-  /* line 189, ../../../compass/scss/components/_datebook.scss */
+  /* line 205, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-calendar-year .flex-column {
     flex: 1 0 23%;
     margin: 0.625rem 1%;
   }
-  /* line 193, ../../../compass/scss/components/_datebook.scss */
+  /* line 209, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-calendar-year .flex-column > .inner {
     padding: 1.5625rem 0.625rem;
   }
-  /* line 196, ../../../compass/scss/components/_datebook.scss */
+  /* line 212, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-calendar-year .flex-column > .inner > *:first-child {
     margin-bottom: 0.9375rem;
   }
-  /* line 200, ../../../compass/scss/components/_datebook.scss */
+  /* line 216, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-calendar-year .flex-column > .inner .button {
     width: 60%;
     padding: 1rem;
   }
-  /* line 205, ../../../compass/scss/components/_datebook.scss */
+  /* line 221, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     width: 60%;
     padding: 1rem;
   }
-  /* line 215, ../../../compass/scss/components/_datebook.scss */
+  /* line 231, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar {
     font-size: 0.75rem;
     /* Weekends */
   }
-  /* line 218, ../../../compass/scss/components/_datebook.scss */
+  /* line 234, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .head {
     display: flex;
     flex: 1.875rem 0 0;
@@ -9103,7 +9121,7 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     font-weight: 600;
     margin-bottom: 0.3125rem;
   }
-  /* line 225, ../../../compass/scss/components/_datebook.scss */
+  /* line 241, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .head > span {
     width: 100%;
     margin-left: 0.0625rem;
@@ -9114,18 +9132,18 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     text-align: right;
     text-transform: uppercase;
   }
-  /* line 235, ../../../compass/scss/components/_datebook.scss */
+  /* line 251, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .head > span.weekno {
     display: none;
   }
-  /* line 241, ../../../compass/scss/components/_datebook.scss */
+  /* line 257, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week {
     display: flex;
     flex: 1.875rem 1 0;
     margin-bottom: 0.3125rem;
     padding: 0;
   }
-  /* line 247, ../../../compass/scss/components/_datebook.scss */
+  /* line 263, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item {
     width: 100%;
     margin-right: 0.375rem;
@@ -9135,6 +9153,7 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     position: relative;
     overflow: hidden;
     border: 1px solid #ccc;
+    background-color: #ffffff;
     /* Include date number from attribute */
     /* Month day action menu */
     /*&:hover{
@@ -9143,23 +9162,28 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
         }
     }*/
   }
-  /* line 257, ../../../compass/scss/components/_datebook.scss */
+  /* line 274, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item h3, html.flexbox .datebook-month.calendar .week > .item .empty {
     display: none;
   }
-  /* line 260, ../../../compass/scss/components/_datebook.scss */
+  /* line 277, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item p {
     font-size: inherit;
   }
-  /* line 264, ../../../compass/scss/components/_datebook.scss */
+  /* line 281, ../../../compass/scss/components/_datebook.scss */
+  html.flexbox .datebook-month.calendar .week > .item.current {
+    border: 1px solid #00b2ed;
+    background-color: #a1e8ff;
+  }
+  /* line 286, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .working-hour {
     margin-bottom: 0.3125rem;
   }
-  /* line 267, ../../../compass/scss/components/_datebook.scss */
+  /* line 289, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .vacation-label {
     font-style: italic;
   }
-  /* line 272, ../../../compass/scss/components/_datebook.scss */
+  /* line 294, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item::after {
     content: attr(data-date);
     display: block;
@@ -9168,7 +9192,7 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     right: 0.25rem;
     color: #008cba;
   }
-  /* line 282, ../../../compass/scss/components/_datebook.scss */
+  /* line 304, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .menu {
     display: block;
     margin: 0;
@@ -9187,41 +9211,41 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
     -o-border-radius: 2px;
     border-radius: 2px;
   }
-  /* line 296, ../../../compass/scss/components/_datebook.scss */
+  /* line 318, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .menu a + a {
     margin-left: 15px;
   }
-  /* line 300, ../../../compass/scss/components/_datebook.scss */
+  /* line 322, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .menu .action::before {
     margin-right: 0;
     content: none;
     text-decoration: none;
   }
-  /* line 305, ../../../compass/scss/components/_datebook.scss */
+  /* line 327, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item .menu .action.read {
     display: inline;
   }
-  /* line 316, ../../../compass/scss/components/_datebook.scss */
+  /* line 338, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item.weekno {
     display: none;
   }
-  /* line 320, ../../../compass/scss/components/_datebook.scss */
+  /* line 342, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item.vacation {
     display: flex;
   }
-  /* line 323, ../../../compass/scss/components/_datebook.scss */
+  /* line 345, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .item.vacation > .container {
     flex: 1;
     align-self: center;
     text-align: center;
     color: #a0a0a0;
   }
-  /* line 335, ../../../compass/scss/components/_datebook.scss */
+  /* line 357, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .week > .sat,
   html.flexbox .datebook-month.calendar .week > .sun {
     background: #f3f3f3;
   }
-  /* line 339, ../../../compass/scss/components/_datebook.scss */
+  /* line 361, ../../../compass/scss/components/_datebook.scss */
   html.flexbox .datebook-month.calendar .head > span:last-child,
   html.flexbox .datebook-month.calendar .week > .item:last-child {
     margin-right: 0;
@@ -9231,21 +9255,21 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
 /*
  * Modal view for day's detail read
  */
-/* line 351, ../../../compass/scss/components/_datebook.scss */
+/* line 373, ../../../compass/scss/components/_datebook.scss */
 #revealDayModal {
   bottom: 100px;
   overflow: auto;
 }
-/* line 355, ../../../compass/scss/components/_datebook.scss */
+/* line 377, ../../../compass/scss/components/_datebook.scss */
 #revealDayModal .modal-navigation-day {
   position: absolute;
   top: 0;
 }
-/* line 359, ../../../compass/scss/components/_datebook.scss */
+/* line 381, ../../../compass/scss/components/_datebook.scss */
 #revealDayModal .modal-navigation-day.previous {
   left: 0;
 }
-/* line 363, ../../../compass/scss/components/_datebook.scss */
+/* line 385, ../../../compass/scss/components/_datebook.scss */
 #revealDayModal .modal-navigation-day.next {
   right: 0;
 }
@@ -9253,11 +9277,11 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
 /*
  * A specific div that contain a switch field with a label
  */
-/* line 372, ../../../compass/scss/components/_datebook.scss */
+/* line 394, ../../../compass/scss/components/_datebook.scss */
 .switch-cell {
   margin-bottom: 1rem;
 }
-/* line 376, ../../../compass/scss/components/_datebook.scss */
+/* line 398, ../../../compass/scss/components/_datebook.scss */
 .switch-cell .switch > label,
 .switch-cell .label {
   margin-bottom: 0;

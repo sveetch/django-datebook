@@ -3,7 +3,7 @@
 
 {% block datebook_content %}
 <div class="datebook-calendar-year">{% for month_date, month_datebook in datebooks_map %}
-    <div class="flex-column{% if not month_datebook %} empty{% endif %} radius text-center">
+    <div class="flex-column radius text-center{% if not month_datebook %} empty{% endif %}{% if month_date.year == today.year and month_date.month == today.month %} current{% endif %}">
         <div class="inner">
             <h3>{{ month_date|date:"F" }}</h3>
             {% if month_datebook %}

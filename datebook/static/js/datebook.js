@@ -52,12 +52,10 @@ function button_switch(holder, options){
 function init_form(day_form, options){
     options = (options) ? options : {};
     // Init timepicker on time inputs
-    $('#id_start_datetime_1', day_form).timepicker({ 'timeFormat': 'H:i' });
-    $('#id_stop_datetime_1', day_form).timepicker({ 'timeFormat': 'H:i' });
-    $('#id_pause', day_form).timepicker({ 'timeFormat': 'H:i' });
+    $('#id_start_datetime_1, #id_stop_datetime_1', day_form).timepicker({ 'timeFormat': 'H:i' });
+    $('#id_pause, #id_overtime', day_form).timepicker({ 'timeFormat': 'H:i' });
     // Hide date inputs to avoid manual edit
-    $('#id_start_datetime_0', day_form).hide();
-    $('#id_stop_datetime_0', day_form).hide();
+    $('#id_start_datetime_0, #id_stop_datetime_0', day_form).hide();
     
     /*
     * Automatically update the stop date on start & stop time inputs changes

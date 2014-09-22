@@ -62,6 +62,8 @@ For day entries, **start and stop time represents times for starting and ending 
 
 **Pause time represents the time that was not worked between start/stop time** and so will be substracted from the total worked time.
 
+**Overtime represents the extra time that is over the working hours**, it does not affect the worked time.
+
 Day entries can be marked as *vacation*, **vacated days will never be used to calculate the total worked time** for the month and their content is hided if any.
 
 Permissions

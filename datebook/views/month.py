@@ -62,10 +62,11 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
     
     def get_calendar(self, day_filters={}):
         # Add current day if the datebook period is the current month+year
-        current_day = None
-        _curr = datetime.date.today()
-        if _curr.replace(day=1) == self.object.period:
-            current_day = _curr
+        #current_day = None
+        current_day = datetime.date.today()
+        #print _curr.replace(day=1), self.object.period
+        #if _curr.replace(day=1) == self.object.period:
+            #current_day = _curr
         
         _cal = super(DatebookMonthView, self).get_calendar()
         

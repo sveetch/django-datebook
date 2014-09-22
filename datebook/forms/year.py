@@ -26,16 +26,23 @@ class DatebookYearForm(CrispyFormMixin, forms.Form):
         super(DatebookYearForm, self).__init__(*args, **kwargs)
         super(forms.Form, self).__init__(*args, **kwargs)
         
-        today = datetime.date.today()
+        self.today = datetime.date.today()
         existing_years = [item.year for item in queryset]
-        available_years = [(k, k) for k in range(today.year-3, today.year+4) if k not in existing_years]
+        available_years = [(k, k) for k in range(self.today.year-3, self.today.year+4) if k not in existing_years]
         
         self.fields['year'] = forms.ChoiceField(label=_('year'), choices=available_years)
     
     def save(self, *args, **kwargs):
+        year = int(self.cleaned_data['year'])
+        # Default opened datebook is for the first month of the given year
+        period = [year, 1, 1]
+        # Open the datebook for the current month if the given year is the current year
+        if year == self.today.year:
+            period = [year, self.today.month, 1]
+            
         instance = Datebook(
             author=self.author,
-            period=datetime.date(int(self.cleaned_data['year']), 1, 1)
+            period=datetime.date(*period)
         )
         instance.save()
         

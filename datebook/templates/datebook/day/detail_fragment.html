@@ -10,6 +10,7 @@
                     <ul class="inline-list">
                         <li><span class="label round secondary"><i class="icon-clock"></i> {{ object.get_working_hours }}</span></li>
                         <li><span class="label round secondary"><i class="icon-timer"></i> {{ object.get_elapsed_time }}</li>
+                        {% if object.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {{ object.get_overtime_time }}</span></li>{% endif %}
                     </ul>
                     {% if object.content %}
                         <div class="content">{{ object.content|linebreaks }}</div>

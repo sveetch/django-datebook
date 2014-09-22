@@ -64,6 +64,7 @@ class DayEntry(models.Model):
     start = models.DateTimeField(_('start'), blank=False) # should default to something like 9h with the dayentry date
     stop = models.DateTimeField(_('stop'), blank=False) # should default to something like 19h with the dayentry date
     pause = models.TimeField(_('pause'), blank=False, default=datetime.time(0, 0))
+    overtime = models.TimeField(_('overtime'), blank=False, default=datetime.time(0, 0))
 
     def __unicode__(self):
         if not self.activity_date:
@@ -89,6 +90,14 @@ class DayEntry(models.Model):
     def get_elapsed_time(self):
         """Return formatted clock for elapsed seconds from 'get_elapsed_seconds'"""
         return utils.format_seconds_to_clock(self.get_elapsed_seconds())
+
+    def get_overtime_seconds(self):
+        """Return overtime seconds"""
+        return utils.time_to_seconds(self.overtime)
+
+    def get_overtime_time(self):
+        """Return formatted clock for overtime seconds from 'get_overtime_seconds'"""
+        return utils.format_seconds_to_clock(self.get_overtime_seconds())
 
     def clean(self):
         from django.core.exceptions import ValidationError
