@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-22 03:53+0200\n"
+"POT-Creation-Date: 2014-09-23 03:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: crumbs.py:9 models.py:52
+#: crumbs.py:9 models.py:51
 msgid "Datebooks"
 msgstr "Agendas"
 
@@ -34,78 +34,78 @@ msgstr "Ajouter le Jour {{ day }}"
 msgid "Edit day {{ day }}"
 msgstr "Éditer le Jour {{ day }}"
 
-#: models.py:22
+#: models.py:21
 msgid "author"
 msgstr "auteur"
 
-#: models.py:23
+#: models.py:22
 msgid "created"
 msgstr "création"
 
-#: models.py:24
+#: models.py:23
 msgid "last edit"
 msgstr "dernière édition"
 
-#: models.py:25
+#: models.py:24
 msgid "month of activity"
 msgstr "mois d'activité"
 
-#: models.py:51
+#: models.py:50
 msgid "Datebook"
 msgstr "Agenda"
 
-#: models.py:59
+#: models.py:58
 msgid "datebook"
 msgstr "agenda"
 
-#: models.py:60
+#: models.py:59
 msgid "activity day date"
 msgstr "date d'activité du jour"
 
-#: models.py:61
+#: models.py:60
 msgid "vacation"
 msgstr "congé"
 
-#: models.py:62
+#: models.py:61
 msgid "content"
 msgstr "contenu"
 
-#: models.py:64 forms/day.py:26
+#: models.py:63 forms/day.py:26
 msgid "start"
 msgstr "Début"
 
-#: models.py:65 forms/day.py:27
+#: models.py:64 forms/day.py:27
 msgid "stop"
 msgstr "Fin"
 
-#: models.py:66
+#: models.py:65
 msgid "pause"
 msgstr "Pause"
 
-#: models.py:67
+#: models.py:66
 msgid "overtime"
 msgstr "supplémentaires"
 
-#: models.py:71 templates/datebook/year.html:16
+#: models.py:70 templates/datebook/year.html:16
 #: templates/datebook/year.html.py:25
 msgid "Empty"
 msgstr "Vide"
 
-#: models.py:80
+#: models.py:79
 #, python-format
 msgid "%(hour)sh%(minute)s"
 msgstr ""
 
-#: models.py:84
+#: models.py:83
 #, python-format
 msgid "%(start)s to %(stop)s"
 msgstr "%(start)s à %(stop)s"
 
-#: models.py:122
+#: models.py:121
 msgid "day entry"
 msgstr "entrée de jour"
 
-#: models.py:123
+#: models.py:122
 msgid "day entries"
 msgstr "entrées de jours"
 
@@ -369,3 +369,7 @@ msgstr "Ven"
 #: templates/datebook/month/form.html:17
 msgid "Sat"
 msgstr "Sam"
+
+#: templates/datebook/month/form.html:29
+msgid "There is no user without a datebook"
+msgstr "Il n'y a aucun utilisateur n'ayant pas d'agenda"

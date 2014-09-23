@@ -11,7 +11,6 @@ from django.utils.timezone import now as tz_now, is_aware, localtime
 
 from datebook import utils
 
-
 class Datebook(models.Model):
     """
     Datebook is only for one user (its author) it is not shared. A Datebook is for a specific month of a year.
@@ -29,7 +28,7 @@ class Datebook(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('datebook-author-month', (), {
+        return ('datebook:month-detail', (), {
             'author': self.author.username,
             'year': self.period.year,
             'month': self.period.strftime('%m'),

@@ -61,7 +61,7 @@ class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
         return kwargs
 
     def get_success_url(self):
-        return reverse('datebook-author-month', kwargs={
+        return reverse('datebook:month-detail', kwargs={
             'author': self.author,
             'year': self.object.activity_date.year,
             'month': self.object.activity_date.month,
@@ -92,7 +92,7 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
                 'stop' : datetime.datetime.combine(day_date, time_stop),
                 'pause' : datetime.time(1, 0),
             },
-            'form_action': reverse('datebook-author-day-add', kwargs={
+            'form_action': reverse('datebook:day-add', kwargs={
                 'author': self.author,
                 'year': self.year,
                 'month': self.month,
@@ -120,7 +120,7 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
         """
         kwargs = super(DayEntryBaseFormView, self).get_form_kwargs()
         kwargs.update({
-            'form_action': reverse('datebook-author-day-edit', kwargs={
+            'form_action': reverse('datebook:day-edit', kwargs={
                 'author': self.author,
                 'year': self.year,
                 'month': self.month,
@@ -176,14 +176,14 @@ class DayEntryCurrentView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, gen
         try:
             obj = DayEntry.objects.get(datebook=datebook, activity_date=datetime.date(self.year, self.month, self.day))
         except DayEntry.DoesNotExist:
-            return reverse('datebook-author-day-add', kwargs={
+            return reverse('datebook:day-add', kwargs={
                 'author': self.author,
                 'year': self.year,
                 'month': self.month,
                 'day': self.day,
             })
         else:
-            return reverse('datebook-author-day-edit', kwargs={
+            return reverse('datebook:day-edit', kwargs={
                 'author': self.author,
                 'year': self.year,
                 'month': self.month,

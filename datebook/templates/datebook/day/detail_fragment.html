@@ -21,7 +21,7 @@
             {% endif %}
         </div>
         {% if previous_day %}<a 
-        href="{% url 'datebook-author-day' author=author year=datebook.period.year month=datebook.period.month day=previous_day.activity_date.day %}" 
+        href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=previous_day.activity_date.day %}" 
         class="button small modal-navigation-day previous" 
         data-from-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ object.activity_date.day }}" 
         data-target-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ previous_day.activity_date.day }}"
@@ -29,7 +29,7 @@
             <i class="icon-arrow-left"></i>
         </a>{% endif %}
         {% if next_day %}<a 
-        href="{% url 'datebook-author-day' author=author year=datebook.period.year month=datebook.period.month day=next_day.activity_date.day %}"
+        href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=next_day.activity_date.day %}"
         class="button small modal-navigation-day next" 
         data-from-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ object.activity_date.day }}" 
         data-target-id="{{ datebook.period.year }}-{{ datebook.period.month }}-{{ next_day.activity_date.day }}"

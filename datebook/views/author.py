@@ -65,7 +65,7 @@ class DatebookAuthorView(LoginRequiredMixin, ListAppendView):
         return context
 
     def get_success_url(self):
-        return reverse('datebook-author-year', kwargs={
+        return reverse('datebook:year-detail', kwargs={
             'author': self.author,
             'year': self.object.period.year,
         })

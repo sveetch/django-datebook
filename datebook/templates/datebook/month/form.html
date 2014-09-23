@@ -22,6 +22,9 @@
 {% endblock %}
 
 {% block datebook_content %}
-    
-{% crispy form %}
+{% if form %}
+    {% crispy form %}
+{% else %}
+    <p class="empty text-center">{% blocktrans %}There is no user without a datebook{% endblocktrans %}</p>
+{% endif %}
 {% endblock %}

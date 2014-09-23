@@ -106,7 +106,7 @@ $(document).ready(function($) {
                             {% endif %}
                         {% else %}
                             {% if user == author or user.is_superuser or perms.datebook.add_dayentry %}
-                                {% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
+                                {% url 'datebook:day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
                                 <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add it</a>{% endblocktrans %}</p>
                             {% else %}
                                 <p class="empty">{% blocktrans %}There is no entry yet{% endblocktrans %}</p>
@@ -116,11 +116,11 @@ $(document).ready(function($) {
                     
                     {% if day.entry %}
                     <div class="menu">
-                        <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook-author-day' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
+                        <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
                             <i class="icon-eye"></i>
                         </a> 
                         {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
-                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
+                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook:day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
                                 <i class="icon-pencil"></i>
                             </a>
                         {% endif %}

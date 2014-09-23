@@ -49,7 +49,7 @@ Finally mount its urls in your main ``urls.py`` : ::
 
     urlpatterns = patterns('',
         ...
-        (r'^datebook/', include('datebook.urls')),
+        (r'^datebook/', include('datebook.urls', namespace='datebook')),
         ...
     )
 

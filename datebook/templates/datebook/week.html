@@ -15,9 +15,9 @@
                 <div class="content">{{ entry.content|linebreaks }}</div>
                 <p class="length">{{ entry.get_elapsed_time }}</p>
             {% endif %}
-            <p class="text-right"><a href="{% url 'datebook-author-day-edit' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Edit' %} <i class="icon-pencil"></i></a></p>
+            <p class="text-right"><a href="{% url 'datebook:day-edit' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Edit' %} <i class="icon-pencil"></i></a></p>
         {% else %}
-            <p class="text-right"><a href="{% url 'datebook-author-day-add' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Add' %} <i class="icon-add-circle"></i></a></p>
+            <p class="text-right"><a href="{% url 'datebook:day-add' author=author year=datebook.period.year month=datebook.period.month day=datekey|date:"d" %}" class="button round success">{% trans 'Add' %} <i class="icon-add-circle"></i></a></p>
         {% endif %}
         </div>
     </li>

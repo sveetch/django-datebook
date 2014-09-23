@@ -8,7 +8,7 @@
             <h3>{{ month_date|date:"F" }}</h3>
             {% if month_datebook %}
                 <p>
-                    <a href="{% url 'datebook-author-month' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button">
+                    <a href="{% url 'datebook:month-detail' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button">
                     {% with month_datebook.dayentry_set.count as entries_counter %}
                         {% if entries_counter > 0 %}
                             {% blocktrans count counter=entries_counter %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}
@@ -35,7 +35,7 @@
 <div id="new-datebook-{{ month_date.month }}" class="reveal-modal text-center tiny" data-reveal>
     <h3>{% trans "Create a new datebook" %}</h3>
     <p>{% blocktrans with name=month_date|date:"F" year=month_date.year %}This will create a datebook for <strong>{{ name }} {{ year }}</strong>, confirm this.{% endblocktrans %}</p>
-    <p><a href="{% url 'datebook-author-month-add' author=author year=year month=forloop.counter %}" class="radius success button">{% trans "I confirm" %}</a></p>
+    <p><a href="{% url 'datebook:month-add' author=author year=year month=forloop.counter %}" class="radius success button">{% trans "I confirm" %}</a></p>
     <a class="close-reveal-modal">&#215;</a>
 </div>
 {% endif %}{% endfor %}

@@ -6,7 +6,7 @@ import datetime
 
 from django import http
 from django.views import generic
-from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -24,6 +24,14 @@ class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
     template_name = 'datebook/month/form.html'
     permission_required = 'datebook.add_datebook'
     raise_exception = True
+
+    def get_form(self, form_class):
+        excluded_users = Datebook.objects.all().values('author_id').distinct()
+        self.available_users = User.objects.all().exclude(pk__in=[v['author_id'] for v in excluded_users]).order_by('username')
+        
+        if self.available_users.count() == 0:
+            return None
+        return super(DatebookMonthFormView, self).get_form(form_class)
     
     def form_valid(self, form):
         self.object = form.save()
