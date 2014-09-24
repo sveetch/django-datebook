@@ -3,6 +3,7 @@
 Day entry views
 """
 import datetime
+from calendar import TextCalendar
 
 from django.conf import settings
 from django.views import generic
@@ -28,6 +29,62 @@ class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
     form_class = DayEntryForm
     permission_required = 'datebook.add_dayentry'
     raise_exception = True
+    
+    def switch_template(self, request):
+        """
+        Switch to the specific Ajax template if request is detected as an Ajax request
+        """
+        if request.is_ajax():
+            return self.ajax_template_name
+        return self.template_name
+    
+    def get_next_day(self):
+        """
+        Find if there is possible next day
+        
+        If the possible next day is not out of range of the month's days, returns its 
+        day entry if exists, else will returns a simple 'datetime.date object'. The 
+        return will allways be a tuple containing the object and the resolved form's 
+        url.
+        
+        Finally if there is no possible next day, returns None.
+        """
+        calendar = TextCalendar()
+        # Get available days from reduced calendar's datas
+        month_days = [item for sublist in calendar.monthdayscalendar(self.year, self.month) for item in sublist if item]
+        month_range = (month_days[0], month_days[-1])
+        
+        # Next day is out of range for current month
+        if self.day+1 > month_days[-1]:
+            return None
+        
+        # Next day is in range, try to find if its day entry allready exists
+        next_day = datetime.date(self.year, self.month, self.day+1)
+        try:
+            obj = self.datebook.dayentry_set.get(activity_date=next_day)
+        except DayEntry.DoesNotExist:
+            return next_day, reverse('datebook:day-add', kwargs={
+                'author': self.author,
+                'year': next_day.year,
+                'month': next_day.month,
+                'day': next_day.day,
+            })
+        else:
+            return obj, reverse('datebook:day-edit', kwargs={
+                'author': self.author,
+                'year': next_day.year,
+                'month': next_day.month,
+                'day': next_day.day,
+            })
+        
+        return None
+    
+    def get_context_data(self, **kwargs):
+        context = super(DayEntryBaseFormView, self).get_context_data(**kwargs)
+        context.update({
+            'next_day': self.next_day,
+        })
+        return context
 
     def get_form(self, form_class):
         """
@@ -35,40 +92,43 @@ class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
         """
         return form_class(self.datebook, self.day, **self.get_form_kwargs())
     
-    def switch_template(self, request):
-        if request.is_ajax():
-            return self.ajax_template_name
-        return self.template_name
-    
-    def get(self, request, *args, **kwargs):
-        self.template_name = self.switch_template(request)
-        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
-        
-        return super(DayEntryBaseFormView, self).get(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        self.template_name = self.switch_template(request)
-        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
-        
-        return super(DayEntryBaseFormView, self).post(request, *args, **kwargs)
-    
     def get_form_kwargs(self):
         """
         Add post form url
         """
         kwargs = super(DayEntryBaseFormView, self).get_form_kwargs()
-        kwargs.update({'form_action': '.'})
+        kwargs.update({
+            'form_action': '.',
+            'next_day': self.next_day,
+        })
         return kwargs
 
     def get_success_url(self):
+        """
+        If 'submit_and_next' button has been used, redirect to the next day form, 
+        else redirect to the month view
+        """
+        if 'submit_and_next' in self.request.POST:
+            if self.next_day:
+                return self.next_day[1]
+        
         return reverse('datebook:month-detail', kwargs={
             'author': self.author,
             'year': self.object.activity_date.year,
             'month': self.object.activity_date.month,
         })
         
-    def get_next(self):
-        return None
+    def get(self, request, *args, **kwargs):
+        self.template_name = self.switch_template(request)
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.next_day = self.get_next_day()
+        return super(DayEntryBaseFormView, self).get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.template_name = self.switch_template(request)
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.next_day = self.get_next_day()
+        return super(DayEntryBaseFormView, self).post(request, *args, **kwargs)
 
 
 class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
@@ -125,7 +185,8 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
                 'year': self.year,
                 'month': self.month,
                 'day': self.day,
-            })
+            }),
+            'next_day': self.next_day,
         })
         return kwargs
 
@@ -198,21 +259,20 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
     model = DayEntry
     template_name = "datebook/day/detail_fragment.html"
         
-    def get_previous(self):
+    def get_previous_day(self):
         try:
             obj = self.object.get_previous_by_activity_date(**{
                 'datebook__author': self.author,
                 'activity_date__month': self.object.activity_date.month,
                 'activity_date__year': self.object.activity_date.year,
             })
-            print "FOO", obj
         except DayEntry.DoesNotExist:
             pass
         else:
             return obj
         return None
         
-    def get_next(self):
+    def get_next_day(self):
         try:
             obj = self.object.get_next_by_activity_date(**{
                 'datebook__author': self.author,
@@ -248,8 +308,8 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
     def get(self, request, *args, **kwargs):
         self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
         self.object = self.get_object()
-        self.previous_day = self.get_previous()
-        self.next_day = self.get_next()
+        self.previous_day = self.get_previous_day()
+        self.next_day = self.get_next_day()
         
         context = self.get_context_data(**kwargs)
         

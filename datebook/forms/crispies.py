@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, Row, Div, Column, HTML, Field, InlineField, SwitchField, ButtonHolder, ButtonHolderPanel, Submit
 
-def day_helper(form_tag=True, form_action='.', has_next=False):
+def day_helper(form_tag=True, form_action='.', next_day=None):
     """
     DayEntry's form layout helper
     """
@@ -16,16 +16,23 @@ def day_helper(form_tag=True, form_action='.', has_next=False):
     helper.attrs = {'data_abide': ''}
     helper.form_tag = form_tag
     
-    buttons = [
-        HTML('<ul class="button-group stack-for-small right"><li>'),
-        Submit('submit', _('Save')),
-        HTML('</li></ul>'),
-    ]
-    if has_next:
-        buttons = [buttons[0]]+[
+    if next_day:
+        buttons = [
+            HTML('<ul class="button-group stack-for-small right"><li>'),
+            Submit('submit', _('Save')),
             HTML('</li><li>'),
             Submit('submit_and_next', _('Save and continue to next day')),
-        ]+buttons[1:]
+            HTML('<p class="text-right"><a class="button tiny secondary" href="{0}">'.format(next_day[1])),
+            HTML(_('Pass and continue to next day')),
+            HTML('</a></p>'),
+            HTML('</li></ul>'),
+        ]
+    else:
+        buttons = [
+            HTML('<ul class="button-group stack-for-small right"><li>'),
+            Submit('submit', _('Save')),
+            HTML('</li></ul>'),
+        ]
     
     helper.layout = Layout(
         Row(
@@ -44,7 +51,7 @@ def day_helper(form_tag=True, form_action='.', has_next=False):
         ),
         ButtonHolderPanel(
             *buttons,
-            css_class=' clearfix text-right'
+            css_class='clearfix text-right'
         ),
     )
 

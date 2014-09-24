@@ -7,14 +7,14 @@
 <hr/>
 
 <ul class="inline-list">
-        {% if user.is_superuser or perms.datebook.add_datebook %}<li>
-            <a href="{% url 'datebook:create' %}" class="button success small radius"><i class="icon-add-circle"></i> {% blocktrans %}Open a new datebook for a new user{% endblocktrans %}</a>
-        </li>{% endif %}
     {% spaceless %}{% for item in object_list %}
         <li>
             <a href="{% url 'datebook:author-detail' author=item.author__username %}" class="button small radius">{{ item.author__username }}</a>
             {% comment %}<p>Updated on {{ item.modified|timesince }}</p>{% endcomment %}
         </li>
     {% endfor %}{% endspaceless %}
+        {% if user.is_superuser or perms.datebook.add_datebook %}<li>
+            <a href="{% url 'datebook:create' %}" class="button success small radius"><i class="icon-add-circle"></i> {% blocktrans %}Open a new datebook for a new user{% endblocktrans %}</a>
+        </li>{% endif %}
 </ul>
  {% endblock %}

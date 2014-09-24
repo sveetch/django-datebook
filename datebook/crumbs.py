@@ -10,7 +10,7 @@ site.update({
     'datebook:create': ugettext_lazy('Create a datebook'),
     'datebook:author-detail': '{{ author.username }}',
     'datebook:year-detail': '{{ year }}',
-    'datebook:month-detail': '{{ target_date|date:"F" }}',
-    'datebook:day-add': ugettext_lazy('Add day {{ day }}'),
-    'datebook:day-edit': ugettext_lazy('Edit day {{ day }}'),
+    'datebook:month-detail': '{{ target_date|date:"F Y" }}',
+    'datebook:day-add': ugettext_lazy('Add {{ target_date|date:"l d F Y" }}'),
+    'datebook:day-edit': ugettext_lazy('Edit {{ target_date|date:"l d F Y" }}'),
 })

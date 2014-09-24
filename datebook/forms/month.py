@@ -4,7 +4,6 @@ Forms for month forms
 """
 from django import forms
 from django.utils.translation import ugettext as _
-from django.contrib.auth.models import User
 
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Submit
@@ -19,13 +18,11 @@ class DatebookForm(CrispyFormMixin, forms.Form):
     crispy_form_helper_path = 'datebook.forms.crispies.month_helper'
     
     def __init__(self, *args, **kwargs):
+        self.available_users = kwargs.pop('available_users', [])
         super(DatebookForm, self).__init__(*args, **kwargs)
         super(forms.Form, self).__init__(*args, **kwargs)
         
-        excluded_users = Datebook.objects.all().values('author_id').distinct()
-        available_users = User.objects.all().exclude(pk__in=[v['author_id'] for v in excluded_users]).order_by('username')
-        
-        self.fields['owner'] = forms.ModelChoiceField(label=_('owner'), queryset=available_users, empty_label=None)
+        self.fields['owner'] = forms.ModelChoiceField(label=_('owner'), queryset=self.available_users, empty_label=None)
         self.fields['period'] = forms.DateField(label=_('period'))
     
     def clean_period(self):

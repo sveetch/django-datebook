@@ -1,7 +1,7 @@
 {% extends "skeleton.html" %}
-{% load autobreadcrumb %}
+{% load i18n autobreadcrumb %}
 
-{% block head_title %}{% current_title_from_breadcrumbs %}{% endblock %}
+{% block head_title %}{% trans "Datebook" %} - {% current_title_from_breadcrumbs %}{% endblock %}
 
 {% block head_more_links %}{{ block.super }}
     {% include "datebook/include_css.html" %}

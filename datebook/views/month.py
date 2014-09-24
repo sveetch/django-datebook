@@ -32,6 +32,13 @@ class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
         if self.available_users.count() == 0:
             return None
         return super(DatebookMonthFormView, self).get_form(form_class)
+        
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(DatebookMonthFormView, self).get_form_kwargs(**kwargs)
+        kwargs.update({
+            'available_users': self.available_users,
+        })
+        return kwargs
     
     def form_valid(self, form):
         self.object = form.save()
@@ -80,9 +87,10 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
         
         # Calculate total elapsed time for worked days
         day_entries = self.get_dayentry_list(day_filters)
-        total_elapsed_time = total_overtime_seconds = 0
+        total_elapsed_time = total_overtime_seconds = total_vacation = 0
         for item in day_entries:
             if item.vacation:
+                total_vacation += 1
                 continue
             total_elapsed_time += item.get_elapsed_seconds()
             total_overtime_seconds += item.get_overtime_seconds()
@@ -93,6 +101,7 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
             "total_elapsed_time": format_seconds_to_clock(total_elapsed_time),
             "total_overtime_seconds": total_overtime_seconds,
             "total_overtime_time": format_seconds_to_clock(total_overtime_seconds),
+            "total_vacation": total_vacation,
         }
         
     def get_context_data(self, **kwargs):

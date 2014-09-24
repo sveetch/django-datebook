@@ -55,6 +55,7 @@ $(document).ready(function($) {
         <ul class="inline-list time-infos">
             <li><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
             {% if datebook_calendar.total_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {% blocktrans with time_clock=datebook_calendar.total_overtime_time %}Including {{ time_clock }} overtime hours{% endblocktrans %}</span></li>{% endif %}
+            {% if datebook_calendar.total_vacation > 0 %}<li><span class="label round secondary"><i class="icon-sleep"></i> {% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} vacation{% plural %}{{ counter }} vacations{% endblocktrans %}</span></li>{% endif %}
         </ul>
     </div>
     <ul class="button-group round right datebook-view-mode">

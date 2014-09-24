@@ -29,9 +29,11 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
     def __init__(self, datebook, day, *args, **kwargs):
         self.datebook = datebook
         self.daydate = datebook.period.replace(day=day)
+        self.next_day = kwargs.pop('next_day', None)
         
+        # Args to give to the form layout method
         self.crispy_form_helper_kwargs = {
-            'has_next': False,
+            'next_day': self.next_day,
             'form_action': kwargs.pop('form_action'),
         }
         
