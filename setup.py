@@ -24,7 +24,6 @@ setup(
     install_requires=[
         'autobreadcrumbs >= 1.0',
         'django-braces>=1.2.0,<1.4',
-        #'django-guardian>=1.2.0',
         'crispy-forms-foundation>=0.3.5',
     ],
     include_package_data=True,

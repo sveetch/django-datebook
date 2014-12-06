@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin
 
 from datebook.models import Datebook, DayEntry
-from datebook.mixins import AuthorKwargsMixin, DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
+from datebook.mixins import AuthorKwargsMixin, DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
 from datebook.forms.day import DayEntryForm
 from datebook.utils import week_from_date
 

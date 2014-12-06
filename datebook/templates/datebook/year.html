@@ -8,15 +8,15 @@
             <h3>{{ month_date|date:"F" }}</h3>
             {% if month_datebook %}
                 <p>
-                    <a href="{% url 'datebook:month-detail' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button">
                     {% with month_datebook.dayentry_set.count as entries_counter %}
+                    <a href="{% url 'datebook:month-detail' author=author year=month_datebook.period.year month=month_datebook.period.month %}" class="button{% if not entries_counter %} secondary{% endif %}">
                         {% if entries_counter > 0 %}
                             {% blocktrans count counter=entries_counter %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}
                         {% else %}
                             {% trans "Empty" %}
                         {% endif %}
-                    {% endwith %}
                     </a>
+                    {% endwith %}
                 </p>
             {% else %}
                 {% if user == author or user.is_superuser or perms.datebook.add_datebook %}

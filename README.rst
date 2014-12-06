@@ -2,7 +2,6 @@
 .. _South: http://south.readthedocs.org/en/latest/
 .. _autobreadcrumbs: https://github.com/sveetch/autobreadcrumbs
 .. _django-braces: https://github.com/brack3t/django-braces/
-.. _django-guardian: https://github.com/lukaszb/django-guardian
 .. _django-crispy-forms: https://github.com/maraujop/django-crispy-forms
 .. _crispy-forms-foundation: https://github.com/sveetch/crispy-forms-foundation
 
@@ -79,3 +78,5 @@ For admin management there is some available permissions :
 * 'Can change datebook' : used to edit datebook for any user;
 * 'Can add day entry' : used to create day entries for any user's datebook;
 * 'Can change day entry' : used to change day entries for any user's datebook;
+
+Permission level object (like with django-guardian) is not planned because the goal is not to share datebook between users. Only datebook owner should edit its entry and all datebook are visible for any logged users, because a team should be aware of everyone datebooks.

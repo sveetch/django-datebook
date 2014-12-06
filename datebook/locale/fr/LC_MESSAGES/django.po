@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-24 04:48+0200\n"
+"POT-Creation-Date: 2014-12-06 18:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,11 +164,15 @@ msgid_plural "<strong>%(counter)s</strong> opened months"
 msgstr[0] "<strong>%(counter)s</strong> mois ouvert"
 msgstr[1] "<strong>%(counter)s</strong> mois ouverts"
 
-#: templates/datebook/index.html:5
+#: templates/datebook/index.html:7
+msgid "See current month"
+msgstr "Voir le mois en cours"
+
+#: templates/datebook/index.html:10
 msgid "Fill your current day"
 msgstr "Remplissez votre journée"
 
-#: templates/datebook/index.html:18
+#: templates/datebook/index.html:24
 msgid "Open a new datebook for a new user"
 msgstr "Ouvrir un nouvel agenda pour un nouvel utilisateur"
 

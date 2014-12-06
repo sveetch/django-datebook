@@ -99,11 +99,11 @@ class DayEntry(models.Model):
         return utils.format_seconds_to_clock(self.get_overtime_seconds())
 
     def clean(self):
-        from django.core.exceptions import ValidationError
         # Inherit the year and month from its datebook
         if hasattr(self, 'datebook'):
             self.activity_date = self.activity_date.replace(month=self.datebook.period.month, year=self.datebook.period.year)
         # DEPRECATED: Stuff below are for the form controller
+        #from django.core.exceptions import ValidationError
         ## Stop can't be less than start
         #if self.stop < self.start:
             #raise ValidationError(_("Hour stop can't be less than hour start."))

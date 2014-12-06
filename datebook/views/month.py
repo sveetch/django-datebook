@@ -12,7 +12,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from datebook.forms.month import DatebookForm
 from datebook.models import Datebook
-from datebook.mixins import DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
+from datebook.mixins import DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
 from datebook.utils import format_seconds_to_clock
 
 class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
@@ -48,7 +48,7 @@ class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
         return self.object.get_absolute_url()
 
 
-class DatebookMonthAddView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin, generic.View):
+class DatebookMonthGetOrCreateView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin, generic.View):
     """
     Automatically create the datebook if it does not allready exists for the "author+year+month" 
     kwargs given, then redirect to its page.
@@ -63,6 +63,26 @@ class DatebookMonthAddView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
             raise http.Http404
         
         d = self.author.datebook_set.create(period=datetime.date(year=self.year, month=self.month, day=1))
+        
+        return http.HttpResponseRedirect(d.get_absolute_url())
+
+
+class DatebookMonthCurrentView(DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin, generic.View):
+    """
+    Automatically create the datebook if it does not allready exists for the "author" 
+    kwarg and the current month, then redirect to its page.
+    
+    If the Datebook allready exists for the given kwargs, directly redirect to it
+    """
+    def get(self, request, *args, **kwargs):
+        self.get_current_date()
+        
+        q = Datebook.objects.filter(author=self.author, period__year=self.year, period__month=self.month)
+        
+        if q.count()>0:
+            d = q.order_by('period')[0:1][0]
+        else:
+            d = self.author.datebook_set.create(period=datetime.date(year=self.year, month=self.month, day=1))
         
         return http.HttpResponseRedirect(d.get_absolute_url())
 
