@@ -3,10 +3,13 @@
 
 {% block datebook_content %}
 <div class="row">
-    <div class="small-12 medium-6 columns">
+    <div class="small-12 medium-6 large-4 columns">
         <p><a href="{% url 'datebook:current-month' author=user %}" class="button large expand radius"><i class="icon-calendar"></i> {% blocktrans %}See current month{% endblocktrans %}</a></p>
     </div>
-    <div class="small-12 medium-6 columns">
+    <div class="small-12 medium-6 large-4 columns">
+        <p><a href="{% url 'datebook:day-models' author=user %}" class="button large expand radius">{% blocktrans %}Manage your models{% endblocktrans %}</a></p>
+    </div>
+    <div class="small-12 medium-12 large-4 columns">
         <p><a href="{% url 'datebook:current-day' author=user %}" class="button success large expand radius"><i class="icon-pencil"></i> {% blocktrans %}Fill your current day{% endblocktrans %}</a></p>
     </div>
 </div>

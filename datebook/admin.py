@@ -7,3 +7,4 @@ from models import *
 
 admin.site.register(Datebook)
 admin.site.register(DayEntry)
+admin.site.register(DayModel)

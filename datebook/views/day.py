@@ -187,6 +187,12 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
                 'day': self.day,
             }),
             'next_day': self.next_day,
+            'day_to_model_url': reverse('datebook:dayentry-to-daymodel', kwargs={
+                'author': self.author,
+                'year': self.year,
+                'month': self.month,
+                'day': self.day,
+            }),
         })
         return kwargs
 

@@ -5,35 +5,80 @@ from django import forms
 from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, Row, Div, Column, HTML, Field, InlineField, SwitchField, ButtonHolder, ButtonHolderPanel, Submit
+from crispy_forms_foundation.layout import Layout, Row, Column, HTML, Div, Field, ButtonHolder, ButtonHolderPanel, ButtonGroup, Panel, Submit
 
-def day_helper(form_tag=True, form_action='.', next_day=None):
+def day_helper(form_tag=True, form_action='.', **kwargs):
     """
     DayEntry's form layout helper
+    
+    TODO: for daymodel form compatibility: remove vacation and all buttons and links except the standard "Save"
     """
     helper = FormHelper()
     helper.form_action = form_action
     helper.attrs = {'data_abide': ''}
     helper.form_tag = form_tag
     
-    if next_day:
-        buttons = [
-            HTML('<ul class="button-group stack-for-small right"><li>'),
-            Submit('submit', _('Save')),
-            HTML('</li><li>'),
-            Submit('submit_and_next', _('Save and continue to next day')),
-            HTML('<p class="text-right"><a class="button tiny secondary" href="{0}">'.format(next_day[1])),
-            HTML(_('Pass and continue to next day')),
-            HTML('</a></p>'),
-            HTML('</li></ul>'),
-        ]
-    else:
-        buttons = [
-            HTML('<ul class="button-group stack-for-small right"><li>'),
-            Submit('submit', _('Save')),
-            HTML('</li></ul>'),
-        ]
+    # Tuple containing next day date and resolved url to its form
+    next_day = kwargs.pop('next_day', None)
+    # Mode to ensure compatibility with DayToDayModelForm (just a save button and no vacation)
+    day_to_model_mode = kwargs.pop('day_to_model_mode', False)
+    # Resolved url to the 'DayToDayModelForm' form
+    day_to_model_url = kwargs.pop('day_to_model_url', None)
     
+    # Menu elements (buttons and links)
+    menu_elements = []
+    
+    # For form's buttons
+    buttons = [Submit('submit', _('Save'))]
+    if not day_to_model_mode and next_day:
+        buttons.append(Submit('submit_and_next', _('Save and continue to next day')))
+    menu_elements.append(
+        Div(
+            ButtonGroup(
+                *buttons,
+                css_class='right'
+            ),
+            css_class='clearfix'
+        )
+    )
+        
+    # For some links under the form's buttons
+    links = []
+    if not day_to_model_mode:
+        if next_day:
+            links.append( 
+                Div(
+                    HTML('<a class="button tiny secondary" href="{0}">'.format(next_day[1])),
+                    HTML(_('Pass and continue to next day')),
+                    HTML('</a>'),
+                )
+            )
+        if day_to_model_url:
+            links.append( 
+                Div(
+                    HTML('<a class="button tiny secondary" href="{0}">'.format(day_to_model_url)),
+                    HTML(_('Use it as a day model')),
+                    HTML('</a>'),
+                )
+            )
+    if links:
+        menu_elements.append(
+            Div(
+                ButtonGroup(
+                    *links,
+                    css_class='right'
+                ),
+                css_class='clearfix'
+            )
+        )
+    
+    # Menu where belong the buttons and links
+    menu = Panel(
+        *menu_elements,
+        css_class='text-right'
+    )
+    
+    # Build the full layout
     helper.layout = Layout(
         Row(
             Column('vacation', css_class='small-6 medium-4 medium-offset-8 text-right'),
@@ -49,11 +94,16 @@ def day_helper(form_tag=True, form_action='.', next_day=None):
             Column('content', css_class='small-12'),
             css_class='opacited'
         ),
-        ButtonHolderPanel(
-            *buttons,
-            css_class='clearfix text-right'
-        ),
+        menu,
     )
+    # Replace 'vacation' field with 'title' field for DayToDayModelForm form
+    if day_to_model_mode:
+        helper.layout.pop(0)
+        helper.layout.insert(0,
+            Row(
+                Column('title'),
+            ),
+        )
 
     return helper
 
@@ -67,6 +117,7 @@ def month_helper(form_tag=True):
     helper.attrs = {'data_abide': ''}
     helper.form_tag = form_tag
     
+    # Build the full layout
     helper.layout = Layout(
         Row(
             Column(
@@ -104,6 +155,7 @@ def year_helper(form_tag=True):
     helper.attrs = {'data_abide': ''}
     helper.form_tag = form_tag
     
+    # Build the full layout
     helper.layout = Layout(
         Field(
             'year',

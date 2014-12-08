@@ -1,0 +1,18 @@
+{% extends "datebook/base.html" %}
+{% load i18n %}
+
+{% block datebook_content %}
+<ul class="list-group">
+    {% spaceless %}{% for item in object_list %}
+        <li>
+            <a href="{% url 'datebook:day-model-edit' author=item.author.username pk=item.pk %}">
+                <h3>{{ item.title }}</h3>
+            </a>
+        </li>
+    {% empty %}
+        <li>
+            <h3>{% trans 'No model yet' %}</h3>
+        </li>
+    {% endfor %}{% endspaceless %}
+</ul>
+ {% endblock %}

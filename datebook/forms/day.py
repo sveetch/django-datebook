@@ -5,8 +5,7 @@ Forms for day forms
 from django import forms
 from django.utils.translation import ugettext as _
 
-from crispy_forms.helper import FormHelper
-from crispy_forms_foundation.layout import Layout, Fieldset, SplitDateTimeField, RowFluid, Column, ButtonHolder, Submit
+from arrow import Arrow
 
 from datebook.models import DayEntry
 from datebook.forms import CrispyFormMixin
@@ -17,26 +16,14 @@ DATETIME_FORMATS = {
     'widget': forms.SplitDateTimeWidget(date_format='%d/%m/%Y', time_format='%H:%M'),
 }
 
-class DayEntryForm(CrispyFormMixin, forms.ModelForm):
+class DayBaseFormMixin(object):
     """
-    DayEntry form
+    DayBase form mixin
     """
     crispy_form_helper_path = 'datebook.forms.crispies.day_helper'
+    crispy_form_helper_kwargs = {}
     
-    start_datetime = forms.SplitDateTimeField(label=_('start'), **DATETIME_FORMATS)
-    stop_datetime = forms.SplitDateTimeField(label=_('stop'), **DATETIME_FORMATS)
-
-    def __init__(self, datebook, day, *args, **kwargs):
-        self.datebook = datebook
-        self.daydate = datebook.period.replace(day=day)
-        self.next_day = kwargs.pop('next_day', None)
-        
-        # Args to give to the form layout method
-        self.crispy_form_helper_kwargs = {
-            'next_day': self.next_day,
-            'form_action': kwargs.pop('form_action'),
-        }
-        
+    def fill_initial_data(self, *args, **kwargs):
         # Pass initial data for start and stop to their clone with SplitDateTimeField
         if 'start' in kwargs['initial']:
             kwargs['initial']['start_datetime'] = kwargs['initial']['start']
@@ -47,10 +34,12 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         if kwargs.get('instance'):
             kwargs['initial']['start_datetime'] = kwargs['instance'].start
             kwargs['initial']['stop_datetime'] = kwargs['instance'].stop
-                
         
-        super(DayEntryForm, self).__init__(*args, **kwargs)
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        return kwargs
+    
+    def init_fields(self, *args, **kwargs):
+        self.fields['start_datetime'] = forms.SplitDateTimeField(label=_('start'), **DATETIME_FORMATS)
+        self.fields['stop_datetime'] = forms.SplitDateTimeField(label=_('stop'), **DATETIME_FORMATS)
     
     def clean_start_datetime(self):
         start = self.cleaned_data['start_datetime']
@@ -69,8 +58,8 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
         # Day entry can't stop before the start
         if start and stop and stop <= start:
             raise forms.ValidationError(_("Stop time can't be less or equal to start time"))
-        # Day entry can't stop more than one day to the targeted day date
-        if stop and stop.date() > self.daydate.replace(day=self.daydate.day+1):
+        # Day entry can't stop in more than one futur day from the targeted day date
+        if stop and stop.date() > Arrow.fromdate(self.daydate).replace(days=1).date():
             raise forms.ValidationError(_("Stop time can't be more than the next day"))
         
         return stop
@@ -90,6 +79,31 @@ class DayEntryForm(CrispyFormMixin, forms.ModelForm):
             #raise forms.ValidationError("Pause time is more than the elapsed time")
         
         #return pause
+    
+
+class DayEntryForm(DayBaseFormMixin, CrispyFormMixin, forms.ModelForm):
+    """
+    DayEntry form
+    """
+    def __init__(self, datebook, day, *args, **kwargs):
+        self.datebook = datebook
+        self.daydate = datebook.period.replace(day=day)
+        
+        # Args to give to the form layout method
+        self.crispy_form_helper_kwargs.update({
+            'next_day': kwargs.pop('next_day', None),
+            'day_to_model_url': kwargs.pop('day_to_model_url', None),
+            'form_action': kwargs.pop('form_action'),
+        })
+        
+        # Fill initial datas
+        kwargs = self.fill_initial_data(*args, **kwargs)
+        
+        super(DayEntryForm, self).__init__(*args, **kwargs)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        
+        # Init some special fields
+        kwargs = self.init_fields(*args, **kwargs)
     
     def save(self, *args, **kwargs):
         instance = super(DayEntryForm, self).save(commit=False, *args, **kwargs)

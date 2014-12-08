@@ -13,10 +13,13 @@ from datebook import utils
 
 class Datebook(models.Model):
     """
-    Datebook is only for one user (its author) it is not shared. A Datebook is for a specific month of a year.
+    Datebook is only for one user (its author) and it is not shared.
     
-    A Datebook is alike "lazy" in the way that its 'DayEntry' are only created when the 
-    user fill them, Datebook are not initialized with all its DayEntry on create.
+    A Datebook is for a specific month of a year.
+    
+    A Datebook is alike "lazy" in the way that its 'DayEntry' are only created 
+    when the user fill them and so Datebook are not initialized with all its 
+    month's days when created.
     """
     author = models.ForeignKey(User, verbose_name=_('author'))
     created = models.DateTimeField(_('created'), blank=True, editable=False)
@@ -51,13 +54,10 @@ class Datebook(models.Model):
         verbose_name_plural = _("Datebooks")
 
 
-class DayEntry(models.Model):
+class DayBase(models.Model):
     """
-    Activity day in a Datebook
+    Base day model
     """
-    datebook = models.ForeignKey(Datebook, verbose_name=_('datebook'))
-    activity_date = models.DateField(_('activity day date'), blank=False) # inherit month and year from its Datebook
-    vacation = models.BooleanField(_('vacation'), default=False, blank=True, null=False)
     content = models.TextField(_("content"), max_length=500, blank=True) # for free ReST text
 
     start = models.DateTimeField(_('start'), blank=False) # should default to something like 9h with the dayentry date
@@ -65,13 +65,8 @@ class DayEntry(models.Model):
     pause = models.TimeField(_('pause'), blank=False, default=datetime.time(0, 0))
     overtime = models.TimeField(_('overtime'), blank=False, default=datetime.time(0, 0))
 
-    def __unicode__(self):
-        if not self.activity_date:
-            return _("Empty")
-        return self.activity_date.strftime("%d/%m/%Y")
-
     def get_display_hour(self, timeobj):
-        """Formating time "XXhYY" display, minute are not displayed if not > 0"""
+        """Formating time "XXhYY" display, minutes are not displayed if they are not > 0"""
         _m = ""
         timeobj = localtime(timeobj)
         if timeobj.minute > 0:
@@ -98,16 +93,35 @@ class DayEntry(models.Model):
         """Return formatted clock for overtime seconds from 'get_overtime_seconds'"""
         return utils.format_seconds_to_clock(self.get_overtime_seconds())
 
-    def clean(self):
-        # Inherit the year and month from its datebook
-        if hasattr(self, 'datebook'):
-            self.activity_date = self.activity_date.replace(month=self.datebook.period.month, year=self.datebook.period.year)
-        # DEPRECATED: Stuff below are for the form controller
+    #def clean(self):
+        ##DEPRECATED: Stuff below are for the form controller
         #from django.core.exceptions import ValidationError
         ## Stop can't be less than start
         #if self.stop < self.start:
             #raise ValidationError(_("Hour stop can't be less than hour start."))
         ## TODO: Pause time can't be superior to the time of (stop-start)
+    
+    class Meta:
+        abstract = True    
+
+
+class DayEntry(DayBase):
+    """
+    Activity day in a Datebook
+    """
+    datebook = models.ForeignKey(Datebook, verbose_name=_('datebook'))
+    activity_date = models.DateField(_('activity day date'), blank=False) # inherit month and year from its Datebook
+    vacation = models.BooleanField(_('vacation'), default=False, blank=True, null=False)
+
+    def __unicode__(self):
+        if not self.activity_date:
+            return _("Empty")
+        return self.activity_date.strftime("%d/%m/%Y")
+
+    def clean(self):
+        # Inherit the year and month from its datebook
+        if hasattr(self, 'datebook'):
+            self.activity_date = self.activity_date.replace(month=self.datebook.period.month, year=self.datebook.period.year)
 
     def save(self, *args, **kwargs):
         # Allways update the datebook
@@ -120,3 +134,25 @@ class DayEntry(models.Model):
         unique_together = ("datebook", "activity_date")
         verbose_name = _("day entry")
         verbose_name_plural = _("day entries")
+
+
+class DayModel(DayBase):
+    """
+    Day model from an user
+    """
+    author = models.ForeignKey(User, verbose_name=_('author'))
+    title = models.CharField(_("title"), blank=False, max_length=255)
+
+    def __unicode__(self):
+        return self.title
+
+    # TODO: auto fill the start/stop date part from the current date to simulate somewhat like a modified field ?
+    #def save(self, *args, **kwargs):
+        # Allways update the datebook
+        
+        #super(DayModel, self).save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("author", "title")
+        verbose_name = _("day model")
+        verbose_name_plural = _("day models")
