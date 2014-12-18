@@ -33,7 +33,7 @@
  * Else fallback on the "flat view"
  */
 // For small and medium only
-.datebook-view-mode{
+.button-group.gregarious{
     display: none;
 }
 
@@ -135,6 +135,69 @@
     }
 }
 
+
+/*
+ * Overlay with a checkbox to select days to fill them with a "daymodel"
+ */
+.daymodel-choose-overlay{
+    $backcolor: rgba(70,70,70,.8);
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(60,60,60,.8);
+    text-align: center;
+    display: flex;
+    
+    .inner{
+        flex: 1;
+        align-self: center;
+        text-align: center;
+        
+        p{
+            margin: 0;
+            padding: 0;
+            font-size: rem-calc(18px);
+            font-weight: bold;
+            color: white;
+            
+            &.checkbox-action i{
+                font-size: rem-calc(30px);
+                
+                &.checked{
+                    display: none;
+                }
+            }
+        }
+    }
+    
+    &:hover{
+        background-color: lighten($backcolor, 5%);
+    }
+    
+    &.checked{
+        background-color: lighten($backcolor, 5%);
+        
+        .inner{
+            p{
+                color: $success-color;
+                
+                &.checkbox-action i{
+                    &.unchecked{
+                        display: none;
+                    }
+                    &.checked{
+                        display: inline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 // For large and up
 html.flexbox{
 
@@ -192,7 +255,7 @@ html.flexbox{
     }
     
     @media #{$large-up} {
-        .datebook-view-mode{
+        .button-group.gregarious{
             display: block;
             
             .button{

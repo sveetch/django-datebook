@@ -7,7 +7,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now as tz_now, is_aware, localtime
+from django.utils.timezone import now as tz_now, localtime
 
 from datebook import utils
 

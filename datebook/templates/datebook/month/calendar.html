@@ -1,5 +1,5 @@
 {% extends "datebook/base.html" %}
-{% load i18n %}
+{% load i18n crispy_forms_tags %}
 
 {% block head_base_js %}{{ block.super }}
 <script type="text/javascript">
@@ -42,6 +42,79 @@ $(document).ready(function($) {
         
         return false;
     });
+    
+    /*
+     * Daymodels menu chooser
+     */
+    var $DaymodelChooser = $('#daymodels-menu');
+        
+    // Menu buttons actions
+    $('.opener', $DaymodelChooser).click(function(e) {
+        $(this).hide('fast');
+        $('.closer, .form', $DaymodelChooser).show('fast');
+        $('.daymodel-choose-overlay').show('fast');
+        return false;
+    });
+    $('.closer', $DaymodelChooser).click(function(e) {
+        $('.opener', $DaymodelChooser).show();
+        $('.closer, .form', $DaymodelChooser).hide();
+        $('.daymodel-choose-overlay').hide().removeClass('checked');
+        return false;
+    });
+    
+    // Item overlays click event to (un)select day
+    $('.daymodel-choose-overlay').click(function(e) {
+        $(this).toggleClass( "checked");
+        return false;
+    });
+    
+    // Form submit override to fill the days selection
+    $( "#daymodel-menu-chooser-form" ).submit(function( event ) {
+        var $form = $(this),
+            $submitted_values = [],
+            errors = [];
+        
+        // Resets
+        $form.removeClass("has-errors");
+        $("#id_days option:selected").each(function() {
+            $(this).prop("selected", false);
+        });
+        
+        // Cheched overlays select appropriate input's values
+        $('.daymodel-choose-overlay.checked').each(function( index ) {
+            $submitted_values.push($(this).attr('data-day-date'));
+            var day_no = $(this).attr('data-day-date');
+            $("#id_days option[value='"+day_no+"']", $form).prop("selected", true);
+        });
+        
+        // Validate daymodel selection
+        if($("#id_daymodel option:selected", $form).length>0){
+            if( !$($("#id_daymodel option:selected", $form)[0]).val() ) {
+                errors.push("You must select a day model.");
+            }
+        }
+        
+        // Let the form submit only if there is selected days
+        if($submitted_values.length==0){
+            errors.push("You must select some days to fill in.");
+        }
+        
+        // Prevent submit if errors
+        if(errors.length>0){
+            $form.addClass("has-errors");
+            event.preventDefault();
+            return false;
+        }
+        
+        // // Debug
+        // console.log( $( this ).serialize() );
+        // event.preventDefault();
+        // return false;
+        // No errors, let the submit event be triggered
+        return true;
+    });
+    
+    
 });
 //]]>
 </script>
@@ -51,6 +124,7 @@ $(document).ready(function($) {
 
 {% block datebook_content %}
 <div class="clearfix">
+    {% comment %}Month's stats resume{% endcomment %}
     <div class="left">
         <ul class="inline-list time-infos">
             <li><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
@@ -58,13 +132,26 @@ $(document).ready(function($) {
             {% if datebook_calendar.total_vacation > 0 %}<li><span class="label round secondary"><i class="icon-sleep"></i> {% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} vacation{% plural %}{{ counter }} vacations{% endblocktrans %}</span></li>{% endif %}
         </ul>
     </div>
-    <ul class="button-group round right datebook-view-mode">
+    
+    {% comment %}View mode menu{% endcomment %}
+    <ul class="button-group gregarious round right" style="margin-left:2rem" id="datebook-view-mode">
         <li><a href="#" class="button tiny" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
         <li><a href="#" class="button tiny secondary" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
     </ul>
+    
+    {% comment %}Daymodel menu chooser{% endcomment %}
+    <ul class="button-group gregarious round right" id="daymodels-menu">
+        <li class="opener"><a href="#" class="button tiny"><i class="icon-insert-template"></i> {% blocktrans %}Use models{% endblocktrans %}</a></li>
+        <li class="closer" style="display:none"><a href="#" class="button secondary tiny"><i class="icon-insert-template"></i> {% blocktrans %}Close models{% endblocktrans %}</a></li>
+        <li class="form" style="display:none">
+            {% crispy daymodels_form %}
+        </li>
+    </ul>
 </div>
 
+{% comment %}The Month calendar{% endcomment %}
 <div class="datebook-month calendar">
+    {% comment %}Week day names{% endcomment %}
     <div class="head">
         {% spaceless %}
             <span class="weekno"></span>
@@ -80,6 +167,7 @@ $(document).ready(function($) {
         <div class="item weekno">
             <span class="label radius">{% trans "Week" %}&nbsp;{{ forloop.counter }}</span>
         </div>
+        {% comment %}Days looping on the calendar object{% endcomment %}
         {% for day in week %}
             {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' as day_name silent %}
             <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}"
@@ -133,6 +221,13 @@ $(document).ready(function($) {
                         </a> 
                     </div>
                     {% endif %}
+                    {% comment %}
+                        Overlay to select item for daymodel assignment
+                    {% endcomment %}
+                    <div class="daymodel-choose-overlay" style="display:none" data-day-date="{{ day.date.day }}"><div class="inner">
+                        {% comment %}<p>Fill this day</p>{% endcomment %}
+                        <p class="checkbox-action"><i class="icon-square-o unchecked"></i><i class="icon-check-square-o checked"></i></p>
+                    </div></div>
                 {% endif %}
             </div>
         {% endfor %}

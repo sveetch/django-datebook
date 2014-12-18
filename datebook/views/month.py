@@ -6,11 +6,13 @@ import datetime
 
 from django import http
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from datebook.forms.month import DatebookForm
+from datebook.forms.daymodel import AssignDayModelForm
 from datebook.models import Datebook
 from datebook.mixins import DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
 from datebook.utils import format_seconds_to_clock
@@ -87,25 +89,24 @@ class DatebookMonthCurrentView(DatebookCalendarAutoCreateMixin, OwnerOrPermissio
         return http.HttpResponseRedirect(d.get_absolute_url())
 
 
-class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.TemplateView):
+class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, generic.TemplateView):
     """
     Datebook month details view
     
     Get the Calendar for the given year+month then fill it with day entries
+    
+    Accept POST request for the AssignDayModelForm form that fill days from a day model.
     """
     template_name = "datebook/month/calendar.html"
+    form_class = AssignDayModelForm
     
     def get_calendar(self, day_filters={}):
         # Add current day if the datebook period is the current month+year
-        #current_day = None
         current_day = datetime.date.today()
-        #print _curr.replace(day=1), self.object.period
-        #if _curr.replace(day=1) == self.object.period:
-            #current_day = _curr
         
         _cal = super(DatebookMonthView, self).get_calendar()
         
-        # Calculate total elapsed time for worked days
+        # Calculate total elapsed time for worked days and total vacations
         day_entries = self.get_dayentry_list(day_filters)
         total_elapsed_time = total_overtime_seconds = total_vacation = 0
         for item in day_entries:
@@ -116,6 +117,7 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
             total_overtime_seconds += item.get_overtime_seconds()
         
         return {
+            "days": [item.day for item in _cal.itermonthdates(self.object.period.year, self.object.period.month) if item.month == self.object.period.month],
             "weekheader": _cal.formatweekheader(),
             "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=day_entries, current_day=current_day),
             "total_elapsed_time": format_seconds_to_clock(total_elapsed_time),
@@ -123,18 +125,59 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, generic.Templ
             "total_overtime_time": format_seconds_to_clock(total_overtime_seconds),
             "total_vacation": total_vacation,
         }
+    
+    def get_day_models(self):
+        """
+        Get and return author's day models
+        """
+        return self.author.daymodel_set.all().order_by('title').values('id', 'title')
         
     def get_context_data(self, **kwargs):
         context = super(DatebookMonthView, self).get_context_data(**kwargs)
         context.update({
             'datebook': self.object,
-            'datebook_calendar': self.get_calendar(),
+            'daymodels_form': self.form,
+            'datebook_calendar': self.calendar,
+            'day_models': self.get_day_models(),
         })
         return context
-    
+        
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(DatebookMonthView, self).get_form_kwargs(**kwargs)
+        kwargs.update({
+            'author': self.author,
+            'datebook': self.object,
+            'daychoices': self.calendar['days'],
+        })
+        return kwargs
+
+    def form_valid(self, form):
+        """
+        If the form is valid, save the associated model.
+        """
+        form.save()
+        return super(DatebookMonthView, self).form_valid(form)
+ 
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+   
     def get(self, request, *args, **kwargs):
         self.object = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.calendar = self.get_calendar()
         
-        context = self.get_context_data(**kwargs)
+        form_class = self.get_form_class()
+        self.form = self.get_form(form_class)
         
-        return self.render_to_response(context)
+        return self.render_to_response(self.get_context_data(**kwargs))
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.calendar = self.get_calendar()
+        
+        form_class = self.get_form_class()
+        self.form = self.get_form(form_class)
+        
+        if self.form.is_valid():
+            return self.form_valid(self.form)
+        else:
+            return self.form_invalid(self.form)

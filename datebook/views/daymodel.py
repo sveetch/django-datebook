@@ -118,6 +118,9 @@ class DayModelFormEditView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, ge
         """
         return form_class(self.author, **self.get_form_kwargs())
     
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.model, author=self.author, pk=self.kwargs['pk'])
+    
     def get_form_kwargs(self):
         """
         Add post form url

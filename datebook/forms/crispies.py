@@ -110,7 +110,7 @@ def day_helper(form_tag=True, form_action='.', **kwargs):
 
 def month_helper(form_tag=True):
     """
-    Datebook's form layout helper
+    Datebook's month form layout helper
     """
     helper = FormHelper()
     helper.form_action = '.'
@@ -165,6 +165,44 @@ def year_helper(form_tag=True):
             'submit',
             _('New year'),
             css_class='tiny',
+        ),
+    )
+    
+    return helper
+
+def assign_daymodel_helper(form_tag=True, form_action='.', **kwargs):
+    """
+    AssignDayModelForm form layout helper
+    """
+    helper = FormHelper()
+    helper.form_action = form_action
+    #helper.attrs = {'data_abide': ''}
+    helper.form_tag = form_tag
+    helper.form_id = "daymodel-menu-chooser-form"
+    
+    # Build the full layout
+    helper.layout = Layout(
+        Row(
+            Column(
+                Field(
+                    'days',
+                    wrapper_class='hide',
+                ),
+                Field(
+                    'daymodel',
+                    wrapper_class='hide-label',
+                ),
+                css_class='medium-9'
+            ),
+            Column(
+                Submit(
+                    'submit',
+                    _('Ok'),
+                    css_class='postfix',
+                ),
+                css_class='medium-3'
+            ),
+            css_class='collapse postfix-round',
         ),
     )
     
