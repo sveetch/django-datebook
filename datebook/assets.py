@@ -18,7 +18,8 @@ else:
             "js/jquery/jquery.timepicker.js",
             "js/jquery/moment.js",
             "js/jquery/pikaday.js",
-            "js/datebook.js",
+            "js/datebook/day_form.js",
+            "js/datebook/calendar.js",
             filters='yui_js',
             output='js/datebook_app.min.js'
         ),

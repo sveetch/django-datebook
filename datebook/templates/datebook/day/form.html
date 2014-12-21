@@ -5,11 +5,10 @@
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
-        init_form("form", {
-                'vacation_off_label': '{% blocktrans %}Switch to work{% endblocktrans %}',
-                'vacation_on_label': '{% blocktrans %}Switch to vacation{% endblocktrans %}',
-            }
-        );
+        $('form').init_day_form({
+            'vacation_off_label': '{% blocktrans %}Switch to work{% endblocktrans %}',
+            'vacation_on_label': '{% blocktrans %}Switch to vacation{% endblocktrans %}',
+        });
     });
 //]]>
 </script>

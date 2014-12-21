@@ -5,116 +5,19 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function($) {
-    {% comment %}This JS code should reside in 'datebook.js'{% endcomment %}
-    /*
-     * Switch calendar to mosaic/flat view
-     */
-    $('#datebook-switch-to-mosaic').click(function(e) {
-        $('.row.datebook').addClass('large-row-fluid');
-        $('#datebook-switch-to-flat').addClass('secondary');
-        $(this).removeClass('secondary');
-        $('.datebook-month').addClass('calendar');
-        return false;
-    });
-    $('#datebook-switch-to-flat').click(function(e) {
-        $('.row.datebook').removeClass('large-row-fluid');
-        $('#datebook-switch-to-mosaic').addClass('secondary');
-        $(this).removeClass('secondary');
-        $('.datebook-month').removeClass('calendar');
-        return false;
-    });
+    // Switch calendar to mosaic/flat view
+    $('#datebook-view-mode').calendar_view_mode();
     
-    /*
-     * Navigation within reveal modal for next/previous day
-     */
-    $("body").on( "click", "a.modal-navigation-day", function(e) {
-        var $this = $(this),
-            url = $this.attr('href'),
-            from_id = $this.attr('data-from-id'),
-            target_id = $this.attr('data-target-id');
-        
-        $.get( url, function(data) {
-            $('#revealDayModal > .inner').replaceWith(data);
-        //})
-        //.fail(function() {
-        //    console.log( "error" );
-        });
-        
-        return false;
-    });
+    // Navigation within reveal modal for next/previous day
+    $("body").calendar_days_modalnav();
     
-    /*
-     * Daymodels menu chooser
-     */
-    var $DaymodelChooser = $('#daymodels-menu');
-        
-    // Menu buttons actions
-    $('.opener', $DaymodelChooser).click(function(e) {
-        $(this).hide('fast');
-        $('.closer, .form', $DaymodelChooser).show('fast');
-        $('.daymodel-choose-overlay').show('fast');
-        return false;
+    // Daymodels menu chooser
+    $('#daymodels-menu').calendar_daymodel_form({
+        'overlay_selector': ".daymodel-choose-overlay",
+        'form_selector': "#daymodel-menu-chooser-form",
+        'day_field_selector': "#id_days",
+        'daymodel_field_selector': "#id_daymodel"
     });
-    $('.closer', $DaymodelChooser).click(function(e) {
-        $('.opener', $DaymodelChooser).show();
-        $('.closer, .form', $DaymodelChooser).hide();
-        $('.daymodel-choose-overlay').hide().removeClass('checked');
-        return false;
-    });
-    
-    // Item overlays click event to (un)select day
-    $('.daymodel-choose-overlay').click(function(e) {
-        $(this).toggleClass( "checked");
-        return false;
-    });
-    
-    // Form submit override to fill the days selection
-    $( "#daymodel-menu-chooser-form" ).submit(function( event ) {
-        var $form = $(this),
-            $submitted_values = [],
-            errors = [];
-        
-        // Resets
-        $form.removeClass("has-errors");
-        $("#id_days option:selected").each(function() {
-            $(this).prop("selected", false);
-        });
-        
-        // Cheched overlays select appropriate input's values
-        $('.daymodel-choose-overlay.checked').each(function( index ) {
-            $submitted_values.push($(this).attr('data-day-date'));
-            var day_no = $(this).attr('data-day-date');
-            $("#id_days option[value='"+day_no+"']", $form).prop("selected", true);
-        });
-        
-        // Validate daymodel selection
-        if($("#id_daymodel option:selected", $form).length>0){
-            if( !$($("#id_daymodel option:selected", $form)[0]).val() ) {
-                errors.push("You must select a day model.");
-            }
-        }
-        
-        // Let the form submit only if there is selected days
-        if($submitted_values.length==0){
-            errors.push("You must select some days to fill in.");
-        }
-        
-        // Prevent submit if errors
-        if(errors.length>0){
-            $form.addClass("has-errors");
-            event.preventDefault();
-            return false;
-        }
-        
-        // // Debug
-        // console.log( $( this ).serialize() );
-        // event.preventDefault();
-        // return false;
-        // No errors, let the submit event be triggered
-        return true;
-    });
-    
-    
 });
 //]]>
 </script>
@@ -127,22 +30,22 @@ $(document).ready(function($) {
     {% comment %}Month's stats resume{% endcomment %}
     <div class="left">
         <ul class="inline-list time-infos">
-            <li><span class="label round secondary"><i class="icon-timer"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
-            {% if datebook_calendar.total_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {% blocktrans with time_clock=datebook_calendar.total_overtime_time %}Including {{ time_clock }} overtime hours{% endblocktrans %}</span></li>{% endif %}
-            {% if datebook_calendar.total_vacation > 0 %}<li><span class="label round secondary"><i class="icon-sleep"></i> {% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} vacation{% plural %}{{ counter }} vacations{% endblocktrans %}</span></li>{% endif %}
+            <li><span class="label round secondary"><i class="icon-hour-glass"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
+            {% if datebook_calendar.total_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {% blocktrans with time_clock=datebook_calendar.total_overtime_time %}Including {{ time_clock }} overtime hours{% endblocktrans %}</span></li>{% endif %}
+            {% if datebook_calendar.total_vacation > 0 %}<li><span class="label round secondary"><i class="icon-clock2"></i> {% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} vacation{% plural %}{{ counter }} vacations{% endblocktrans %}</span></li>{% endif %}
         </ul>
     </div>
     
     {% comment %}View mode menu{% endcomment %}
     <ul class="button-group gregarious round right" style="margin-left:2rem" id="datebook-view-mode">
-        <li><a href="#" class="button tiny" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
-        <li><a href="#" class="button tiny secondary" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
+        <li><a href="#" class="button tiny to-mosaic" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
+        <li><a href="#" class="button tiny secondary to-flat" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
     </ul>
     
     {% comment %}Daymodel menu chooser{% endcomment %}
     <ul class="button-group gregarious round right" id="daymodels-menu">
         <li class="opener"><a href="#" class="button tiny"><i class="icon-insert-template"></i> {% blocktrans %}Use models{% endblocktrans %}</a></li>
-        <li class="closer" style="display:none"><a href="#" class="button secondary tiny"><i class="icon-insert-template"></i> {% blocktrans %}Close models{% endblocktrans %}</a></li>
+        <li class="closer" style="display:none"><a href="#" class="button secondary tiny"><i class="icon-times-circle"></i> {% blocktrans %}Close models{% endblocktrans %}</a></li>
         <li class="form" style="display:none">
             {% crispy daymodels_form %}
         </li>
@@ -184,8 +87,8 @@ $(document).ready(function($) {
                             {% else %}
                                 <ul class="inline-list time-infos">
                                     <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
-                                    <li><span class="label round secondary"><i class="icon-timer"></i> {{ day.entry.get_elapsed_time }}</span></li>
-                                    {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-starfull"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
+                                    <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ day.entry.get_elapsed_time }}</span></li>
+                                    {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
                                 </ul>
                                 {% if day.entry.content %}
                                     <div class="content">{{ day.entry.content|linebreaks }}</div>
@@ -217,7 +120,7 @@ $(document).ready(function($) {
                     {% elif user == author or user.is_superuser or perms.datebook.add_dayentry %}
                     <div class="menu">
                         <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
-                            <i class="icon-add-circle"></i>
+                            <i class="icon-plus-circle"></i>
                         </a> 
                     </div>
                     {% endif %}

@@ -4,6 +4,7 @@
 .. _django-braces: https://github.com/brack3t/django-braces/
 .. _django-crispy-forms: https://github.com/maraujop/django-crispy-forms
 .. _crispy-forms-foundation: https://github.com/sveetch/crispy-forms-foundation
+.. _Arrow: https://github.com/crsmithdev/arrow
 
 Introduction
 ============
@@ -28,6 +29,7 @@ Requires
 * `autobreadcrumbs`_ >= 1.0;
 * `django-braces`_ >= 1.2.0,<1.4;
 * `crispy-forms-foundation`_ >= 0.3.5;
+* `Arrow`_;
 
 Optionnally :
 
@@ -80,3 +82,14 @@ For admin management there is some available permissions :
 * 'Can change day entry' : used to change day entries for any user's datebook;
 
 Permission level object (like with django-guardian) is not planned because the goal is not to share datebook between users. Only datebook owner should edit its entry and all datebook are visible for any logged users, because a team should be aware of everyone datebooks.
+
+Day models
+----------
+
+Often you would need to repeatedly fill your days with the approximately same content and so to avoid this there is *Day models*.
+
+You can create a *Day model* from an existing day in your calendars, its content will be saved as a model and then you can use it to fill any another days in your calendar.
+
+You can have multiple models, but they are allways for an unique user, models are not shareable through other users.
+
+To fill days with a model, just go into a month calendar, open the models menu, select the day to fill, select the model to use and submit, existing days will be overwrited with model contents and empty selected days will be created with the model contents.

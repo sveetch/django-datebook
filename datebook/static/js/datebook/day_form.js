@@ -60,6 +60,7 @@ $.fn.day_form_vacation_switcher = function(options) {
 $.fn.init_day_form = function(options) {
     var $form = this,
         options = (options) ? options : {};
+        
     // Init timepicker on time inputs
     $('#id_start_datetime_1, #id_stop_datetime_1', $form).timepicker({ 'timeFormat': 'H:i' });
     $('#id_pause, #id_overtime', $form).timepicker({ 'timeFormat': 'H:i' });

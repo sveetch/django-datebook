@@ -24,11 +24,12 @@ class DayBaseFormMixin(object):
     crispy_form_helper_kwargs = {}
     
     def fill_initial_data(self, *args, **kwargs):
-        # Pass initial data for start and stop to their clone with SplitDateTimeField
+        # Pass initial data for start and stop to their SplitDateTimeField clones
         if 'start' in kwargs['initial']:
             kwargs['initial']['start_datetime'] = kwargs['initial']['start']
         if 'stop' in kwargs['initial']:
             kwargs['initial']['stop_datetime'] = kwargs['initial']['stop']
+            
         # For existing instance (in edit mode) pass the start and stop values to their 
         # clone with SplitDateTimeField via initial datas
         if kwargs.get('instance'):

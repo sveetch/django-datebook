@@ -27,7 +27,7 @@ class Datebook(models.Model):
     period = models.DateField(_("month of activity"), blank=False)
 
     def __unicode__(self):
-        return self.period.strftime("%m/%Y")
+        return self.period.strftime("%B %Y")
 
     @models.permalink
     def get_absolute_url(self):
@@ -145,12 +145,6 @@ class DayModel(DayBase):
 
     def __unicode__(self):
         return self.title
-
-    # TODO: auto fill the start/stop date part from the current date to simulate somewhat like a modified field ?
-    #def save(self, *args, **kwargs):
-        # Allways update the datebook
-        
-        #super(DayModel, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ("author", "title")
