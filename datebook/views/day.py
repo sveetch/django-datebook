@@ -15,7 +15,7 @@ from braces.views import LoginRequiredMixin
 
 from datebook.models import Datebook, DayEntry
 from datebook.mixins import AuthorKwargsMixin, DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
-from datebook.forms.day import DayEntryForm
+from datebook.forms.day import DayEntryForm, DayEntryCreateForm
 from datebook.utils import week_from_date
 
 class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin):
@@ -135,6 +135,8 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
     """
     DayEntry form create view
     """
+    form_class = DayEntryCreateForm
+    
     def get_form_kwargs(self):
         """
         Put the initial data for the datetime start and stop

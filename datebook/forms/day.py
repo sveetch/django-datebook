@@ -123,3 +123,18 @@ class DayEntryForm(DayBaseFormMixin, CrispyFormMixin, forms.ModelForm):
             'pause': forms.TimeInput(format=DATETIME_FORMATS['input_time_formats'][0]),
             'overtime': forms.TimeInput(format=DATETIME_FORMATS['input_time_formats'][0]),
         }
+
+
+class DayEntryCreateForm(DayEntryForm):
+    def clean(self):
+        cleaned_data = super(DayEntryCreateForm, self).clean()
+        
+        # Validate that there is not allready a day entry for the same day
+        try:
+            obj = DayEntry.objects.get(datebook=self.datebook, activity_date=self.daydate)
+        except DayEntry.DoesNotExist:
+            pass
+        else:
+            raise forms.ValidationError(_("This day entry has allready been created"))
+            
+        return cleaned_data
