@@ -10,7 +10,7 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-
+from django.views.generic.edit import DeleteView
 from braces.views import LoginRequiredMixin
 
 from datebook.models import Datebook, DayEntry
@@ -159,7 +159,7 @@ class DayEntryFormCreateView(DayEntryBaseFormView, generic.CreateView):
                 'year': self.year,
                 'month': self.month,
                 'day': self.day,
-            })
+            }),
         })
         return kwargs
 
@@ -171,9 +171,6 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
     permission_required = 'datebook.change_dayentry'
     
     def get_object(self):
-        """
-        Add required args to form instance
-        """
         return self.datebook.dayentry_set.get(activity_date__day=self.day)
     
     def get_form_kwargs(self):
@@ -190,6 +187,12 @@ class DayEntryFormEditView(DayEntryBaseFormView, generic.UpdateView):
             }),
             'next_day': self.next_day,
             'day_to_model_url': reverse('datebook:dayentry-to-daymodel', kwargs={
+                'author': self.author,
+                'year': self.year,
+                'month': self.month,
+                'day': self.day,
+            }),
+            'remove_url': reverse('datebook:day-remove', kwargs={
                 'author': self.author,
                 'year': self.year,
                 'month': self.month,
@@ -322,4 +325,35 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
         context = self.get_context_data(**kwargs)
         
         return self.render_to_response(context)
+    
+class DayEntryDeleteFormView(DayEntryBaseFormView, generic.DeleteView):
+    template_name = "datebook/day/delete.html"
+    permission_required = 'datebook.delete_dayentry'
+    
+    def get_context_data(self, **kwargs):
+        context = super(DayEntryBaseFormView, self).get_context_data(**kwargs)
+        context.update({
+            'datebook': self.datebook,
+        })
+        return context
+    
+    def get_object(self):
+        return self.datebook.dayentry_set.get(activity_date__day=self.day)
 
+    def get_form(self, form_class):
+        return super(DayEntryBaseFormView, self).get_form(form_class)
+    
+    def get_form_kwargs(self):
+        return super(DayEntryBaseFormView, self).get_form_kwargs()
+
+    def get_success_url(self):
+        """
+        If 'submit_and_next' button has been used, redirect to the next day form, 
+        else redirect to the month view
+        """
+        return reverse('datebook:month-detail', kwargs={
+            'author': self.author,
+            'year': self.object.activity_date.year,
+            'month': self.object.activity_date.month,
+        })
+        

@@ -10,8 +10,6 @@ from crispy_forms_foundation.layout import Layout, Row, Column, HTML, Div, Field
 def day_helper(form_tag=True, form_action='.', **kwargs):
     """
     DayEntry's form layout helper
-    
-    TODO: for daymodel form compatibility: remove vacation and all buttons and links except the standard "Save"
     """
     helper = FormHelper()
     helper.form_action = form_action
@@ -24,20 +22,33 @@ def day_helper(form_tag=True, form_action='.', **kwargs):
     day_to_model_mode = kwargs.pop('day_to_model_mode', False)
     # Resolved url to the 'DayToDayModelForm' form
     day_to_model_url = kwargs.pop('day_to_model_url', None)
+    # Resolved url to the day removing form
+    remove_url = kwargs.pop('remove_url', None)
     
     # Menu elements (buttons and links)
     menu_elements = []
     
-    # For form's buttons
+    # Build button groups
     buttons = [Submit('submit', _('Save'))]
     if not day_to_model_mode and next_day:
         buttons.append(Submit('submit_and_next', _('Save and continue to next day')))
+    groups = []
+    if remove_url:
+        groups.append(ButtonGroup(
+            Div(
+                HTML('<a class="button tiny alert" href="{0}">'.format(remove_url)),
+                HTML(_('Remove this entry')),
+                HTML('</a>'),
+            ),
+            css_class='left'
+        ))
+    groups.append(ButtonGroup(
+        *buttons,
+        css_class='right'
+    ))
     menu_elements.append(
         Div(
-            ButtonGroup(
-                *buttons,
-                css_class='right'
-            ),
+            *groups,
             css_class='clearfix'
         )
     )

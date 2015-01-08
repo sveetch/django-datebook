@@ -95,6 +95,7 @@ class DayEntryForm(DayBaseFormMixin, CrispyFormMixin, forms.ModelForm):
             'next_day': kwargs.pop('next_day', None),
             'day_to_model_url': kwargs.pop('day_to_model_url', None),
             'form_action': kwargs.pop('form_action'),
+            'remove_url': kwargs.pop('remove_url', None),
         })
         
         # Fill initial datas

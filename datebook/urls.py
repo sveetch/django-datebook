@@ -8,7 +8,7 @@ from datebook.views import IndexView
 from datebook.views.author import DatebookAuthorView
 from datebook.views.year import DatebookYearView
 from datebook.views.month import DatebookMonthView, DatebookMonthGetOrCreateView, DatebookMonthCurrentView, DatebookMonthFormView
-from datebook.views.day import DayEntryFormCreateView, DayEntryDetailView, DayEntryFormEditView, DayEntryCurrentView
+from datebook.views.day import DayEntryFormCreateView, DayEntryDetailView, DayEntryFormEditView, DayEntryCurrentView, DayEntryDeleteFormView
 from datebook.views.daymodel import DayModelListView, DayEntryToDayModelFormView, DayModelFormEditView
 
 urlpatterns = patterns('',
@@ -33,5 +33,6 @@ urlpatterns = patterns('',
     
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$', DayEntryDetailView.as_view(), name='day-detail'),
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/edit/$', DayEntryFormEditView.as_view(), name='day-edit'),
+    url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/remove/$', DayEntryDeleteFormView.as_view(), name='day-remove'),
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/to-daymodel/$', DayEntryToDayModelFormView.as_view(), name='dayentry-to-daymodel'),
 )

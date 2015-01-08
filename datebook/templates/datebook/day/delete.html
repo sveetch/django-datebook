@@ -1,0 +1,16 @@
+{% extends "datebook/base.html" %}
+{% load i18n autobreadcrumb crispy_forms_tags %}
+
+{% block datebook_content %}
+<form action="." method="post">
+
+    {% csrf_token %}
+
+    <p class="text-center">You must confirm the removing of this day entry.</p>
+    
+    <p class="text-center">
+        <a href="{% url 'datebook:month-detail' author=author author=author year=datebook.period.year month=datebook.period.month %}" class="button secondary">I cancel</a>
+        <input name="submit" value="I confirm" class="submit button" id="submit-id-submit" type="submit">
+    </p>
+</form>
+{% endblock %}
