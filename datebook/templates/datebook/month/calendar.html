@@ -1,5 +1,5 @@
 {% extends "datebook/base.html" %}
-{% load i18n crispy_forms_tags %}
+{% load i18n autobreadcrumb crispy_forms_tags %}
 
 {% block head_base_js %}{{ block.super }}
 <script type="text/javascript">
@@ -25,120 +25,160 @@ $(document).ready(function($) {
 
 {% block datebook_container_css_classes %} large-row-fluid{% endblock %}
 
-{% block datebook_content %}
-<div class="clearfix">
-    {% comment %}Month's stats resume{% endcomment %}
-    <div class="left">
-        <ul class="inline-list time-infos">
-            <li><span class="label round secondary"><i class="icon-hour-glass"></i> {% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}Total worked hours : {{ time_clock }}{% endblocktrans %}</span></li>
-            {% if datebook_calendar.total_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {% blocktrans with time_clock=datebook_calendar.total_overtime_time %}Including {{ time_clock }} overtime hours{% endblocktrans %}</span></li>{% endif %}
-            {% if datebook_calendar.total_vacation > 0 %}<li><span class="label round secondary"><i class="icon-clock2"></i> {% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} vacation{% plural %}{{ counter }} vacations{% endblocktrans %}</span></li>{% endif %}
+{% block datebook_maintitle %}
+<div class="row row-fluid">
+    <div class="large-10 columns">
+        <h2>{% current_title_from_breadcrumbs %}</h2>
+    </div>
+    <div class="large-2 columns">
+        {% comment %}View mode menu{% endcomment %}
+        <ul class="button-group gregarious round" id="datebook-view-mode">
+            <li><a href="#" class="button tiny to-mosaic" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
+            <li><a href="#" class="button tiny secondary to-flat" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
         </ul>
     </div>
+</div>
+{% endblock %}
+
+{% block datebook_content %}
+<div class="row row-fluid">
     
-    {% comment %}View mode menu{% endcomment %}
-    <ul class="button-group gregarious round right" style="margin-left:2rem" id="datebook-view-mode">
-        <li><a href="#" class="button tiny to-mosaic" id="datebook-switch-to-mosaic" title="{% trans "Calendar view" %}"><i class="icon-calendar"></i></a></li>
-        <li><a href="#" class="button tiny secondary to-flat" id="datebook-switch-to-flat" title="{% trans "Flat view" %}"><i class="icon-list-ul"></i></a></li>
-    </ul>
+    <div class="large-2 large-push-10 columns">
+        <div class="clearfix">
+            {% comment %}Month's stats resume{% endcomment %}
+            <table class="calendar-time-infos">
+                <tbody>
+                    <tr>
+                        <th><i class="icon-hour-glass"></i> Total</th>
+                        <td>{% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}{{ time_clock }}h{% endblocktrans %}</td>
+                    </tr>
+                    {% if datebook_calendar.total_overtime_seconds > 0 %}<tr>
+                        <th><i class="icon-clock2"></i> Including overtime</th>
+                        <td>{% blocktrans with time_clock=datebook_calendar.total_overtime_time %}{{ time_clock }}h{% endblocktrans %}</td>
+                    </tr>{% endif %}
+                    {% if datebook_calendar.total_vacation > 0 %}<tr>
+                        <th><i class="icon-star-full"></i> Vacations</th>
+                        <td>{% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</td>
+                    </tr>{% endif %}
+                </tbody>
+            </table>
+            <hr>
+            {% comment %}Daymodel menu chooser{% endcomment %}
+            <ul class="button-group gregarious" id="daymodels-menu">
+                <li class="opener"><a href="#" class="button tiny"><i class="icon-insert-template"></i> {% blocktrans %}Use models{% endblocktrans %}</a></li>
+                <li class="closer" style="display:none"><a href="#" class="button secondary tiny"><i class="icon-times-circle"></i> {% blocktrans %}Close models{% endblocktrans %}</a></li>
+                <li class="form" style="display:none">
+                    {% crispy daymodels_form %}
+                </li>
+            </ul>
+        </div>
+        
+        {% if datebook.notes %}
+        <hr>
+        
+        <div class="calendar-notes-container">
+            <h3>{% trans "Your notes" %}</h3>
+            {% if datebook.notes %}
+                <div class="content">{{ datebook.notes|linebreaks }}</div>
+            {% else %}
+            {% endif %}
+        </div>{% endif %}
+
+    </div>
     
-    {% comment %}Daymodel menu chooser{% endcomment %}
-    <ul class="button-group gregarious round right" id="daymodels-menu">
-        <li class="opener"><a href="#" class="button tiny"><i class="icon-insert-template"></i> {% blocktrans %}Use models{% endblocktrans %}</a></li>
-        <li class="closer" style="display:none"><a href="#" class="button secondary tiny"><i class="icon-times-circle"></i> {% blocktrans %}Close models{% endblocktrans %}</a></li>
-        <li class="form" style="display:none">
-            {% crispy daymodels_form %}
-        </li>
-    </ul>
+    <div class="large-10 large-pull-2 columns">
+
+        {% comment %}The Month calendar{% endcomment %}
+        <div class="datebook-month calendar">
+            {% comment %}Week day names{% endcomment %}
+            <div class="head">
+                {% spaceless %}
+                    <span class="weekno"></span>
+                    {% for classname, name in datebook_calendar.weekheader %}
+                    <span class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}">{% trans name %}</span>
+                    {% endfor %}
+                {% endspaceless %}
+            </div>
+            
+            {% spaceless %}
+            {% for week in datebook_calendar.month %}
+            <div class="week">
+                <div class="item weekno">
+                    <span class="label radius">{% trans "Week" %}&nbsp;{{ forloop.counter }}</span>
+                </div>
+                {% comment %}Days looping on the calendar object{% endcomment %}
+                {% for day in week %}
+                    {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' as day_name silent %}
+                    <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}"
+                    {% if not day.noday %}
+                    data-date="{{ day.date.day }}"
+                    id="{{ day_name }}-{{ day.date.day }}"{% endif %}
+                    >
+                        {% if not day.noday %}
+                            <h3>{{ day.date|date:"l d F" }}</h3>
+                            <div class="container">
+                                {% if day.entry %}
+                                    {% if day.entry.vacation %}
+                                        <p class="vacation-label">{% trans "Vacation" %}</p>
+                                    {% else %}
+                                        <ul class="inline-list time-infos">
+                                            <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
+                                            <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ day.entry.get_elapsed_time }}</span></li>
+                                            {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
+                                        </ul>
+                                        {% if day.entry.content %}
+                                            <div class="content">{{ day.entry.content|linebreaks }}</div>
+                                        {% else %}
+                                            <p class="empty">{% trans "Empty content" %}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if user == author or user.is_superuser or perms.datebook.add_dayentry %}
+                                        {% url 'datebook:day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
+                                        <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add it</a>{% endblocktrans %}</p>
+                                    {% else %}
+                                        <p class="empty">{% blocktrans %}There is no entry yet{% endblocktrans %}</p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            
+                            {% if day.entry %}
+                            <div class="menu">
+                                <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
+                                    <i class="icon-eye"></i>
+                                </a> 
+                                {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
+                                    <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook:day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
+                                        <i class="icon-pencil"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% elif user == author or user.is_superuser or perms.datebook.add_dayentry %}
+                            <div class="menu">
+                                <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
+                                    <i class="icon-plus-circle"></i>
+                                </a> 
+                            </div>
+                            {% endif %}
+                            {% comment %}
+                                Overlay to select item for daymodel assignment
+                            {% endcomment %}
+                            <div class="daymodel-choose-overlay" style="display:none" data-day-date="{{ day.date.day }}"><div class="inner">
+                                {% comment %}<p>Fill this day</p>{% endcomment %}
+                                <p class="checkbox-action"><i class="icon-square-o unchecked"></i><i class="icon-check-square-o checked"></i></p>
+                            </div></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            {% endspaceless %}
+            
+        </div>
+        
+    </div>
 </div>
 
-{% comment %}The Month calendar{% endcomment %}
-<div class="datebook-month calendar">
-    {% comment %}Week day names{% endcomment %}
-    <div class="head">
-        {% spaceless %}
-            <span class="weekno"></span>
-            {% for classname, name in datebook_calendar.weekheader %}
-            <span class="{% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' %}">{% trans name %}</span>
-            {% endfor %}
-        {% endspaceless %}
-    </div>
-    
-    {% spaceless %}
-    {% for week in datebook_calendar.month %}
-    <div class="week">
-        <div class="item weekno">
-            <span class="label radius">{% trans "Week" %}&nbsp;{{ forloop.counter }}</span>
-        </div>
-        {% comment %}Days looping on the calendar object{% endcomment %}
-        {% for day in week %}
-            {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' as day_name silent %}
-            <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}"
-            {% if not day.noday %}
-             data-date="{{ day.date.day }}"
-             id="{{ day_name }}-{{ day.date.day }}"{% endif %}
-             >
-                {% if not day.noday %}
-                    <h3>{{ day.date|date:"l d F" }}</h3>
-                    <div class="container">
-                        {% if day.entry %}
-                            {% if day.entry.vacation %}
-                                <p class="vacation-label">{% trans "Vacation" %}</p>
-                            {% else %}
-                                <ul class="inline-list time-infos">
-                                    <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
-                                    <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ day.entry.get_elapsed_time }}</span></li>
-                                    {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
-                                </ul>
-                                {% if day.entry.content %}
-                                    <div class="content">{{ day.entry.content|linebreaks }}</div>
-                                {% else %}
-                                    <p class="empty">{% trans "Empty content" %}</p>
-                                {% endif %}
-                            {% endif %}
-                        {% else %}
-                            {% if user == author or user.is_superuser or perms.datebook.add_dayentry %}
-                                {% url 'datebook:day-add' author=author year=datebook.period.year month=datebook.period.month day=day.date.day as add_url %}
-                                <p class="empty">{% blocktrans with add_url=add_url %}There is no entry yet, <a href="{{ add_url }}">add it</a>{% endblocktrans %}</p>
-                            {% else %}
-                                <p class="empty">{% blocktrans %}There is no entry yet{% endblocktrans %}</p>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    
-                    {% if day.entry %}
-                    <div class="menu">
-                        <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
-                            <i class="icon-eye"></i>
-                        </a> 
-                        {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
-                            <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook:day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
-                                <i class="icon-pencil"></i>
-                            </a>
-                        {% endif %}
-                    </div>
-                    {% elif user == author or user.is_superuser or perms.datebook.add_dayentry %}
-                    <div class="menu">
-                        <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
-                            <i class="icon-plus-circle"></i>
-                        </a> 
-                    </div>
-                    {% endif %}
-                    {% comment %}
-                        Overlay to select item for daymodel assignment
-                    {% endcomment %}
-                    <div class="daymodel-choose-overlay" style="display:none" data-day-date="{{ day.date.day }}"><div class="inner">
-                        {% comment %}<p>Fill this day</p>{% endcomment %}
-                        <p class="checkbox-action"><i class="icon-square-o unchecked"></i><i class="icon-check-square-o checked"></i></p>
-                    </div></div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
-    {% endfor %}
-    {% endspaceless %}
-    
-</div>
 {% endblock %}
 
 {% block foot_more_js %}<div id="revealDayModal" class="reveal-modal medium" data-reveal="true"></div>{% endblock %}

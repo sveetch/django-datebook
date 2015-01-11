@@ -34,6 +34,7 @@ $.fn.calendar_view_mode = function(options) {
     var $container = this,
         options = (options) ? options : {};
         
+    // Switch to calendar mode
     $('.to-mosaic', $container).click(function(e) {
         $('.row.datebook').addClass('large-row-fluid');
         $('.to-flat', $container).addClass('secondary');
@@ -41,6 +42,8 @@ $.fn.calendar_view_mode = function(options) {
         $('.datebook-month').addClass('calendar');
         return false;
     });
+    
+    // Switch to flat mode
     $('.to-flat', $container).click(function(e) {
         $('.row.datebook').removeClass('large-row-fluid');
         $('.to-mosaic', $container).addClass('secondary');

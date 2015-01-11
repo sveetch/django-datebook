@@ -25,6 +25,7 @@ class Datebook(models.Model):
     created = models.DateTimeField(_('created'), blank=True, editable=False)
     modified = models.DateTimeField(_('last edit'), auto_now=True)
     period = models.DateField(_("month of activity"), blank=False)
+    notes = models.TextField(_("content"), max_length=500, blank=True)
 
     def __unicode__(self):
         return self.period.strftime("%B %Y")
@@ -58,7 +59,7 @@ class DayBase(models.Model):
     """
     Base day model
     """
-    content = models.TextField(_("content"), max_length=500, blank=True) # for free ReST text
+    content = models.TextField(_("content"), max_length=500, blank=True)
 
     start = models.DateTimeField(_('start'), blank=False) # should default to something like 9h with the dayentry date
     stop = models.DateTimeField(_('stop'), blank=False) # should default to something like 19h with the dayentry date

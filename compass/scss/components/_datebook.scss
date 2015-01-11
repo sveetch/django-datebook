@@ -37,6 +37,24 @@
     display: none;
 }
 
+table.calendar-time-infos{
+    width: 100%;
+}
+
+#daymodels-menu{
+    .opener .button{
+        margin-bottom: 0;
+    }
+    
+    &>li{
+        width: 100%;
+        
+        .button{
+            width: 100%;
+        }
+    }
+}
+
 .datebook-month {
     .head {
         display: none;
