@@ -1,0 +1,10 @@
+{% extends "datebook/base.html" %}
+{% load i18n crispy_forms_tags %}
+
+{% block head_base_js %}{{ block.super }}{% if DATEBOOK_TEXT_FIELD_JS_TEMPLATE and form.notes %}
+    {% include DATEBOOK_TEXT_FIELD_JS_TEMPLATE with field=form.notes %}
+{% endif %}{% endblock %}
+
+{% block datebook_content %}
+    {% crispy form %}
+{% endblock %}

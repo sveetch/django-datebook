@@ -359,6 +359,12 @@ html.flexbox{
                     p{
                         font-size: inherit;
                     }
+                    
+                    .content.restructuredtext{
+                        p, ul, li, dl, dd, dt, div{
+                            font-size: inherit;
+                        }
+                    }
             
                     &.current{
                         border: 1px solid lighten($primary-color, 10%);
@@ -379,7 +385,8 @@ html.flexbox{
                         position: absolute;
                         top: 0;
                         right: rem-calc(4px);
-                        color: $primary-color;
+                        color: darken($primary-color, 10%);
+                        font-weight: bold;
                     }
                     
                     /* Month day action menu */

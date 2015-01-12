@@ -7,7 +7,7 @@ from django.conf.urls import *
 from datebook.views import IndexView
 from datebook.views.author import DatebookAuthorView
 from datebook.views.year import DatebookYearView
-from datebook.views.month import DatebookMonthView, DatebookMonthGetOrCreateView, DatebookMonthCurrentView, DatebookMonthFormView
+from datebook.views.month import DatebookMonthView, DatebookMonthGetOrCreateView, DatebookMonthCurrentView, DatebookMonthFormView, DatebookNotesFormView
 from datebook.views.day import DayEntryFormCreateView, DayEntryDetailView, DayEntryFormEditView, DayEntryCurrentView, DayEntryDeleteFormView
 from datebook.views.daymodel import DayModelListView, DayEntryToDayModelFormView, DayModelFormEditView
 
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/add/(?P<month>\d{1,2})/$', DatebookMonthGetOrCreateView.as_view(), name='month-add'),
     
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/$', DatebookMonthView.as_view(), name='month-detail'),
+    url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/notes/$', DatebookNotesFormView.as_view(), name='month-notes'),
     
     url(r'^(?P<author>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/add/(?P<day>\d{1,2})/$', DayEntryFormCreateView.as_view(), name='day-add'),
     

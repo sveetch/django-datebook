@@ -49,19 +49,21 @@ $(document).ready(function($) {
             <table class="calendar-time-infos">
                 <tbody>
                     <tr>
-                        <th><i class="icon-hour-glass"></i> Total</th>
-                        <td>{% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}{{ time_clock }}h{% endblocktrans %}</td>
+                        <th><i class="icon-clock"></i> {% blocktrans %}Total{% endblocktrans %}</th>
+                        <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}{{ time_clock }}h{% endblocktrans %}</td>
                     </tr>
                     {% if datebook_calendar.total_overtime_seconds > 0 %}<tr>
-                        <th><i class="icon-clock2"></i> Including overtime</th>
-                        <td>{% blocktrans with time_clock=datebook_calendar.total_overtime_time %}{{ time_clock }}h{% endblocktrans %}</td>
+                        <th><i class="icon-hour-glass"></i> {% blocktrans %}Including overtime{% endblocktrans %}</th>
+                        <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_overtime_time %}{{ time_clock }}h{% endblocktrans %}</td>
                     </tr>{% endif %}
                     {% if datebook_calendar.total_vacation > 0 %}<tr>
-                        <th><i class="icon-star-full"></i> Vacations</th>
-                        <td>{% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</td>
+                        <th><i class="icon-star-full"></i> {% blocktrans %}Vacations{% endblocktrans %}</th>
+                        <td class="text-right">{% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</td>
                     </tr>{% endif %}
                 </tbody>
             </table>
+            
+            {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
             <hr>
             {% comment %}Daymodel menu chooser{% endcomment %}
             <ul class="button-group gregarious" id="daymodels-menu">
@@ -70,19 +72,25 @@ $(document).ready(function($) {
                 <li class="form" style="display:none">
                     {% crispy daymodels_form %}
                 </li>
-            </ul>
+            </ul>{% endif %}
         </div>
         
-        {% if datebook.notes %}
         <hr>
-        
         <div class="calendar-notes-container">
-            <h3>{% trans "Your notes" %}</h3>
+            <h3>{% trans "Notes" %}</h3>
             {% if datebook.notes %}
-                <div class="content">{{ datebook.notes|linebreaks }}</div>
+                <div class="content">{% if DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE %}
+                    {% include DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE with content=datebook.notes %}
+                {% else %}
+                    {{ datebook.notes|linebreaks }}
+                {% endif %}</div>
             {% else %}
+                <p class="empty text-center">{% trans "Empty" %}</p>
             {% endif %}
-        </div>{% endif %}
+            {% if user == author or user.is_superuser or perms.datebook.change_datebook %}
+            <a href="{% url 'datebook:month-notes' author=author year=datebook.period.year month=datebook.period.month %}" class="button expand"><i class="icon-pencil"></i> {% blocktrans %}Edit{% endblocktrans %}</a>
+            {% endif %}
+        </div>
 
     </div>
     
@@ -127,7 +135,11 @@ $(document).ready(function($) {
                                             {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
                                         </ul>
                                         {% if day.entry.content %}
-                                            <div class="content">{{ day.entry.content|linebreaks }}</div>
+                                            <div class="content restructuredtext">{% if DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE %}
+                                                {% include DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE with content=day.entry.content %}
+                                            {% else %}
+                                                {{ day.entry.content|linebreaks }}
+                                            {% endif %}</div>
                                         {% else %}
                                             <p class="empty">{% trans "Empty content" %}</p>
                                         {% endif %}

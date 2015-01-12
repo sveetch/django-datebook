@@ -4,6 +4,7 @@ Datebook month views
 """
 import datetime
 
+from django.conf import settings
 from django import http
 from django.views import generic
 from django.views.generic.edit import FormMixin
@@ -11,7 +12,7 @@ from django.contrib.auth.models import User
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
-from datebook.forms.month import DatebookForm
+from datebook.forms.month import DatebookForm, DatebookNotesForm
 from datebook.forms.daymodel import AssignDayModelForm
 from datebook.models import Datebook
 from datebook.mixins import DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
@@ -139,6 +140,7 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, ge
             'daymodels_form': self.form,
             'datebook_calendar': self.calendar,
             'day_models': self.get_day_models(),
+            'DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE': settings.DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE,
         })
         return context
         
@@ -181,3 +183,30 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, ge
             return self.form_valid(self.form)
         else:
             return self.form_invalid(self.form)
+
+
+class DatebookNotesFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin, generic.UpdateView):
+    """
+    Datebook create form view
+    """
+    model = Datebook
+    form_class = DatebookNotesForm
+    template_name = 'datebook/month/notes_form.html'
+    permission_required = 'datebook.change_datebook'
+    raise_exception = True
+    
+    def get_object(self):
+        self.datebook = self.get_datebook({'period__year': self.year, 'period__month': self.month})
+        self.author = self.datebook.author
+        return self.datebook
+    
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+        
+    def get_context_data(self, **kwargs):
+        context = super(DatebookNotesFormView, self).get_context_data(**kwargs)
+        context.update({
+            'DATEBOOK_TEXT_FIELD_JS_TEMPLATE': settings.DATEBOOK_TEXT_FIELD_JS_TEMPLATE,
+            'DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE': settings.DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE,
+        })
+        return context

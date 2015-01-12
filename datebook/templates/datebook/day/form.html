@@ -12,6 +12,9 @@
     });
 //]]>
 </script>
+{% if DATEBOOK_TEXT_FIELD_JS_TEMPLATE and form.content %}
+    {% include DATEBOOK_TEXT_FIELD_JS_TEMPLATE with field=form.content %}
+{% endif %}
 {% endblock %}
 
 {% block datebook_content %}

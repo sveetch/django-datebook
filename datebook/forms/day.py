@@ -2,6 +2,7 @@
 """
 Forms for day forms
 """
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext as _
 
@@ -9,6 +10,7 @@ from arrow import Arrow
 
 from datebook.models import DayEntry
 from datebook.forms import CrispyFormMixin
+from datebook.utils.imports import safe_import_module
 
 DATETIME_FORMATS = {
     'input_date_formats': ['%d/%m/%Y'],
@@ -41,6 +43,22 @@ class DayBaseFormMixin(object):
     def init_fields(self, *args, **kwargs):
         self.fields['start_datetime'] = forms.SplitDateTimeField(label=_('start'), **DATETIME_FORMATS)
         self.fields['stop_datetime'] = forms.SplitDateTimeField(label=_('stop'), **DATETIME_FORMATS)
+        
+        # Set the form field for Datebook.notes
+        field_helper = safe_import_module(settings.DATEBOOK_TEXT_FIELD_HELPER_PATH)
+        if field_helper is not None:
+            self.fields['content'] = field_helper(self, **{'label':_('content'), 'required':True})
+    
+    def clean_notes(self):
+        """
+        Text content validation
+        """
+        content = self.cleaned_data.get("content")
+        validation_helper = safe_import_module(settings.DATEBOOK_TEXT_VALIDATOR_HELPER_PATH)
+        if validation_helper is not None:
+            return validation_helper(self, content)
+        else:
+            return content
     
     def clean_start_datetime(self):
         start = self.cleaned_data['start_datetime']

@@ -11,6 +11,7 @@ site.update({
     'datebook:author-detail': '{{ author.username }}',
     'datebook:year-detail': '{{ year }}',
     'datebook:month-detail': '{{ target_date|date:"F Y" }}',
+    'datebook:month-notes': ugettext_lazy('Notes for {{ target_date|date:"F Y" }}'),
     'datebook:day-add': ugettext_lazy('Add {{ target_date|date:"l d F Y" }}'),
     'datebook:day-edit': ugettext_lazy('Edit {{ target_date|date:"l d F Y" }}'),
     'datebook:day-remove': ugettext_lazy('Remove {{ target_date|date:"l d F Y" }}'),

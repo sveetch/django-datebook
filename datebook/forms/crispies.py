@@ -7,6 +7,16 @@ from django.utils.translation import ugettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Row, Column, HTML, Div, Field, ButtonHolder, ButtonHolderPanel, ButtonGroup, Panel, Submit
 
+def SimpleRowColumn(field, *args, **kwargs):
+    """
+    Shortcut for simple row with only a full column
+    """
+    if isinstance(field, basestring):
+        field = Field(field, *args, **kwargs)
+    return Row(
+        Column(field),
+    )
+
 def day_helper(form_tag=True, form_action='.', **kwargs):
     """
     DayEntry's form layout helper
@@ -177,6 +187,31 @@ def year_helper(form_tag=True):
             _('New year'),
             css_class='tiny',
         ),
+    )
+    
+    return helper
+
+def notes_helper(form_tag=True):
+    """
+    Datebook's notes form layout helper
+    """
+    helper = FormHelper()
+    helper.form_action = '.'
+    helper.attrs = {'data_abide': ''}
+    helper.form_tag = form_tag
+    
+    # Build the full layout
+    helper.layout = Layout(
+        SimpleRowColumn('notes', wrapper_class='hide-label'),
+        SimpleRowColumn(
+            ButtonHolderPanel(
+                Submit(
+                    'submit',
+                    _('Submit'),
+                ),
+                css_class='text-right',
+            ),
+        )
     )
     
     return helper

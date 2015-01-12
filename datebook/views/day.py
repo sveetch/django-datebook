@@ -83,6 +83,8 @@ class DayEntryBaseFormView(DatebookCalendarMixin, OwnerOrPermissionRequiredMixin
         context = super(DayEntryBaseFormView, self).get_context_data(**kwargs)
         context.update({
             'next_day': self.next_day,
+            'DATEBOOK_TEXT_FIELD_JS_TEMPLATE': settings.DATEBOOK_TEXT_FIELD_JS_TEMPLATE,
+            'DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE': settings.DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE,
         })
         return context
 
@@ -313,6 +315,7 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
             'object': self.object,
             'previous_day': self.previous_day,
             'next_day': self.next_day,
+            'DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE': settings.DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE,
         })
         return context
     
@@ -334,6 +337,8 @@ class DayEntryDeleteFormView(DayEntryBaseFormView, generic.DeleteView):
         context = super(DayEntryBaseFormView, self).get_context_data(**kwargs)
         context.update({
             'datebook': self.datebook,
+            'DATEBOOK_TEXT_FIELD_JS_TEMPLATE': settings.DATEBOOK_TEXT_FIELD_JS_TEMPLATE,
+            'DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE': settings.DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE,
         })
         return context
     

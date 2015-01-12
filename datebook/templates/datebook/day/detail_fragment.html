@@ -13,7 +13,11 @@
                         {% if object.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ object.get_overtime_time }}</span></li>{% endif %}
                     </ul>
                     {% if object.content %}
-                        <div class="content">{{ object.content|linebreaks }}</div>
+                        <div class="content">{% if DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE %}
+                            {% include DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE with content=object.content %}
+                        {% else %}
+                            {{ object.content|linebreaks }}
+                        {% endif %}</div>
                     {% else %}
                         <p class="empty text-center">{% trans "Empty content" %}</p>
                     {% endif %}

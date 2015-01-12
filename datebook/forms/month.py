@@ -2,14 +2,15 @@
 """
 Forms for month forms
 """
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms_foundation.layout import Submit
 
 from datebook.models import Datebook
 from datebook.forms import CrispyFormMixin
+from datebook.utils.imports import safe_import_module
 
 class DatebookForm(CrispyFormMixin, forms.Form):
     """
@@ -39,3 +40,34 @@ class DatebookForm(CrispyFormMixin, forms.Form):
         instance.save()
         
         return instance
+
+
+class DatebookNotesForm(CrispyFormMixin, forms.ModelForm):
+    """
+    Datebook form
+    """
+    crispy_form_helper_path = 'datebook.forms.crispies.notes_helper'
+    
+    def __init__(self, *args, **kwargs):
+        super(DatebookNotesForm, self).__init__(*args, **kwargs)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        
+        # Set the form field for Datebook.notes
+        field_helper = safe_import_module(settings.DATEBOOK_TEXT_FIELD_HELPER_PATH)
+        if field_helper is not None:
+            self.fields['notes'] = field_helper(self, **{'label':_('notes'), 'required':True})
+    
+    def clean_notes(self):
+        """
+        Text content validation
+        """
+        notes = self.cleaned_data.get("notes")
+        validation_helper = safe_import_module(settings.DATEBOOK_TEXT_VALIDATOR_HELPER_PATH)
+        if validation_helper is not None:
+            return validation_helper(self, notes)
+        else:
+            return notes
+    
+    class Meta:
+        model = Datebook
+        fields = ['notes']
