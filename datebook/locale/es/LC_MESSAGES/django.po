@@ -2,294 +2,296 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FULL NAME <EMAIL@ADDRESS>, 2015.
+# slothy <slothyrulez@gmail.com>, 2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-18 01:06+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2015-01-18 20:41+0100\n"
+"Last-Translator: slothy <slothyrulez@gmail.com>\n"
+"Language-Team: Español; Castellano <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: admin.py:18 models.py:27
 msgid "month of activity"
-msgstr ""
+msgstr "actividad mensual"
 
 #: admin.py:23
 msgid "Days"
-msgstr ""
+msgstr "Días"
 
 #: admin.py:28 models.py:64 forms/day.py:44
 msgid "start"
-msgstr ""
+msgstr "inicio"
 
 #: admin.py:33 models.py:65 forms/day.py:45
 msgid "stop"
-msgstr ""
+msgstr "fin"
 
 #: admin.py:44
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: admin.py:47 admin.py:70
 msgid "Time"
-msgstr ""
+msgstr "Hora"
 
 #: admin.py:50 admin.py:73
 msgid "Content"
-msgstr ""
+msgstr "Contenido"
 
 #: admin.py:57 models.py:54 templates/datebook/base.html:4
 msgid "Datebook"
-msgstr ""
+msgstr "Agenda"
 
 #: admin.py:67
 msgid "Parameters"
-msgstr ""
+msgstr "Parámetros"
 
 #: crumbs.py:9 models.py:55
 msgid "Datebooks"
-msgstr ""
+msgstr "Agendas"
 
 #: crumbs.py:10
 msgid "Create a datebook"
-msgstr ""
+msgstr "Crear una agenda"
 
 #: crumbs.py:14
 msgid "Notes for {{ target_date|date:\"F Y\" }}"
-msgstr ""
+msgstr "Notas el {{ target_date|date:\"F Y\" }}"
 
 #: crumbs.py:15
 msgid "Add {{ target_date|date:\"l d F Y\" }}"
-msgstr ""
+msgstr "Añadir {{ target_date|date:\"l d F Y\" }}"
 
 #: crumbs.py:16
 msgid "Edit {{ target_date|date:\"l d F Y\" }}"
-msgstr ""
+msgstr "Editar {{ target_date|date:\"l d F Y\" }}"
 
 #: crumbs.py:17
 msgid "Remove {{ target_date|date:\"l d F Y\" }}"
-msgstr ""
+msgstr "Eliminar {{ target_date|date:\"l d F Y\" }}"
 
 #: crumbs.py:18
 msgid "Day models"
-msgstr ""
+msgstr "Modelos diarios"
 
 #: crumbs.py:19
 msgid "Edit \"{{ daymodel.title }}\""
-msgstr ""
+msgstr "Editar \"{{ daymodel.title }}\""
 
 #: crumbs.py:20
 msgid "Make a model from {{ target_date|date:\"l d F Y\" }}"
-msgstr ""
+msgstr "Crear un modelo de"
 
 #: models.py:24 models.py:144
 msgid "author"
-msgstr ""
+msgstr "autor"
 
 #: models.py:25
 msgid "created"
-msgstr ""
+msgstr "creado"
 
 #: models.py:26
 msgid "last edit"
-msgstr ""
+msgstr "última edición"
 
 #: models.py:28 models.py:62 forms/day.py:50
 msgid "content"
-msgstr ""
+msgstr "contenido"
 
 #: models.py:66
 msgid "pause"
-msgstr ""
+msgstr "pausa"
 
 #: models.py:67
 msgid "overtime"
-msgstr ""
+msgstr "horas extra"
 
 #: models.py:75
 #, python-format
 msgid "%(hour)sh%(minute)s"
-msgstr ""
+msgstr "%(hour)sh%(minute)s"
 
 #: models.py:79
 #, python-format
 msgid "%(start)s to %(stop)s"
-msgstr ""
+msgstr "%(start)s a %(stop)s"
 
 #: models.py:113
 msgid "datebook"
-msgstr ""
+msgstr "agenda"
 
 #: models.py:114
 msgid "activity day date"
-msgstr ""
+msgstr "fecha de actividad"
 
 #: models.py:115
 msgid "vacation"
-msgstr ""
+msgstr "libres"
 
 #: models.py:119 templates/datebook/year.html:16
 #: templates/datebook/year.html.py:25
 #: templates/datebook/month/calendar.html:91
 msgid "Empty"
-msgstr ""
+msgstr "Vacio"
 
 #: models.py:136
 msgid "day entry"
-msgstr ""
+msgstr "entrada diaria"
 
 #: models.py:137
 msgid "day entries"
-msgstr ""
+msgstr "entradas diarias"
 
 #: models.py:145
 msgid "title"
-msgstr ""
+msgstr "titulo"
 
 #: models.py:152
 msgid "day model"
-msgstr ""
+msgstr "modelo día"
 
 #: models.py:153
 msgid "day models"
-msgstr ""
+msgstr "modelo días"
 
 #: forms/__init__.py:23 forms/crispies.py:210
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: forms/crispies.py:42 forms/crispies.py:156
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: forms/crispies.py:44
 msgid "Save and continue to next day"
-msgstr ""
+msgstr "Guardar y continuar día siguiente"
 
 #: forms/crispies.py:50
 msgid "Remove this entry"
-msgstr ""
+msgstr "Eliminar esta entrada"
 
 #: forms/crispies.py:73
 msgid "Pass and continue to next day"
-msgstr ""
+msgstr "Ignorar y continuar día siguiente"
 
 #: forms/crispies.py:81
 msgid "Use it as a day model"
-msgstr ""
+msgstr "Utilizar como día modelo"
 
 #: forms/crispies.py:187
 msgid "New year"
-msgstr ""
+msgstr "Nuevo año"
 
 #: forms/crispies.py:246
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: forms/day.py:67
 msgid "You can't start a day before itself"
-msgstr ""
+msgstr "No puedes empezar un día anterior a si mismo"
 
 #: forms/day.py:70
 msgid "You can't start a day after itself"
-msgstr ""
+msgstr "You can't start a day after itself"
 
 #: forms/day.py:79
 msgid "Stop time can't be less or equal to start time"
-msgstr ""
+msgstr "Final de jornada no puede ser inferior o igual al inicio de jornada"
 
 #: forms/day.py:82
 msgid "Stop time can't be more than the next day"
-msgstr ""
+msgstr "Final de jornada no puede ser superior al día siguiente"
 
 #: forms/day.py:134
 msgid "Worked days require a content text"
-msgstr ""
+msgstr "Día trabajado requiere contenido"
 
 #: forms/day.py:167
 msgid "This day entry has allready been created"
-msgstr ""
+msgstr "Entrada diaria ya creada"
 
 #: forms/daymodel.py:78
 msgid "Use the model's content text"
-msgstr ""
+msgstr "Utilizar el texto del modelo"
 
 #: forms/month.py:26
 msgid "owner"
-msgstr ""
+msgstr "propietario"
 
 #: forms/month.py:27
 msgid "period"
-msgstr ""
+msgstr "período"
 
 #: forms/month.py:58
 msgid "notes"
-msgstr ""
+msgstr "notas"
 
 #: forms/year.py:33
 msgid "year"
-msgstr ""
+msgstr "año"
 
 #: templates/datebook/author_index.html:14
 #, python-format
 msgid "<strong>%(counter)s</strong> opened month"
 msgid_plural "<strong>%(counter)s</strong> opened months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>%(counter)s</strong> mes abierto"
+msgstr[1] "<strong>%(counter)s</strong> meses abiertos"
 
 #: templates/datebook/index.html:7
 msgid "See current month"
-msgstr ""
+msgstr "VEr mes actual"
 
 #: templates/datebook/index.html:10
 msgid "Manage your models"
-msgstr ""
+msgstr "Administrar tus modelos"
 
 #: templates/datebook/index.html:13
 msgid "Fill your current day"
-msgstr ""
+msgstr "Llenar el día vigente"
 
 #: templates/datebook/index.html:27
 msgid "Open a new datebook for a new user"
-msgstr ""
+msgstr "Crear nueva agenda a un nuevo usuario"
 
 #: templates/datebook/week.html:12
 #: templates/datebook/day/detail_fragment.html:8
 #: templates/datebook/month/calendar.html:136
 msgid "Vacation"
-msgstr ""
+msgstr "Libres"
 
 #: templates/datebook/week.html:18 templates/datebook/month/calendar.html:94
 #: templates/datebook/month/calendar.html:169
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: templates/datebook/week.html:20 templates/datebook/month/calendar.html:177
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: templates/datebook/year.html:14 templates/datebook/month/calendar.html:63
 #, python-format
 msgid "%(counter)s day"
 msgid_plural "%(counter)s days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(counter)s día"
+msgstr[1] "%(counter)s días"
 
 #: templates/datebook/year.html:23
 msgid "Create it"
-msgstr ""
+msgstr "Crearlo"
 
 #: templates/datebook/year.html:36
 msgid "Create a new datebook"
-msgstr ""
+msgstr "Crear nueva agenda"
 
 #: templates/datebook/year.html:37
 #, python-format
@@ -297,195 +299,197 @@ msgid ""
 "This will create a datebook for <strong>%(name)s %(year)s</strong>, confirm "
 "this."
 msgstr ""
+"Esta acción creará una agenda el <strong>%(name)s %(year)s</strong>, "
+"confirmar."
 
 #: templates/datebook/year.html:38
 msgid "I confirm"
-msgstr ""
+msgstr "Confirmo"
 
 #: templates/datebook/day/detail_fragment.html:22
 #: templates/datebook/month/calendar.html:150
 msgid "Empty content"
-msgstr ""
+msgstr "Contenido vacío"
 
 #: templates/datebook/day/detail_fragment.html:32
 msgid "Previous"
-msgstr ""
+msgstr "Anterior"
 
 #: templates/datebook/day/detail_fragment.html:40
 msgid "Next"
-msgstr ""
+msgstr "Siguiente"
 
 #: templates/datebook/day/form.html:9
 msgid "Switch to work"
-msgstr ""
+msgstr "Cambiar a trabajado"
 
 #: templates/datebook/day/form.html:10
 msgid "Switch to vacation"
-msgstr ""
+msgstr "Cambiar a libre"
 
 #: templates/datebook/daymodel/index.html:14
 msgid "No model yet"
-msgstr ""
+msgstr "Sin modelo"
 
 #: templates/datebook/month/calendar.html:37
 msgid "Calendar view"
-msgstr ""
+msgstr "Vista de calendario"
 
 #: templates/datebook/month/calendar.html:38
 msgid "Flat view"
-msgstr ""
+msgstr "Vista plana"
 
 #: templates/datebook/month/calendar.html:54
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: templates/datebook/month/calendar.html:55
 #: templates/datebook/month/calendar.html:59
 #, python-format
 msgid "%(time_clock)sh"
-msgstr ""
+msgstr "%(time_clock)sh"
 
 #: templates/datebook/month/calendar.html:58
 msgid "Including overtime"
-msgstr ""
+msgstr "Incluyendo horas extra"
 
 #: templates/datebook/month/calendar.html:62
 msgid "Vacations"
-msgstr ""
+msgstr "Vacaciones"
 
 #: templates/datebook/month/calendar.html:73
 msgid "Use models"
-msgstr ""
+msgstr "Usar modelos"
 
 #: templates/datebook/month/calendar.html:74
 msgid "Close models"
-msgstr ""
+msgstr "Cerrar modelos"
 
 #: templates/datebook/month/calendar.html:83
 msgid "Notes"
-msgstr ""
+msgstr "Notas"
 
 #: templates/datebook/month/calendar.html:120
 msgid "Week"
-msgstr ""
+msgstr "Semana"
 
 #: templates/datebook/month/calendar.html:156
 #, python-format
 msgid "There is no entry yet, <a href=\"%(add_url)s\">add it</a>"
-msgstr ""
+msgstr "No hay entrada, <a href=\"%(add_url)s\">añadir</a>"
 
 #: templates/datebook/month/calendar.html:158
 msgid "There is no entry yet"
-msgstr ""
+msgstr "No hay entrada"
 
 #: templates/datebook/month/calendar.html:165
 msgid "Read"
-msgstr ""
+msgstr "Leer"
 
 #: templates/datebook/month/form.html:13
 msgid "January"
-msgstr ""
+msgstr "Enero"
 
 #: templates/datebook/month/form.html:13
 msgid "February"
-msgstr ""
+msgstr "Febrero"
 
 #: templates/datebook/month/form.html:13
 msgid "March"
-msgstr ""
+msgstr "Marzo"
 
 #: templates/datebook/month/form.html:13
 msgid "April"
-msgstr ""
+msgstr "Abril"
 
 #: templates/datebook/month/form.html:13
 msgid "May"
-msgstr ""
+msgstr "Mayo"
 
 #: templates/datebook/month/form.html:13
 msgid "June"
-msgstr ""
+msgstr "Junio"
 
 #: templates/datebook/month/form.html:13
 msgid "July"
-msgstr ""
+msgstr "Julio"
 
 #: templates/datebook/month/form.html:13
 msgid "August"
-msgstr ""
+msgstr "Agosto"
 
 #: templates/datebook/month/form.html:13
 msgid "September"
-msgstr ""
+msgstr "Seprtiembre"
 
 #: templates/datebook/month/form.html:13
 msgid "October"
-msgstr ""
+msgstr "Octubre"
 
 #: templates/datebook/month/form.html:13
 msgid "November"
-msgstr ""
+msgstr "Noviembre"
 
 #: templates/datebook/month/form.html:13
 msgid "December"
-msgstr ""
+msgstr "Diciembre"
 
 #: templates/datebook/month/form.html:14
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 #: templates/datebook/month/form.html:14
 msgid "Monday"
-msgstr ""
+msgstr "Lunes"
 
 #: templates/datebook/month/form.html:14
 msgid "Tuesday"
-msgstr ""
+msgstr "Martes"
 
 #: templates/datebook/month/form.html:14
 msgid "Wednesday"
-msgstr ""
+msgstr "Miércoles"
 
 #: templates/datebook/month/form.html:14
 msgid "Thursday"
-msgstr ""
+msgstr "Jueves"
 
 #: templates/datebook/month/form.html:14
 msgid "Friday"
-msgstr ""
+msgstr "Viernes"
 
 #: templates/datebook/month/form.html:14
 msgid "Saturday"
-msgstr ""
+msgstr "Sábado"
 
 #: templates/datebook/month/form.html:15
 msgid "Sun"
-msgstr ""
+msgstr "Sab"
 
 #: templates/datebook/month/form.html:15
 msgid "Mon"
-msgstr ""
+msgstr "Lun"
 
 #: templates/datebook/month/form.html:15
 msgid "Tue"
-msgstr ""
+msgstr "Mar"
 
 #: templates/datebook/month/form.html:15
 msgid "Wed"
-msgstr ""
+msgstr "Mie"
 
 #: templates/datebook/month/form.html:15
 msgid "Thu"
-msgstr ""
+msgstr "Jue"
 
 #: templates/datebook/month/form.html:15
 msgid "Fri"
-msgstr ""
+msgstr "Vie"
 
 #: templates/datebook/month/form.html:15
 msgid "Sat"
-msgstr ""
+msgstr "Sab"
 
 #: templates/datebook/month/form.html:27
 msgid "There is no user without a datebook"
-msgstr ""
+msgstr "No hay usuarios sin agenda"
