@@ -299,14 +299,12 @@ class DayEntryDetailView(LoginRequiredMixin, DatebookCalendarMixin, generic.Temp
         return None
         
     def get_object(self, **kwargs):
-        return get_object_or_404(DayEntry, datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
-        #try:
-            #obj = DayEntry.objects.get(datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
-        #except DayEntry.DoesNotExist:
-            #pass
-        #else:
-            #return obj
-        #return None
+        today = datetime.date.today()
+        obj = get_object_or_404(DayEntry, datebook=self.datebook, activity_date=datetime.date(self.year, self.month, self.day))
+        obj.projected = False
+        if today <= obj.activity_date:
+            obj.projected = True
+        return obj
     
     def get_context_data(self, **kwargs):
         context = super(DayEntryDetailView, self).get_context_data(**kwargs)

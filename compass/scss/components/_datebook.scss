@@ -477,6 +477,15 @@ html.flexbox{
     }
 }
 
+
+/*
+ * Datebook notes container
+ */
+.calendar-notes-container{
+    overflow: hidden;
+}
+
+
 /*
  * A specific div that contain a switch field with a label
  */
@@ -486,5 +495,18 @@ html.flexbox{
     .switch > label,
     .label{
         margin-bottom: 0;
+    }
+}
+
+
+/*
+ * Minor fix on label display within DayModel assignment form
+ */
+#div_id_with_content{
+    input[type="checkbox"]{
+        margin: 0 0 rem-calc(1px);
+    }
+    input[type="checkbox"] + label{
+        display: inline;
     }
 }

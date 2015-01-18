@@ -6,9 +6,13 @@
             {% if object %}
                 {% if object.vacation %}
                     <p class="empty text-center vacation-label">{% trans "Vacation" %}</p>
+                    <p class="text-center vacation-icon"><i class="icon-sunumbrella large"></i></p>
                 {% else %}
                     <ul class="inline-list">
-                        <li><span class="label round secondary"><i class="icon-clock"></i> {{ object.get_working_hours }}</span></li>
+                        {% if object.projected %}
+                            <li><span class="label round secondary"><i class="icon-binoculars"></i> {% trans "Expectation" %}</span></li>
+                        {% endif %}
+                        <li><span class="label round secondary"><i class="icon-history"></i> {{ object.get_working_hours }}</span></li>
                         <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ object.get_elapsed_time }}</li>
                         {% if object.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ object.get_overtime_time }}</span></li>{% endif %}
                     </ul>

@@ -49,15 +49,15 @@ $(document).ready(function($) {
             <table class="calendar-time-infos">
                 <tbody>
                     <tr>
-                        <th><i class="icon-clock"></i> {% blocktrans %}Total{% endblocktrans %}</th>
+                        <th><i class="icon-history"></i> {% blocktrans %}Total{% endblocktrans %}</th>
                         <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}{{ time_clock }}h{% endblocktrans %}</td>
                     </tr>
                     {% if datebook_calendar.total_overtime_seconds > 0 %}<tr>
-                        <th><i class="icon-hour-glass"></i> {% blocktrans %}Including overtime{% endblocktrans %}</th>
+                        <th><i class="icon-star-full"></i> {% blocktrans %}Including overtime{% endblocktrans %}</th>
                         <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_overtime_time %}{{ time_clock }}h{% endblocktrans %}</td>
                     </tr>{% endif %}
                     {% if datebook_calendar.total_vacation > 0 %}<tr>
-                        <th><i class="icon-star-full"></i> {% blocktrans %}Vacations{% endblocktrans %}</th>
+                        <th><i class="icon-sunumbrella"></i> {% blocktrans %}Vacations{% endblocktrans %}</th>
                         <td class="text-right">{% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</td>
                     </tr>{% endif %}
                 </tbody>
@@ -117,7 +117,7 @@ $(document).ready(function($) {
                 {% comment %}Days looping on the calendar object{% endcomment %}
                 {% for day in week %}
                     {% cycle 'mon' 'tue' 'wed' 'thu' 'fri' 'sat' 'sun' as day_name silent %}
-                    <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}"
+                    <div class="item {{ day_name }}{% if day.entry %} has-entry{% if day.entry.vacation %} vacation{% endif %}{% endif %}{% if day.is_current %} current{% endif %}{% if day.noday %} noday{% endif %}{% if day.entry.projected %} projected{% endif %}"
                     {% if not day.noday %}
                     data-date="{{ day.date.day }}"
                     id="{{ day_name }}-{{ day.date.day }}"{% endif %}
@@ -130,9 +130,13 @@ $(document).ready(function($) {
                                         <p class="vacation-label">{% trans "Vacation" %}</p>
                                     {% else %}
                                         <ul class="inline-list time-infos">
-                                            <li><span class="label round secondary"><i class="icon-clock"></i> {{ day.entry.get_working_hours }}</span></li>
+                                            {% if not day.entry.projected %}
+                                            <li><span class="label round secondary"><i class="icon-history"></i> {{ day.entry.get_working_hours }}</span></li>
                                             <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ day.entry.get_elapsed_time }}</span></li>
                                             {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
+                                            {% else %}
+                                            <li><span class="label round secondary"><i class="icon-binoculars"></i> {% trans "Expectation" %}</span></li>
+                                            {% endif %}
                                         </ul>
                                         {% if day.entry.content %}
                                             <div class="content restructuredtext">{% if DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE %}

@@ -8370,96 +8370,143 @@ th.hide-for-touch {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* line 32, ../../../compass/scss/datebook_app.scss */
+[class^="icon-"].small, [class*=" icon-"].small {
+  font-size: 0.7em;
+}
+/* line 36, ../../../compass/scss/datebook_app.scss */
+[class^="icon-"].small, [class*=" icon-"].small {
+  font-size: 1em;
+}
+/* line 40, ../../../compass/scss/datebook_app.scss */
+[class^="icon-"].large, [class*=" icon-"].large {
+  font-size: 2em;
+}
 
 /*
  * Datebook icon set from icomoon
  */
 /* line 5, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-sunumbrella:before {
+  content: "\e600";
+}
+
+/* line 9, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-pencil:before {
   content: "\f040";
 }
 
-/* line 8, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 13, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-check-square-o:before {
   content: "\f046";
 }
 
-/* line 11, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 17, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-plus-circle:before {
   content: "\f055";
 }
 
-/* line 14, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 21, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-times-circle:before {
   content: "\f057";
 }
 
-/* line 17, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 25, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-arrow-left:before {
   content: "\f060";
 }
 
-/* line 20, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 29, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-arrow-right:before {
   content: "\f061";
 }
 
-/* line 23, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 33, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-calendar:before {
   content: "\f073";
 }
 
-/* line 26, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 37, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-square-o:before {
   content: "\f096";
 }
 
-/* line 29, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 41, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-list-ul:before {
   content: "\f0ca";
 }
 
-/* line 32, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 45, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-history:before {
+  content: "\e94d";
+}
+
+/* line 49, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-clock:before {
   content: "\e94e";
 }
 
-/* line 35, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 53, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-clock2:before {
   content: "\e94f";
 }
 
-/* line 38, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 57, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-alarm:before {
+  content: "\e950";
+}
+
+/* line 61, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-bell:before {
+  content: "\e951";
+}
+
+/* line 65, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-stopwatch:before {
+  content: "\e952";
+}
+
+/* line 69, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-hour-glass:before {
   content: "\e979";
 }
 
-/* line 41, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 73, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-binoculars:before {
+  content: "\e985";
+}
+
+/* line 77, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-eye:before {
   content: "\e9ce";
 }
 
-/* line 44, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 81, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-eye-blocked:before {
   content: "\e9d1";
 }
 
-/* line 47, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 85, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-star-empty:before {
   content: "\e9d7";
 }
 
-/* line 50, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 89, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-star-half:before {
   content: "\e9d8";
 }
 
-/* line 53, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 93, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-star-full:before {
   content: "\e9d9";
 }
 
-/* line 56, ../../../compass/scss/components/_datebook_webfont.scss */
+/* line 97, ../../../compass/scss/components/_datebook_webfont.scss */
+.icon-cool:before {
+  content: "\e9eb";
+}
+
+/* line 101, ../../../compass/scss/components/_datebook_webfont.scss */
 .icon-insert-template:before {
   content: "\ea72";
 }
@@ -9474,14 +9521,34 @@ html.flexbox .datebook-calendar-year .flex-column > .inner .empty {
 }
 
 /*
+ * Datebook notes container
+ */
+/* line 484, ../../../compass/scss/components/_datebook.scss */
+.calendar-notes-container {
+  overflow: hidden;
+}
+
+/*
  * A specific div that contain a switch field with a label
  */
-/* line 483, ../../../compass/scss/components/_datebook.scss */
+/* line 492, ../../../compass/scss/components/_datebook.scss */
 .switch-cell {
   margin-bottom: 1rem;
 }
-/* line 487, ../../../compass/scss/components/_datebook.scss */
+/* line 496, ../../../compass/scss/components/_datebook.scss */
 .switch-cell .switch > label,
 .switch-cell .label {
   margin-bottom: 0;
+}
+
+/*
+ * Minor fix on label display within DayModel assignment form
+ */
+/* line 506, ../../../compass/scss/components/_datebook.scss */
+#div_id_with_content input[type="checkbox"] {
+  margin: 0 0 0.0625rem;
+}
+/* line 509, ../../../compass/scss/components/_datebook.scss */
+#div_id_with_content input[type="checkbox"] + label {
+  display: inline;
 }

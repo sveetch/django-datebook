@@ -111,9 +111,16 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, ge
         day_entries = self.get_dayentry_list(day_filters)
         total_elapsed_time = total_overtime_seconds = total_vacation = 0
         for item in day_entries:
+            item.projected = False # Temporary mark used in calendar template
+            # Do not calculate future days (from current day and further)
+            if current_day <= item.activity_date:
+                item.projected = True
+                continue
+            # Do not calculate vacations days
             if item.vacation:
                 total_vacation += 1
                 continue
+            # Compute totals
             total_elapsed_time += item.get_elapsed_seconds()
             total_overtime_seconds += item.get_overtime_seconds()
         

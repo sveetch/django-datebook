@@ -169,6 +169,8 @@ For day entries, **start and stop time represents times for starting and ending 
 
 Day entries can be marked as *vacation*, **vacated days will never be used to calculate the total worked time** for the month and their content is hided if any.
 
+Also, future days (days that are bigger or equal to the current day) are not used to calculate month totals (worked hours, overtime and vacations).
+
 Permissions
 ***********
 
@@ -195,3 +197,15 @@ You can create a *Day model* from an existing day in your calendars, its content
 You can have multiple models, but they are allways for an unique user, models are not shareable through other users.
 
 To fill days with a model, just go into a month calendar, open the models menu, select the day to fill, select the model to use and submit, existing days will be overwrited with model contents and empty selected days will be created with the model contents.
+
+When filling days, default behavior does not use the model content text to fill the days, use the checkbox within the assignment form to use it.
+
+Credits
+=======
+
+Collaborators
+    * `slothyrulez <https://github.com/slothyrulez>`_ for Spanish translation;
+For the "Sun umbrella" icon in webfont
+    Icon made by `Freepik <http://www.freepik.com>`_ from `www.flaticon.com <http://www.flaticon.com>`_ is licensed under `CC BY 3.0 <http://creativecommons.org/licenses/by/3.0/>`_.
+Other icons in webfont
+    Comes from various sets on `IcoMoon <https://icomoon.io>`_.

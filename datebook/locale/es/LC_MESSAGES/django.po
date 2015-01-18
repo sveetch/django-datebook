@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-18 01:06+0100\n"
+"POT-Creation-Date: 2015-01-18 22:06+0100\n"
 "PO-Revision-Date: 2015-01-18 20:41+0100\n"
 "Last-Translator: slothy <slothyrulez@gmail.com>\n"
 "Language-Team: Español; Castellano <>\n"
@@ -270,11 +270,11 @@ msgid "Vacation"
 msgstr "Libres"
 
 #: templates/datebook/week.html:18 templates/datebook/month/calendar.html:94
-#: templates/datebook/month/calendar.html:169
+#: templates/datebook/month/calendar.html:173
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/datebook/week.html:20 templates/datebook/month/calendar.html:177
+#: templates/datebook/week.html:20 templates/datebook/month/calendar.html:181
 msgid "Add"
 msgstr "Añadir"
 
@@ -306,16 +306,22 @@ msgstr ""
 msgid "I confirm"
 msgstr "Confirmo"
 
-#: templates/datebook/day/detail_fragment.html:22
-#: templates/datebook/month/calendar.html:150
+#: templates/datebook/day/detail_fragment.html:13
+#: templates/datebook/month/calendar.html:144
+#, fuzzy
+msgid "Expectation"
+msgstr "libres"
+
+#: templates/datebook/day/detail_fragment.html:26
+#: templates/datebook/month/calendar.html:154
 msgid "Empty content"
 msgstr "Contenido vacío"
 
-#: templates/datebook/day/detail_fragment.html:32
+#: templates/datebook/day/detail_fragment.html:36
 msgid "Previous"
 msgstr "Anterior"
 
-#: templates/datebook/day/detail_fragment.html:40
+#: templates/datebook/day/detail_fragment.html:44
 msgid "Next"
 msgstr "Siguiente"
 
@@ -328,8 +334,15 @@ msgid "Switch to vacation"
 msgstr "Cambiar a libre"
 
 #: templates/datebook/daymodel/index.html:14
-msgid "No model yet"
+#, fuzzy
+msgid "No model yet."
 msgstr "Sin modelo"
+
+#: templates/datebook/daymodel/index.html:18
+msgid ""
+"To create a model go on an existing Day entry form and use the button \"Use "
+"it as a day model\"."
+msgstr ""
 
 #: templates/datebook/month/calendar.html:37
 msgid "Calendar view"
@@ -373,16 +386,16 @@ msgstr "Notas"
 msgid "Week"
 msgstr "Semana"
 
-#: templates/datebook/month/calendar.html:156
+#: templates/datebook/month/calendar.html:160
 #, python-format
 msgid "There is no entry yet, <a href=\"%(add_url)s\">add it</a>"
 msgstr "No hay entrada, <a href=\"%(add_url)s\">añadir</a>"
 
-#: templates/datebook/month/calendar.html:158
+#: templates/datebook/month/calendar.html:162
 msgid "There is no entry yet"
 msgstr "No hay entrada"
 
-#: templates/datebook/month/calendar.html:165
+#: templates/datebook/month/calendar.html:169
 msgid "Read"
 msgstr "Leer"
 

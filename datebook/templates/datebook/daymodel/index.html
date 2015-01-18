@@ -9,10 +9,11 @@
                 <h3>{{ item.title }}</h3>
             </a>
         </li>
-    {% empty %}
+   {% empty %}
         <li>
-            <h3>{% trans 'No model yet' %}</h3>
+            <h3>{% trans 'No model yet.' %}</h3>
         </li>
     {% endfor %}{% endspaceless %}
 </ul>
+<p class="empty text-center">{% trans 'To create a model go on an existing Day entry form and use the button "Use it as a day model".' %}</p>
  {% endblock %}
