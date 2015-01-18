@@ -250,6 +250,7 @@ def assign_daymodel_helper(form_tag=True, form_action='.', **kwargs):
             ),
             css_class='collapse postfix-round',
         ),
+        SimpleRowColumn('with_content', wrapper_class='text-center'),
     )
     
     return helper

@@ -44,12 +44,12 @@ class DayBaseFormMixin(object):
         self.fields['start_datetime'] = forms.SplitDateTimeField(label=_('start'), **DATETIME_FORMATS)
         self.fields['stop_datetime'] = forms.SplitDateTimeField(label=_('stop'), **DATETIME_FORMATS)
         
-        # Set the form field for Datebook.notes
+        # Set the form field for DayEntry.content
         field_helper = safe_import_module(settings.DATEBOOK_TEXT_FIELD_HELPER_PATH)
         if field_helper is not None:
-            self.fields['content'] = field_helper(self, **{'label':_('content'), 'required':True})
+            self.fields['content'] = field_helper(self, **{'label':_('content'), 'required': False})
     
-    def clean_notes(self):
+    def clean_content(self):
         """
         Text content validation
         """
@@ -124,6 +124,16 @@ class DayEntryForm(DayBaseFormMixin, CrispyFormMixin, forms.ModelForm):
         
         # Init some special fields
         kwargs = self.init_fields(*args, **kwargs)
+    
+    def clean(self):
+        cleaned_data = super(DayBaseFormMixin, self).clean()
+        content = cleaned_data.get("content")
+        vacation = cleaned_data.get("vacation")
+        # Content text is only required when vacation is not checked
+        if not vacation and not content:
+            raise forms.ValidationError(_("Worked days require a content text"))
+        
+        return cleaned_data
     
     def save(self, *args, **kwargs):
         instance = super(DayEntryForm, self).save(commit=False, *args, **kwargs)

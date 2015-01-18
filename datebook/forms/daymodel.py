@@ -58,7 +58,7 @@ class DayToDayModelForm(DayBaseFormMixin, CrispyFormMixin, forms.ModelForm):
 
 class AssignDayModelForm(CrispyFormMixin, forms.Form):
     """
-    Form to fill DayEntries with content from a DayModel
+    Form to fill selected DayEntry with contents from a DayModel
     """
     crispy_form_helper_path = 'datebook.forms.crispies.assign_daymodel_helper'
     
@@ -75,6 +75,7 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
         # Init fields
         self.fields['days'] = forms.MultipleChoiceField(choices=self.daychoices, required=True)
         self.fields['daymodel'] = forms.ModelChoiceField(queryset=self.daymodels_queryset, required=True)
+        self.fields['with_content'] = forms.BooleanField(label=_('Use the model\'s content text'), required=False)
 
     def combine_day_and_daymodel_time(self, day_start, daymodel_start, daymodel_delta):
         """
@@ -98,6 +99,7 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
 
     def save(self, *args, **kwargs):
         daymodel = self.cleaned_data['daymodel']
+        with_content = self.cleaned_data['with_content']
         daymodel_delta = daymodel.stop - daymodel.start
         # Bind datetime for each days using datebook period as the base date
         daydates = [self.daydate.replace(day=int(item)) for item in self.cleaned_data['days']]
@@ -111,7 +113,8 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
             entry.stop = goto_stop
             entry.pause = daymodel.pause
             entry.overtime = daymodel.overtime
-            entry.content = daymodel.content
+            if with_content:
+                entry.content = daymodel.content
             entry.vacation = False # Allways remove the vacation
             entry.save()
             # Remove the day number from remaining selected days
@@ -125,6 +128,10 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
 
             goto_start, goto_stop = self.combine_day_and_daymodel_time(activity_date, daymodel.start, daymodel_delta)
             
+            content = ""
+            if with_content:
+                content = daymodel.content
+            
             new_days.append(DayEntry(
                 datebook=self.datebook,
                 activity_date=activity_date,
@@ -132,7 +139,7 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
                 stop=goto_stop,
                 pause=daymodel.pause,
                 overtime=daymodel.overtime,
-                content=daymodel.content,
+                content=content,
                 vacation=False,
             ))
         # Bulk create all new days
