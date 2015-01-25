@@ -135,7 +135,7 @@ $(document).ready(function($) {
                                             <li><span class="label round secondary"><i class="icon-hour-glass"></i> {{ day.entry.get_elapsed_time }}</span></li>
                                             {% if day.entry.get_overtime_seconds > 0 %}<li><span class="label round secondary"><i class="icon-star-full"></i> {{ day.entry.get_overtime_time }}</span></li>{% endif %}
                                             {% else %}
-                                            <li><span class="label round secondary"><i class="icon-binoculars"></i> {% trans "Expectation" %}</span></li>
+                                            <li><span class="label round secondary"><i class="icon-binoculars"></i> {% blocktrans with time_clock=day.entry.get_elapsed_time %}Expectation: {{ time_clock }}{% endblocktrans %}</span></li>
                                             {% endif %}
                                         </ul>
                                         {% if day.entry.content %}

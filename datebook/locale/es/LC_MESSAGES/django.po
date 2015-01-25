@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-18 22:06+0100\n"
+"POT-Creation-Date: 2015-01-25 14:47+0100\n"
 "PO-Revision-Date: 2015-01-18 20:41+0100\n"
 "Last-Translator: slothy <slothyrulez@gmail.com>\n"
 "Language-Team: Español; Castellano <>\n"
@@ -307,7 +307,6 @@ msgid "I confirm"
 msgstr "Confirmo"
 
 #: templates/datebook/day/detail_fragment.html:13
-#: templates/datebook/month/calendar.html:144
 #, fuzzy
 msgid "Expectation"
 msgstr "libres"
@@ -385,6 +384,11 @@ msgstr "Notas"
 #: templates/datebook/month/calendar.html:120
 msgid "Week"
 msgstr "Semana"
+
+#: templates/datebook/month/calendar.html:144
+#, fuzzy, python-format
+msgid "Expectation: %(time_clock)s"
+msgstr "%(time_clock)sh"
 
 #: templates/datebook/month/calendar.html:160
 #, python-format
