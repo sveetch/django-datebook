@@ -16,7 +16,7 @@ from datebook.forms.month import DatebookForm, DatebookNotesForm
 from datebook.forms.daymodel import AssignDayModelForm
 from datebook.models import Datebook
 from datebook.mixins import DatebookCalendarMixin, DatebookCalendarAutoCreateMixin, OwnerOrPermissionRequiredMixin
-from datebook.utils import format_seconds_to_clock
+from datebook.utils import format_seconds_to_clock, get_day_weekno
 
 class DatebookMonthFormView(PermissionRequiredMixin, generic.FormView):
     """
@@ -89,7 +89,6 @@ class DatebookMonthCurrentView(DatebookCalendarAutoCreateMixin, OwnerOrPermissio
         
         return http.HttpResponseRedirect(d.get_absolute_url())
 
-
 class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, generic.TemplateView):
     """
     Datebook month details view
@@ -100,39 +99,88 @@ class DatebookMonthView(LoginRequiredMixin, DatebookCalendarMixin, FormMixin, ge
     """
     template_name = "datebook/month/calendar.html"
     form_class = AssignDayModelForm
-    
+
     def get_calendar(self, day_filters={}):
-        # Add current day if the datebook period is the current month+year
+        """
+        Where we get the Datebook's calendar and crawl it to compute some 
+        values about its weeks and days
+        """
         current_day = datetime.date.today()
         
+        # Init the calendar object
         _cal = super(DatebookMonthView, self).get_calendar()
+        
+        # Get month weeks structure, removing days that are not month's days (equal to 0)
+        week_days = [filter(None, item) for item in _cal.monthdayscalendar(self.object.period.year, self.object.period.month)]
+        weeks_totals = [{'current': False, 'active': False, 'elapsed_seconds':0, 'overtime_seconds':0, 'vacations':0} for i in range(0, len(week_days))]
+        # Tag the current week if we are on a current month
+        if current_day.year == self.object.period.year and current_day.month == self.object.period.month:
+            for i, item in enumerate(weeks_totals, start=0):
+                if current_day.day in week_days[i]:
+                    item['current'] = True
+                    break
         
         # Calculate total elapsed time for worked days and total vacations
         day_entries = self.get_dayentry_list(day_filters)
-        total_elapsed_time = total_overtime_seconds = total_vacation = 0
+        total_elapsed_seconds = total_overtime_seconds = total_vacation = 0
+        
         for item in day_entries:
-            item.projected = False # Temporary mark used in calendar template
+            # Find the day's week number
+            weekno = get_day_weekno(week_days, item.activity_date.day)
+            week = weeks_totals[weekno]
+            
+            # Default value for day's mark used in calendar template for a day equal or after the current day
+            item.projected = False
+            
             # Do not calculate future days (from current day and further)
             if current_day <= item.activity_date:
                 item.projected = True
                 continue
+            # Mark the day's week as active (the week have days that are not projections)
+            else:
+                weeks_totals[weekno]['active'] = True
+            
             # Do not calculate vacations days
             if item.vacation:
                 total_vacation += 1
+                weeks_totals[weekno]['vacations'] += 1
                 continue
-            # Compute totals
-            total_elapsed_time += item.get_elapsed_seconds()
+            
+            # Compute totals (for months and weeks)
+            total_elapsed_seconds += item.get_elapsed_seconds()
             total_overtime_seconds += item.get_overtime_seconds()
+            weeks_totals[weekno]['elapsed_seconds'] += item.get_elapsed_seconds()
+            weeks_totals[weekno]['overtime_seconds'] += item.get_overtime_seconds()
         
-        return {
+        
+        # Post process week totals for some additional values
+        for item in weeks_totals:
+            item['elapsed_time'] = format_seconds_to_clock(item['elapsed_seconds'])
+            item['overtime_time'] = format_seconds_to_clock(item['overtime_seconds'])
+            
+        
+        calendar_datas = {
             "days": [item.day for item in _cal.itermonthdates(self.object.period.year, self.object.period.month) if item.month == self.object.period.month],
             "weekheader": _cal.formatweekheader(),
+            "weeks_totals": weeks_totals,
             "month": _cal.formatmonth(self.object.period.year, self.object.period.month, dayentries=day_entries, current_day=current_day),
-            "total_elapsed_time": format_seconds_to_clock(total_elapsed_time),
-            "total_overtime_seconds": total_overtime_seconds,
-            "total_overtime_time": format_seconds_to_clock(total_overtime_seconds),
-            "total_vacation": total_vacation,
+            "elapsed_seconds": 0,
+            "elapsed_time": None,
+            "overtime_seconds": 0,
+            "overtime_time": None,
+            "vacations": 0,
         }
+        
+        # Crawl all weeks to calculate month totals
+        for item in weeks_totals:
+            calendar_datas['elapsed_seconds'] += item['elapsed_seconds']
+            calendar_datas['overtime_seconds'] += item['overtime_seconds']
+            calendar_datas['vacations'] += item['vacations']
+            
+        calendar_datas['elapsed_time'] = format_seconds_to_clock(calendar_datas['elapsed_seconds'])
+        calendar_datas['overtime_time'] = format_seconds_to_clock(calendar_datas['overtime_seconds'])
+        
+        return calendar_datas
     
     def get_day_models(self):
         """

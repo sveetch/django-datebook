@@ -37,8 +37,15 @@
     display: none;
 }
 
+// Month and weeks stats
 table.calendar-time-infos{
     width: 100%;
+    
+    tr.month_total{
+        th, td{
+            border-top: 1px solid #b0b0b0;
+        }
+    }
 }
 
 #daymodels-menu{

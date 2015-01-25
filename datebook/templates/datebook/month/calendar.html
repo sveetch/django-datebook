@@ -1,6 +1,9 @@
 {% extends "datebook/base.html" %}
 {% load i18n autobreadcrumb crispy_forms_tags %}
 
+{% block datebook_container_css_classes %} large-row-fluid{% endblock %}
+
+
 {% block head_base_js %}{{ block.super }}
 <script type="text/javascript">
 //<![CDATA[
@@ -23,7 +26,6 @@ $(document).ready(function($) {
 </script>
 {% endblock %}
 
-{% block datebook_container_css_classes %} large-row-fluid{% endblock %}
 
 {% block datebook_maintitle %}
 <div class="row row-fluid">
@@ -40,26 +42,56 @@ $(document).ready(function($) {
 </div>
 {% endblock %}
 
+
 {% block datebook_content %}
 <div class="row row-fluid">
     
     <div class="large-2 large-push-10 columns">
         <div class="clearfix">
-            {% comment %}Month's stats resume{% endcomment %}
+            {% comment %}Weeks stats{% endcomment %}
             <table class="calendar-time-infos">
-                <tbody>
+                <thead>
                     <tr>
-                        <th><i class="icon-history"></i> {% blocktrans %}Total{% endblocktrans %}</th>
-                        <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_elapsed_time %}{{ time_clock }}h{% endblocktrans %}</td>
+                        <th class="text-center">{% trans "Week" %}</th>
+                        <th class="text-center"><i class="icon-history" title="Elapsed"></i></th>
+                        <th class="text-center"><i class="icon-star-full" title="Overtime"></i></th>
+                        <th class="text-center"><i class="icon-sunumbrella" title="Vacations"></i></th>
                     </tr>
-                    {% if datebook_calendar.total_overtime_seconds > 0 %}<tr>
-                        <th><i class="icon-star-full"></i> {% blocktrans %}Including overtime{% endblocktrans %}</th>
-                        <td class="text-right">{% blocktrans with time_clock=datebook_calendar.total_overtime_time %}{{ time_clock }}h{% endblocktrans %}</td>
-                    </tr>{% endif %}
-                    {% if datebook_calendar.total_vacation > 0 %}<tr>
-                        <th><i class="icon-sunumbrella"></i> {% blocktrans %}Vacations{% endblocktrans %}</th>
-                        <td class="text-right">{% blocktrans count counter=datebook_calendar.total_vacation %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</td>
-                    </tr>{% endif %}
+                </thead>
+                <tbody>
+                {% for week in datebook_calendar.weeks_totals %}
+                    <tr>
+                        <th class="text-right">{{ forloop.counter }}</th>
+                        <td class="text-center">
+                            {% blocktrans with time_clock=week.elapsed_time %}{{ time_clock }}h{% endblocktrans %}
+                        </td>
+                        <td class="text-center">
+                            {% blocktrans with time_clock=week.overtime_time %}{{ time_clock }}h{% endblocktrans %}
+                        </td>
+                        <td class="text-center">
+                            {% blocktrans with counter=week.vacations %}{{ counter }}d{% endblocktrans %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                    <tr class="month_total">
+                        <th class="text-right">{% trans "Total" %}</th>
+                        <td class="text-center">
+                            {% blocktrans with time_clock=datebook_calendar.elapsed_time %}{{ time_clock }}h{% endblocktrans %}
+                        </td>
+                        <td class="text-center">
+                            {% if datebook_calendar.overtime_seconds > 0 %}
+                                {% blocktrans with time_clock=datebook_calendar.overtime_time %}{{ time_clock }}h{% endblocktrans %}
+                            {% else %}
+                                {% blocktrans with time_clock=0 %}{{ time_clock }}h{% endblocktrans %}
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if datebook_calendar.vacations > 0 %}
+                                {% blocktrans with counter=datebook_calendar.vacations %}{{ counter }}d{% endblocktrans %}
+                            {% else %}
+                                {% blocktrans with counter=0 %}{{ counter }}d{% endblocktrans %}
+                            {% endif %}
+                        </td>
                 </tbody>
             </table>
             

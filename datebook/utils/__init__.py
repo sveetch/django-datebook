@@ -34,3 +34,14 @@ def week_from_date(dt, start=1):
             return week_no
     # This should never happend
     raise ValueError
+
+def get_day_weekno(weeks, dayno):
+    """
+    Given a week list of day tuples, find and return the week number (index 
+    on zero) for that the day number belong to
+    """
+    for i, daysno in enumerate(weeks, start=0):
+        if dayno in daysno:
+            return i
+    # This should never happend
+    raise ValueError
