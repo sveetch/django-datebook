@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-25 21:46+0100\n"
+"POT-Creation-Date: 2015-03-07 03:30+0100\n"
 "PO-Revision-Date: 2015-01-18 20:41+0100\n"
 "Last-Translator: slothy <slothyrulez@gmail.com>\n"
 "Language-Team: Español; Castellano <>\n"
@@ -332,12 +332,12 @@ msgstr "Cambiar a trabajado"
 msgid "Switch to vacation"
 msgstr "Cambiar a libre"
 
-#: templates/datebook/daymodel/index.html:14
+#: templates/datebook/daymodel/index.html:22
 #, fuzzy
 msgid "No model yet."
 msgstr "Sin modelo"
 
-#: templates/datebook/daymodel/index.html:18
+#: templates/datebook/daymodel/index.html:26
 msgid ""
 "To create a model go on an existing Day entry form and use the button \"Use "
 "it as a day model\"."
@@ -513,6 +513,15 @@ msgstr "Sab"
 #: templates/datebook/month/form.html:27
 msgid "There is no user without a datebook"
 msgstr "No hay usuarios sin agenda"
+
+#: views/daymodel.py:53
+#, fuzzy
+msgid "Day entry has been created successfully"
+msgstr "Entrada diaria ya creada"
+
+#: views/daymodel.py:128
+msgid "Day entry has been edited successfully"
+msgstr ""
 
 #~ msgid "Including overtime"
 #~ msgstr "Incluyendo horas extra"

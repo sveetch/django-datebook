@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-25 21:46+0100\n"
+"POT-Creation-Date: 2015-03-07 03:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -329,11 +329,11 @@ msgstr "Changer en jour travaillé"
 msgid "Switch to vacation"
 msgstr "Changer en jour de congé"
 
-#: templates/datebook/daymodel/index.html:14
+#: templates/datebook/daymodel/index.html:22
 msgid "No model yet."
 msgstr "Aucun modèle"
 
-#: templates/datebook/daymodel/index.html:18
+#: templates/datebook/daymodel/index.html:26
 msgid ""
 "To create a model go on an existing Day entry form and use the button \"Use "
 "it as a day model\"."
@@ -512,8 +512,10 @@ msgstr "Sam"
 msgid "There is no user without a datebook"
 msgstr "Il n'y a aucun utilisateur sans agenda"
 
-#~ msgid "Including overtime"
-#~ msgstr "Dont heures supp."
+#: views/daymodel.py:53
+msgid "Day entry has been created successfully"
+msgstr "Le modèle a été créé avec succès"
 
-#~ msgid "Vacations"
-#~ msgstr "Congés"
+#: views/daymodel.py:128
+msgid "Day entry has been edited successfully"
+msgstr "Le modèle a été édité avec succès"

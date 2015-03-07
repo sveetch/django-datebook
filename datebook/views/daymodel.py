@@ -8,7 +8,9 @@ from django.conf import settings
 from django.views import generic
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
 from braces.views import LoginRequiredMixin
 
@@ -46,6 +48,10 @@ class DayEntryToDayModelFormView(DatebookCalendarMixin, OwnerOrPermissionRequire
         Add required args to form instance
         """
         return form_class(self.author, **self.get_form_kwargs())
+    
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('Day entry has been created successfully'), fail_silently=True)
+        return super(DayEntryToDayModelFormView, self).form_valid(form)
     
     def get_form_kwargs(self):
         """
@@ -118,8 +124,9 @@ class DayModelFormEditView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, ge
         """
         return form_class(self.author, **self.get_form_kwargs())
     
-    def get_object(self, queryset=None):
-        return get_object_or_404(self.model, author=self.author, pk=self.kwargs['pk'])
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('Day entry has been edited successfully'), fail_silently=True)
+        return super(DayModelFormEditView, self).form_valid(form)
     
     def get_form_kwargs(self):
         """
@@ -132,7 +139,9 @@ class DayModelFormEditView(AuthorKwargsMixin, OwnerOrPermissionRequiredMixin, ge
             'day_date': self.object.start.date(),
         })
         return kwargs
-
+    
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.model, author=self.author, pk=self.kwargs['pk'])
 
     def get_success_url(self):
         """

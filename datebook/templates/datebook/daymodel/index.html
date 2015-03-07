@@ -2,6 +2,14 @@
 {% load i18n %}
 
 {% block datebook_content %}
+{% if messages %}
+    {% for message in messages %}
+    <div data-alert class="alert-box {% if message.tags %}{{ message.tags }}{% endif %} radius">
+    {{ message }}
+    <a href="#" class="close">&times;</a>
+    </div>
+    {% endfor %}
+{% endif %}
 <ul class="list-group">
     {% spaceless %}{% for item in object_list %}
         <li>
