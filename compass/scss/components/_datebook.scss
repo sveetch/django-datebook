@@ -484,6 +484,16 @@ html.flexbox{
     }
 }
 
+/*
+ * Calendar legend
+ */
+.legend{
+    li{
+        margin-top: rem-calc(12px);
+        font-size: rem-calc(12px);
+        line-height: 1.2;
+    }
+}
 
 /*
  * Datebook notes container

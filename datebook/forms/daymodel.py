@@ -6,7 +6,7 @@ import datetime
 
 from django import forms
 from django.utils.translation import ugettext as _
-from django.utils.timezone import now as tz_now, make_aware, utc
+from django.utils.timezone import now as tz_now, make_aware, utc, get_current_timezone, localtime, is_naive, pytz
 
 from datebook.models import DayEntry, DayModel
 from datebook.forms.day import DATETIME_FORMATS, DayBaseFormMixin
@@ -89,9 +89,20 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
         Return the calculated start and stop datetimes
         """
         if not isinstance(day_start, datetime.date):
-            day_start = day_start.date()
-            
-        start = make_aware(datetime.datetime.combine(day_start, daymodel_start.time()), utc)
+            combined_date = datetime.datetime.combine(day_start.date(), daymodel_start.time())
+        else:
+            combined_date = datetime.datetime.combine(day_start, daymodel_start.time())
+        
+        # Combine day date and daymodel time
+        combined_date = datetime.datetime.combine(day_start, daymodel_start.time())
+        start = make_aware(combined_date, utc)
+        
+        # Adapt day hour to daylight if needed, we get the offset time for the day date, 
+        # substract it the time diff between daylight seasons, then substract the result 
+        # to the day date
+        day_dst = (make_aware(datetime.datetime(day_start.year, day_start.month, day_start.day), self.current_tz).utcoffset())-self.seasons_offset
+        start = start-day_dst
+        
         return (
             start,
             start+daymodel_delta,
@@ -104,10 +115,17 @@ class AssignDayModelForm(CrispyFormMixin, forms.Form):
         # Bind datetime for each days using datebook period as the base date
         daydates = [self.daydate.replace(day=int(item)) for item in self.cleaned_data['days']]
         
+        # Get time dst for daylight seasons
+        self.current_tz = get_current_timezone()
+        self.winter_offset = make_aware(datetime.datetime(daymodel.start.year, 1, 1), self.current_tz).utcoffset()
+        self.summer_offset = make_aware(datetime.datetime(daymodel.start.year, 7, 1), self.current_tz).utcoffset()
+        self.seasons_offset = (self.summer_offset-self.winter_offset)
+        
         # Fill existing entries
         for entry in self.datebook.dayentry_set.filter(activity_date__in=daydates).order_by('activity_date'):
             # Get the start/stop datetimes
             goto_start, goto_stop = self.combine_day_and_daymodel_time(entry.start, daymodel.start, daymodel_delta)
+            
             # Fill object attribute using the daymodel
             entry.start = goto_start
             entry.stop = goto_stop

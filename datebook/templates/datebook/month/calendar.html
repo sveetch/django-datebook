@@ -53,9 +53,9 @@ $(document).ready(function($) {
                 <thead>
                     <tr>
                         <th class="text-center">{% trans "Week" %}</th>
-                        <th class="text-center"><i class="icon-history" title="Elapsed"></i></th>
-                        <th class="text-center"><i class="icon-star-full" title="Overtime"></i></th>
-                        <th class="text-center"><i class="icon-sunumbrella" title="Vacations"></i></th>
+                        <th class="text-center"><i class="icon-history" title="{% trans "Elapsed" %}"></i></th>
+                        <th class="text-center"><i class="icon-star-full" title="{% trans "Overtime" %}"></i></th>
+                        <th class="text-center"><i class="icon-sunumbrella" title="{% trans "Vacations" %}"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,6 +222,17 @@ $(document).ready(function($) {
             {% endfor %}
             {% endspaceless %}
             
+        </div>
+        
+            
+        <div class="legend clearfix text-right">
+            <ul class="inline-list right">
+                <li><strong>{% trans "Legend:" %}</strong></li>
+                <li><i class="icon-history" title="{% trans "Elapsed" %}">&nbsp;{% trans "Elapsed" %}</i></li>
+                <li><i class="icon-hour-glass" title="{% trans "Pause" %}">&nbsp;{% trans "Pause" %}</i></li>
+                <li><i class="icon-star-full" title="{% trans "Overtime" %}">&nbsp;{% trans "Overtime" %}</i></li>
+                <li><i class="icon-sunumbrella" title="{% trans "Vacations" %}">&nbsp;{% trans "Vacations" %}</i></li>
+            </ul>
         </div>
         
     </div>

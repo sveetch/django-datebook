@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-07 03:30+0100\n"
+"POT-Creation-Date: 2015-04-27 03:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,6 +354,21 @@ msgstr "Vue à plat"
 msgid "Week"
 msgstr "Semaine"
 
+#: templates/datebook/month/calendar.html:58
+#: templates/datebook/month/calendar.html:240
+msgid "Elapsed"
+msgstr "Temps passé"
+
+#: templates/datebook/month/calendar.html:59
+#: templates/datebook/month/calendar.html:242
+msgid "Overtime"
+msgstr "Temps supplémentaire"
+
+#: templates/datebook/month/calendar.html:60
+#: templates/datebook/month/calendar.html:243
+msgid "Vacations"
+msgstr "Congés"
+
 #: templates/datebook/month/calendar.html:68
 #: templates/datebook/month/calendar.html:71
 #: templates/datebook/month/calendar.html:81
@@ -403,6 +418,14 @@ msgstr "Il n'y encore aucune entrée"
 #: templates/datebook/month/calendar.html:201
 msgid "Read"
 msgstr "Lire"
+
+#: templates/datebook/month/calendar.html:239
+msgid "Legend:"
+msgstr "Légende :"
+
+#: templates/datebook/month/calendar.html:241
+msgid "Pause"
+msgstr "Pause"
 
 #: templates/datebook/month/form.html:13
 msgid "January"
