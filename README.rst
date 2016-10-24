@@ -53,26 +53,47 @@ Add it to your installed apps in settings : ::
 
     INSTALLED_APPS = (
         ...
+        'django_assets',
+        'crispy_forms',
+        'crispy_forms_foundation',
         'autobreadcrumbs',
         'datebook',
         ...
     )
 
-Add its settings (into your project settings):
+Append context processor in settings : ::
+
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        ...
+        'autobreadcrumbs.context_processors.AutoBreadcrumbsContext',
+        ...
+    )
+
+Add required settings (into your project settings):
 
 .. sourcecode:: python
+
+    # Add 'foundation-5' layout pack
+    CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'foundation-5')
+    # Default layout to use with "crispy_forms"
+    CRISPY_TEMPLATE_PACK = 'foundation-5'
 
     from datebook.settings import *
 
 (Also you can override some of its settings, see ``datebook.settings`` for more details).
 
-Finally mount its urls in your main ``urls.py`` : ::
+Then in your ``urls.py`` : ::
+
+    from django.conf.urls import patterns, include, url
+    import autobreadcrumbs
+    autobreadcrumbs.autodiscover()
 
     urlpatterns = patterns('',
-        ...
-        (r'^datebook/', include('datebook.urls', namespace='datebook')),
-        ...
+        url(r'^datebook/', include('datebook.urls', namespace='datebook')),
     )
+
+Finally you will need to read Django-datebook templates to know about required
+template blocks and inheritance in your project templates.
 
 Text markup
 ***********
@@ -98,31 +119,31 @@ This can be done with the following settings:
     DATEBOOK_TEXT_VALIDATOR_HELPER_PATH = None # Default, no markup validation
 
 They are the default values in the datebook settings.
-    
+
 Explanations
 ------------
 
 **DATEBOOK_TEXT_FIELD_HELPER_PATH**
-    a function that will be used to define a form field to use for text. 
-    
+    a function that will be used to define a form field to use for text.
+
     Signature is ``get_text_field(form_instance, **kwargs)`` where:
-    
+
     * ``form_instance`` is the Form instance where it will be used from;
     * ``kwargs`` is a dict containing all default named arguments to give to the field. These default arguments are ``label`` for the field label name and ``required``  that is ``True`` (you should never change this);
-    
+
     This should return an instanciated form field that must act as a ``CharField``.
 
 **DATEBOOK_TEXT_VALIDATOR_HELPER_PATH**
 
     A function that will be used to clean value on the form field text;
-    
+
     Signature is ``clean_restructuredtext(form_instance, content)`` where:
-    
+
     * ``form_instance`` is the Form instance where it will be used from;
     * ``content`` is the value to validate;
-    
+
     Act like a Django form field cleaner method, this should return the cleaned value and eventually raise a validation error if needed.
-    
+
 **DATEBOOK_TEXT_MARKUP_RENDER_TEMPLATE**
 
     A template to include to render text value with some markup syntax. It will have access to the page context with an additional value named ``content`` that will be the text to render;
@@ -132,7 +153,7 @@ Explanations
     A template to include with forms when your custom form field require some Javascript to initialize it. It will have access to page context with an additional value named ``field`` that will be the targeted form field;
 
 All these settings are only used with forms and template managing ``Datebook.notes`` and ``DayBase.content`` models attributes.
-    
+
 Example
 -------
 
