@@ -1,5 +1,6 @@
 {% extends "datebook/base.html" %}
 {% load i18n autobreadcrumb crispy_forms_tags %}
+{% load cycle from future %}
 
 {% block datebook_container_css_classes %} large-row-fluid{% endblock %}
 
@@ -10,10 +11,10 @@
 $(document).ready(function($) {
     // Switch calendar to mosaic/flat view
     $('#datebook-view-mode').calendar_view_mode();
-    
+
     // Navigation within reveal modal for next/previous day
     $("body").calendar_days_modalnav();
-    
+
     // Daymodels menu chooser
     $('#daymodels-menu').calendar_daymodel_form({
         'overlay_selector': ".daymodel-choose-overlay",
@@ -45,7 +46,7 @@ $(document).ready(function($) {
 
 {% block datebook_content %}
 <div class="row row-fluid">
-    
+
     <div class="large-2 large-push-10 columns">
         <div class="clearfix">
             {% comment %}Weeks stats{% endcomment %}
@@ -94,7 +95,7 @@ $(document).ready(function($) {
                         </td>
                 </tbody>
             </table>
-            
+
             {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
             <hr>
             {% comment %}Daymodel menu chooser{% endcomment %}
@@ -106,7 +107,7 @@ $(document).ready(function($) {
                 </li>
             </ul>{% endif %}
         </div>
-        
+
         <hr>
         <div class="calendar-notes-container">
             <h3>{% trans "Notes" %}</h3>
@@ -125,7 +126,7 @@ $(document).ready(function($) {
         </div>
 
     </div>
-    
+
     <div class="large-10 large-pull-2 columns">
 
         {% comment %}The Month calendar{% endcomment %}
@@ -139,7 +140,7 @@ $(document).ready(function($) {
                     {% endfor %}
                 {% endspaceless %}
             </div>
-            
+
             {% spaceless %}
             {% for week in datebook_calendar.month %}
             <div class="week">
@@ -189,12 +190,12 @@ $(document).ready(function($) {
                                     {% endif %}
                                 {% endif %}
                             </div>
-                            
+
                             {% if day.entry %}
                             <div class="menu">
                                 <a title="{% trans 'Read' %}" class="read action" href="{% url 'datebook:day-detail' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}" data-reveal-id="revealDayModal" data-reveal-ajax="true">
                                     <i class="icon-eye"></i>
-                                </a> 
+                                </a>
                                 {% if user == author or user.is_superuser or perms.datebook.change_dayentry %}
                                     <a title="{% trans 'Edit' %}" class="edit action" href="{% url 'datebook:day-edit' author=author year=datebook.period.year month=datebook.period.month day=day.date.day %}"{% comment %} data-reveal-id="revealDayModal" data-reveal-ajax="true"{% endcomment %}>
                                         <i class="icon-pencil"></i>
@@ -205,7 +206,7 @@ $(document).ready(function($) {
                             <div class="menu">
                                 <a title="{% trans 'Add' %}" class="add action" href="{{ add_url }}">
                                     <i class="icon-plus-circle"></i>
-                                </a> 
+                                </a>
                             </div>
                             {% endif %}
                             {% comment %}
@@ -221,10 +222,10 @@ $(document).ready(function($) {
             </div>
             {% endfor %}
             {% endspaceless %}
-            
+
         </div>
-        
-            
+
+
         <div class="legend clearfix text-right">
             <ul class="inline-list right">
                 <li><strong>{% trans "Legend:" %}</strong></li>
@@ -234,7 +235,7 @@ $(document).ready(function($) {
                 <li><i class="icon-sunumbrella" title="{% trans "Vacations" %}">&nbsp;{% trans "Vacations" %}</i></li>
             </ul>
         </div>
-        
+
     </div>
 </div>
 

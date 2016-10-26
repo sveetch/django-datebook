@@ -27,20 +27,22 @@ Links
 Requires
 ********
 
-* `Django`_ >= 1.5;
-* `autobreadcrumbs`_ >= 1.0;
+* `Django`_ >=1.7, <1.8;
+* `autobreadcrumbs`_ >= 1.0, <2.0.0;
 * `django-braces`_ >= 1.2.0,<1.4;
-* `crispy-forms-foundation`_ >= 0.3.5;
+* `crispy-forms-foundation`_ >= 0.5.3;
 * `Arrow`_;
+
 
 Optionnally
 ***********
 
-* `South`_ to perform database migrations for next releases;
 * If you want to use the shipped *Text markup* integration :
 
-  * `rstview`_ >= 0.2;
-  * `Django-CodeMirror`_ >= 0.9.7;
+  * `rstview`_ >= 0.2, <0.4.0;
+  * `Django-CodeMirror`_ >= 0.9.7, <1.0.0;
+
+`South`_ usage has been dropped in favor of Django migrations;
 
 Install
 =======

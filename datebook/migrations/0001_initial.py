@@ -1,113 +1,81 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import datetime
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Datebook'
-        db.create_table(u'datebook_datebook', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('period', self.gf('django.db.models.fields.DateField')()),
-        ))
-        db.send_create_signal(u'datebook', ['Datebook'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-        # Adding unique constraint on 'Datebook', fields ['author', 'period']
-        db.create_unique(u'datebook_datebook', ['author_id', 'period'])
-
-        # Adding model 'DayEntry'
-        db.create_table(u'datebook_dayentry', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('datebook', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['datebook.Datebook'])),
-            ('activity_date', self.gf('django.db.models.fields.DateField')()),
-            ('vacation', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('content', self.gf('django.db.models.fields.TextField')(max_length=500, blank=True)),
-            ('start', self.gf('django.db.models.fields.DateTimeField')()),
-            ('stop', self.gf('django.db.models.fields.DateTimeField')()),
-            ('pause', self.gf('django.db.models.fields.TimeField')(default=datetime.time(0, 0))),
-        ))
-        db.send_create_signal(u'datebook', ['DayEntry'])
-
-        # Adding unique constraint on 'DayEntry', fields ['datebook', 'activity_date']
-        db.create_unique(u'datebook_dayentry', ['datebook_id', 'activity_date'])
-
-
-    def backwards(self, orm):
-        # Removing unique constraint on 'DayEntry', fields ['datebook', 'activity_date']
-        db.delete_unique(u'datebook_dayentry', ['datebook_id', 'activity_date'])
-
-        # Removing unique constraint on 'Datebook', fields ['author', 'period']
-        db.delete_unique(u'datebook_datebook', ['author_id', 'period'])
-
-        # Deleting model 'Datebook'
-        db.delete_table(u'datebook_datebook')
-
-        # Deleting model 'DayEntry'
-        db.delete_table(u'datebook_dayentry')
-
-
-    models = {
-        u'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        u'auth.permission': {
-            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        u'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'datebook.datebook': {
-            'Meta': {'unique_together': "(('author', 'period'),)", 'object_name': 'Datebook'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'period': ('django.db.models.fields.DateField', [], {})
-        },
-        u'datebook.dayentry': {
-            'Meta': {'unique_together': "(('datebook', 'activity_date'),)", 'object_name': 'DayEntry'},
-            'activity_date': ('django.db.models.fields.DateField', [], {}),
-            'content': ('django.db.models.fields.TextField', [], {'max_length': '500', 'blank': 'True'}),
-            'datebook': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['datebook.Datebook']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'pause': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(0, 0)'}),
-            'start': ('django.db.models.fields.DateTimeField', [], {}),
-            'stop': ('django.db.models.fields.DateTimeField', [], {}),
-            'vacation': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        }
-    }
-
-    complete_apps = ['datebook']
+    operations = [
+        migrations.CreateModel(
+            name='Datebook',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(verbose_name='created', editable=False, blank=True)),
+                ('modified', models.DateTimeField(auto_now=True, verbose_name='last edit')),
+                ('period', models.DateField(verbose_name='month of activity')),
+                ('notes', models.TextField(max_length=500, verbose_name='content', blank=True)),
+                ('author', models.ForeignKey(verbose_name='author', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name': 'Datebook',
+                'verbose_name_plural': 'Datebooks',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='DayEntry',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('content', models.TextField(max_length=500, verbose_name='content', blank=True)),
+                ('start', models.DateTimeField(verbose_name='start')),
+                ('stop', models.DateTimeField(verbose_name='stop')),
+                ('pause', models.TimeField(default=datetime.time(0, 0), verbose_name='pause')),
+                ('overtime', models.TimeField(default=datetime.time(0, 0), verbose_name='overtime')),
+                ('activity_date', models.DateField(verbose_name='activity day date')),
+                ('vacation', models.BooleanField(default=False, verbose_name='vacation')),
+                ('datebook', models.ForeignKey(verbose_name='datebook', to='datebook.Datebook')),
+            ],
+            options={
+                'verbose_name': 'day entry',
+                'verbose_name_plural': 'day entries',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='DayModel',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('content', models.TextField(max_length=500, verbose_name='content', blank=True)),
+                ('start', models.DateTimeField(verbose_name='start')),
+                ('stop', models.DateTimeField(verbose_name='stop')),
+                ('pause', models.TimeField(default=datetime.time(0, 0), verbose_name='pause')),
+                ('overtime', models.TimeField(default=datetime.time(0, 0), verbose_name='overtime')),
+                ('title', models.CharField(max_length=255, verbose_name='title')),
+                ('author', models.ForeignKey(verbose_name='author', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name': 'day model',
+                'verbose_name_plural': 'day models',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='daymodel',
+            unique_together=set([('author', 'title')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='dayentry',
+            unique_together=set([('datebook', 'activity_date')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='datebook',
+            unique_together=set([('author', 'period')]),
+        ),
+    ]

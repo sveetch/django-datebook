@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Modèles de données
+Data models
 """
 import datetime
 
@@ -14,11 +14,11 @@ from datebook import utils
 class Datebook(models.Model):
     """
     Datebook is only for one user (its author) and it is not shared.
-    
+
     A Datebook is for a specific month of a year.
-    
-    A Datebook is alike "lazy" in the way that its 'DayEntry' are only created 
-    when the user fill them and so Datebook are not initialized with all its 
+
+    A Datebook is alike "lazy" in the way that its 'DayEntry' are only created
+    when the user fill them and so Datebook are not initialized with all its
     month's days when created.
     """
     author = models.ForeignKey(User, verbose_name=_('author'))
@@ -40,13 +40,13 @@ class Datebook(models.Model):
 
     def clean(self):
         """Allways forcing to the first day of the month"""
-        self.period = self.period.replace(day=1) 
+        self.period = self.period.replace(day=1)
 
     def save(self, *args, **kwargs):
         # First create
         if not self.created:
             self.created = tz_now()
-        
+
         super(Datebook, self).save(*args, **kwargs)
 
     class Meta:
@@ -101,9 +101,9 @@ class DayBase(models.Model):
         #if self.stop < self.start:
             #raise ValidationError(_("Hour stop can't be less than hour start."))
         ## TODO: Pause time can't be superior to the time of (stop-start)
-    
+
     class Meta:
-        abstract = True    
+        abstract = True
 
 
 class DayEntry(DayBase):
@@ -128,7 +128,7 @@ class DayEntry(DayBase):
         # Allways update the datebook
         self.datebook.modified = tz_now()
         self.datebook.save()
-        
+
         super(DayEntry, self).save(*args, **kwargs)
 
     class Meta:
