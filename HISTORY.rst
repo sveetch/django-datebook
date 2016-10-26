@@ -3,10 +3,19 @@
 Changelog
 =========
 
+Version 1.2.0 - Unreleased
+--------------------------
+
+* Added support for Django 1.8;
+* Dropped support for Django 1.7;
+* Updated ``setup.py``;
+* Fixed crumbs for new Autobreadcrumbs 2.x API;
+
 Version 1.1.0 - 2016/10/26
 --------------------------
 
-* Dropped support for Django 1.7;
+* Added support for Django 1.7;
+* Dropped support for Django 1.6;
 * Moved old south migrations directory ``migrations`` to ``south_migrations``;
 * Added initial Django migrations in ``migrations`` directory;
 * Fixed usage of future ``cycle`` template tags;

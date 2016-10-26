@@ -2,10 +2,10 @@
 """
 Application Crumbs
 """
-from autobreadcrumbs import site
+from autobreadcrumbs.registry import breadcrumbs_registry
 from django.utils.translation import ugettext_lazy
 
-site.update({
+breadcrumbs_registry.update({
     'datebook:index': ugettext_lazy('Datebooks'),
     'datebook:create': ugettext_lazy('Create a datebook'),
     'datebook:author-detail': '{{ author.username }}',
