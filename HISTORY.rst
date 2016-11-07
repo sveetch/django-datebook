@@ -10,6 +10,8 @@ Version 1.2.0 - Unreleased
 * Dropped support for Django 1.7;
 * Updated ``setup.py``;
 * Fixed crumbs for new Autobreadcrumbs 2.x API;
+* Use ``importlib`` Python module instead of deprecated ``django.utils.importlib``;
+* Fixed ``DayEntryBaseFormView.get_form`` since ``FormMixin.get_form`` has changed;
 
 Version 1.1.0 - 2016/10/26
 --------------------------
