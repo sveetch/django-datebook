@@ -3,6 +3,14 @@
 Changelog
 =========
 
+Version 1.1.1 - 2016/11/08
+--------------------------
+
+Dummy release to fix changelog about Django support:
+
+* Added support for Django 1.7;
+* Dropped support for Django 1.6;
+
 Version 1.1.0 - 2016/10/26
 --------------------------
 
