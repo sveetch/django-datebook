@@ -27,7 +27,7 @@ Links
 Requires
 ********
 
-* `Django`_ >=1.7, <1.8;
+* `Django`_ >=1.7, <1.9;
 * `autobreadcrumbs`_ >= 1.0, <2.0.0;
 * `django-braces`_ >= 1.2.0,<1.4;
 * `crispy-forms-foundation`_ >= 0.5.3;
