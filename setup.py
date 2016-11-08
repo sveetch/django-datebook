@@ -17,6 +17,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         'Environment :: Web Environment',
         'Framework :: Django',
+        "Framework :: Django :: 1.7",
         "Framework :: Django :: 1.8",
         'Intended Audience :: Developers',
         'Topic :: Internet :: WWW/HTTP',
@@ -24,7 +25,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=[
-        'Django>=1.8,<1.9',
+        'Django>=1.7,<1.9',
         'django-assets>=0.12',
         'autobreadcrumbs>=2.0.0',
         'django-braces>=1.2.0,<1.4',

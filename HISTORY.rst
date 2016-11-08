@@ -3,21 +3,27 @@
 Changelog
 =========
 
-Version 1.2.0 - Unreleased
+Version 1.2.0 - 2016/10/26
 --------------------------
 
 * Added support for Django 1.8;
-* Dropped support for Django 1.7;
 * Updated ``setup.py``;
 * Fixed crumbs for new Autobreadcrumbs 2.x API;
 * Use ``importlib`` Python module instead of deprecated ``django.utils.importlib``;
 * Fixed ``DayEntryBaseFormView.get_form`` since ``FormMixin.get_form`` has changed;
 
-Version 1.1.0 - 2016/10/26
+Version 1.1.1 - 2016/11/08
 --------------------------
+
+Dummy release to fix changelog about Django support:
 
 * Added support for Django 1.7;
 * Dropped support for Django 1.6;
+
+Version 1.1.0 - 2016/10/26
+--------------------------
+
+* Dropped support for Django 1.7;
 * Moved old south migrations directory ``migrations`` to ``south_migrations``;
 * Added initial Django migrations in ``migrations`` directory;
 * Fixed usage of future ``cycle`` template tags;
